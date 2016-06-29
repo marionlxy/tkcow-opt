@@ -1,0 +1,25 @@
+package com.taikang.tkcoww.module.action;
+
+import com.taikang.udp.framework.core.action.IBaseAction;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+
+import java.util.Arrays;
+
+
+/**
+  * IModuleAction
+  */
+
+public interface IModuleAction extends IBaseAction { 
+
+	final String ACTION_ID = "moduleAction";
+
+	/**
+	 * @author itw_lixy02
+	 * queryNavMenuForPage
+	 * IModuleAction
+	 * @param page
+	 * @return
+	 */
+	CurrentPage queryNavMenuForPage(CurrentPage page); 	
+}

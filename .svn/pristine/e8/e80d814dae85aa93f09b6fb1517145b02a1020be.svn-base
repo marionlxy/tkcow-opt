@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Article">
+	<resultMap id="articleResultMap" type="com.taikang.udp.manage.model.ArticleBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="content" column="content"/>
+		<result property="display" column="display"/>
+		<result property="mark" column="mark"/>
+		<result property="sequence" column="sequence"/>
+		<result property="title" column="title"/>
+		<result property="url" column="url"/>
+		<result property="articleclassId" column="articleClass_id"/>
+  	</resultMap>
+  
+  	<sql id="articleWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null and deletestatus != '' and deletestatus != 'null' ">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" content != null and content != '' and content != 'null' ">
+			<![CDATA[ AND A.content = #{content} ]]>
+	  	</if>
+	  	<if test=" display != null">
+			<![CDATA[ AND A.display = #{display} ]]>
+	  	</if>
+	  	<if test=" mark != null and mark != '' and mark != 'null' ">
+			<![CDATA[ AND A.mark = #{mark} ]]>
+	  	</if>
+	  	<if test=" sequence != null ">
+	  		<![CDATA[ AND A.sequence = ${sequence} ]]>
+	  	</if>
+	  	<if test=" title != null and title != '' and title != 'null' ">
+			<![CDATA[ AND A.title = #{title} ]]>
+	  	</if>
+	  	<if test=" url != null and url != '' and url != 'null' ">
+			<![CDATA[ AND A.url = #{url} ]]>
+	  	</if>
+	  	<if test=" articleclass_id != null ">
+	  		<![CDATA[ AND A.articleClass_id = ${articleclass_id} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addArticle"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ARTICLE
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" content  != null and  content  != ''  and  content  != 'null' ">
+				<![CDATA[ content , ]]>
+	  		</if>
+	  		<if test=" display  != null ">
+				<![CDATA[ display , ]]>
+	  		</if>
+	  		<if test=" mark  != null and  mark  != ''  and  mark  != 'null' ">
+				<![CDATA[ mark , ]]>
+	  		</if>
+	  		<if test=" sequence  != null ">
+				<![CDATA[ sequence , ]]>
+	  		</if>
+	  		<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+				<![CDATA[ title , ]]>
+	  		</if>
+	  		<if test=" url  != null and  url  != ''  and  url  != 'null' ">
+				<![CDATA[ url , ]]>
+	  		</if>
+	  		<if test=" articleclass_id  != null ">
+				<![CDATA[ articleClass_id , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+	  			<![CDATA[ #{deletestatus} , ]]>
+	  		</if>
+	  		<if test=" content  != null and  content  != ''  and  content  != 'null' ">
+	  			<![CDATA[ #{content} , ]]>
+	  		</if>
+	  		<if test=" display  != null">
+	  			<![CDATA[ #{display} , ]]>
+	  		</if>
+	  		<if test=" mark  != null and  mark  != ''  and  mark  != 'null' ">
+	  			<![CDATA[ #{mark} , ]]>
+	  		</if>
+	  		<if test=" sequence  != null">
+	    		<![CDATA[ ${sequence} , ]]>
+	  		</if>
+	  		<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+	  			<![CDATA[ #{title} , ]]>
+	  		</if>
+	  		<if test=" url  != null and  url  != ''  and  url  != 'null' ">
+	  			<![CDATA[ #{url} , ]]>
+	  		</if>
+	  		<if test=" articleclass_id  != null">
+	    		<![CDATA[ ${articleclass_id} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateArticle" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ARTICLE A ]]>
+		<set>
+	  	<if test=" addtime != null">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+	  	<if test=" deletestatus  != null">
+	  		<![CDATA[ A.deleteStatus = #{deletestatus}, ]]>
+	  	</if>
+	  	<if test=" content  != null and  content  != ''  and  content  != 'null' ">
+	  		<![CDATA[ A.content = #{content}, ]]>
+	  	</if>
+	  	<if test=" display  != null">
+	  		<![CDATA[ A.display = #{display}, ]]>
+	  	</if>
+	  	<if test=" mark  != null and  mark  != ''  and  mark  != 'null' ">
+	  		<![CDATA[ A.mark = #{mark}, ]]>
+	  	</if>
+		<if test=" sequence  != null ">
+  			<![CDATA[ A.sequence = ${sequence} , ]]>
+		</if>
+	  	<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+	  		<![CDATA[ A.title = #{title}, ]]>
+	  	</if>
+	  	<if test=" url  != null and  url  != ''  and  url  != 'null' ">
+	  		<![CDATA[ A.url = #{url}, ]]>
+	  	</if>
+		<if test=" articleclass_id  != null ">
+  			<![CDATA[ A.articleClass_id = ${articleclass_id} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteArticle" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ARTICLE  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneArticle" parameterType="java.util.Map" resultMap="articleResultMap">
+		<![CDATA[ SELECT A.* FROM ARTICLE A  ]]>
+		<include refid="articleWhereCondition" />
+  	</select>
+    
+  	<select id="findAllArticle" parameterType="java.util.Map" resultMap="articleResultMap" >
+		<![CDATA[ SELECT A.* FROM ARTICLE A ]]>
+		<include refid="articleWhereCondition" />
+  	</select>
+  	
+  	<select id="findByArticleByClass" parameterType="java.util.Map" resultMap="articleResultMap" >
+		select
+		A.*
+		from
+		article A
+		left join
+		articleclass AC
+		on  A.articleClass_id = AC.id
+		where A.deletestatus = 0 
+		<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" content != null and content != '' and content != 'null' ">
+			<![CDATA[ AND A.content = #{content} ]]>
+	  	</if>
+	  	<if test=" display != null">
+			<![CDATA[ AND A.display = #{display} ]]>
+	  	</if>
+	  	<if test=" mark != null and mark != '' and mark != 'null' ">
+			<![CDATA[ AND A.mark = #{mark} ]]>
+	  	</if>
+	  	<if test=" sequence != null ">
+	  		<![CDATA[ AND A.sequence = ${sequence} ]]>
+	  	</if>
+	  	<if test=" title != null and title != '' and title != 'null' ">
+			<![CDATA[ AND A.title = #{title} ]]>
+	  	</if>
+	  	<if test=" url != null and url != '' and url != 'null' ">
+			<![CDATA[ AND A.url = #{url} ]]>
+	  	</if>
+	  	<if test=" articleclass_id != null ">
+	  		<![CDATA[ AND A.articleClass_id = ${articleclass_id} ]]>
+	  	</if>
+		<if test="class_mark != null">
+			and AC.mark = #{class_mark}
+		</if>
+		order by A.addTime desc
+  	</select>
+  	
+  	
+  	<select id="findAllMapArticle" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ARTICLE A ]]>
+		<include refid="articleWhereCondition" />
+	</select>
+  
+  	<select id="findArticleTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ARTICLE A ]]>
+		<include refid="articleWhereCondition" />
+  	</select>
+  
+  	<select id="queryArticleForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ARTICLE A ]]>
+		<include refid="articleWhereCondition" />
+  	</select>
+</mapper>

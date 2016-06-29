@@ -1,0 +1,1060 @@
+package com.taikang.tkcoww.module.controller;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.mysql.jdbc.Blob;
+import com.taikang.tkcoww.banner.action.IBannerAction;
+import com.taikang.tkcoww.module.action.IModuleAction;
+import com.taikang.tkcoww.moduleContent.action.IModuleContentAction;
+import com.taikang.tkcoww.moduleDes.action.IModuleDesAction;
+import com.taikang.tkcoww.moduleImg.action.IModuleImgAction;
+import com.taikang.udp.common.constant.Globals;
+import com.taikang.udp.common.constant.UploadVertor;
+import com.taikang.udp.common.util.CommUtil;
+import com.taikang.udp.common.util.FileHelper;
+import com.taikang.udp.common.util.ProperHelper;
+import com.taikang.udp.common.util.WebUtil;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+import com.taikang.udp.framework.common.util.TKStringUtils;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.core.web.BaseController;
+import com.taikang.udp.security.service.SecurityUserHolder;
+import com.taikang.udp.sys.action.IMenuAction;
+import com.taikang.udp.sys.action.IRoleMenuAction;
+import com.taikang.udp.sys.action.IUserRoleAction;
+import com.taikang.udp.sys.model.UserBO;
+import com.taikang.udp.sys.util.CommonUtil;
+
+/**
+ * ModuleController
+ * 
+ * 
+ * 
+ */
+@Controller("moduleController")
+@RequestMapping(value = "/module")
+public class ModuleController extends BaseController {
+	@Resource(name = IUserRoleAction.ACTION_ID)
+	private IUserRoleAction userRoleAction;
+
+	@Resource(name = IModuleAction.ACTION_ID)
+	private IModuleAction moduleAction;
+
+	@Resource(name = IModuleDesAction.ACTION_ID)
+	private IModuleDesAction moduleDesAction;
+
+	@Resource(name = IModuleContentAction.ACTION_ID)
+	private IModuleContentAction moduleContentAction;
+
+	@Resource(name = IBannerAction.ACTION_ID)
+	private IBannerAction bannerAction;
+
+	@Resource(name = IModuleImgAction.ACTION_ID)
+	private IModuleImgAction moduleImgAction;
+
+	@Resource(name = IMenuAction.ACTION_ID)
+	private IMenuAction menuAction;
+
+	@Resource(name = IRoleMenuAction.ACTION_ID)
+	private IRoleMenuAction roleMenuAction;
+
+	/*
+	 * @Resource(name = IMenuAction.ACTION_ID) private IMenuAction menuAction;
+	 */
+	// /**
+	// * 打开主查询页面
+	// * @return 页面地址
+	// */
+	// @RequestMapping("")
+	// public String showModuleIndexPage() {
+	// return "module/moduleIndex";
+	// }
+
+	/**
+	 * 打开主查询页面-bylixiaoyang
+	 * 
+	 * @return 页面地址
+	 */
+	@RequestMapping("")
+	public String showModuleIndexPage(
+			@RequestParam("reqMenuId") String reqMenuId,
+			HttpServletRequest request, Model model) {
+		Dto paramAsDto = getParamAsDto(request);
+		
+		paramAsDto.put("modId", paramAsDto.getAsString("backUp2"));
+		Dto findOne = moduleAction.findOne(paramAsDto);
+		if (reqMenuId != null && !reqMenuId.equals("")) {
+			model.addAttribute("reqMenuId", reqMenuId);
+			model.addAttribute("modId", paramAsDto.getAsString("backUp2"));
+			model.addAttribute("menuId", paramAsDto.getAsString("reqMenuId"));
+			model.addAttribute("parentId", paramAsDto.getAsString("parentId"));
+			model.addAttribute("isLeaf", paramAsDto.getAsString("isLeaf"));
+			model.addAttribute("status", paramAsDto.getAsString("status"));
+			model.addAttribute("menuName", paramAsDto.getAsString("menuName"));
+			model.addAttribute("modIsleaf", findOne.getAsString("modIsleaf"));
+			model.addAttribute("modName", findOne.getAsString("modName"));
+			model.addAttribute("modLevel", findOne.getAsString("modLevel"));
+			model.addAttribute("modParentId",
+					findOne.getAsString("modParentId"));
+		}
+		return "module/moduleIndex";
+	}
+
+	/**
+	 * 打开下级栏目列表页面-bylixiaoyang
+	 * 
+	 * @return 页面地址
+	 */
+	@RequestMapping(value = "subList")
+	public String showModuleSubPage(
+			@RequestParam("reqMenuId") String reqMenuId,
+			HttpServletRequest request, Model model) {
+		Dto paramAsDto = getParamAsDto(request);
+		paramAsDto.put("modId", paramAsDto.getAsString("backUp2"));
+		Dto findOne = moduleAction.findOne(paramAsDto);
+		
+/*		Dto menuOne=null;
+		if(!paramAsDto.getAsString("modId").isEmpty()){
+			Dto param = new BaseDto();
+			param.put("backUp2", paramAsDto.getAsString("modId"));
+			menuOne = menuAction.findNewOne(param);
+		}*/
+		
+		if (reqMenuId != null && !reqMenuId.equals("")) {
+			model.addAttribute("reqMenuId", reqMenuId);
+			model.addAttribute("modId", paramAsDto.getAsString("backUp2"));
+			model.addAttribute("menuId", paramAsDto.getAsString("reqMenuId"));
+			model.addAttribute("parentId", paramAsDto.getAsString("parentId"));
+			model.addAttribute("isLeaf", paramAsDto.getAsString("isLeaf"));
+			model.addAttribute("status", paramAsDto.getAsString("status"));
+			model.addAttribute("menuName", paramAsDto.getAsString("menuName"));
+			model.addAttribute("modIsleaf", findOne.getAsString("modIsleaf"));
+			model.addAttribute("modName", findOne.getAsString("modName"));
+			model.addAttribute("modLevel", findOne.getAsString("modLevel"));
+			model.addAttribute("modParentId",
+					findOne.getAsString("modParentId"));
+
+		}
+		return "module/moduleSubList";
+	}
+
+	/**
+	 * 查询信息列表
+	 * 
+	 * @return 分页列表数据
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public Map<String, Object> getModuleList(HttpServletRequest request,
+			CurrentPage page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		page.setParamObject(getParamAsDto(request));
+		CurrentPage currentPage = moduleAction.queryModulelist(page);
+
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+
+		return map;
+	}
+
+	/*
+	 *得到菜单
+	 */
+	@RequestMapping("/getNavMenuList")
+	@ResponseBody
+	public Map<String, Object> getNavMenuList(HttpServletRequest request,
+			CurrentPage page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		Dto paramAsDto = getParamAsDto(request);
+		page.setParamObject(paramAsDto);
+		CurrentPage currentPage = moduleAction.queryNavMenuForPage(page);
+
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+		return map;
+	}
+
+	/*
+	 * 得到导航菜单信息列表
+	 */
+	@RequestMapping("/getSubMenu")
+	@ResponseBody
+	public Map<String, Object> getSubMenu(HttpServletRequest request,
+			CurrentPage page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		Dto paramAsDto = getParamAsDto(request);
+		page.setParamObject(paramAsDto);
+		CurrentPage currentPage = moduleAction.querySubMenu(page);
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+		return map;
+	}
+
+	/**
+	 * 打开新增或修改页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/edit")
+	public String showModuleEditPage(String modId, String menuParentName,
+			String modLevel, String modType, Model model) {
+		Dto param = new BaseDto();
+		Dto module = new BaseDto();
+		Dto bannerBo = new BaseDto();
+		Dto imgBo = new BaseDto();
+		Dto menuOne = new BaseDto();
+
+		if (modId != null && !modId.equals("")) {
+			model.addAttribute("modId", modId);
+			param.put("modId", modId);
+		}
+		String mName = CommUtil.convert(menuParentName, "UTF-8");
+		model.addAttribute("modParentName", mName);
+		module = moduleAction.findNewOne(param);
+		model.addAttribute("modName", module.getAsString("modName"));
+		model.addAttribute("modByname", module.getAsString("modByname"));
+		model.addAttribute("modSquence", module.getAsString("modSquence"));
+		model.addAttribute("modUrl", module.getAsString("modUrl"));
+		model.addAttribute("seoDes", module.getAsString("seoDes"));
+		model.addAttribute("modSeo", module.getAsString("modSeo"));
+		model.addAttribute("modDes", module.getAsString("modDes"));
+	/*	// 查询banner表
+		String modBanner = module.getAsString("modBanner");
+		if (modBanner != null && !"".equals(modBanner)) {
+			param.put("banImgId", modBanner);
+			bannerBo = bannerAction.findOne(param);
+			model.addAttribute("modBannerUrl",
+					bannerBo.getAsString("banImgUrl"));
+		}*/
+		// 查询banner表
+				Dto paramBan=new BaseDto();
+				paramBan.put("belongId", modId);
+				 bannerBo = bannerAction.findOne(paramBan);
+				String banImgId = bannerBo.getAsString("banImgId");
+				if (banImgId != null && !"".equals(banImgId)) {
+					param.put("banImgId", banImgId);
+					module.put("modNewBanner", bannerBo.getAsString("banImgName"));
+					model.addAttribute("modBannerUrl",
+							bannerBo.getAsString("banImgUrl"));
+				}
+		
+	/*	// 查询小图表
+		String modImg = module.getAsString("modImg");
+		if (modImg != null && !"".equals(modImg)) {
+			param.put("modImgId", modImg);
+			modImgBo = moduleImgAction.findOne(param);
+			model.addAttribute("modImgUrl", modImgBo.getAsString("modImgUrl"));
+		}*/
+		
+		// 查询小图表
+				Dto paramImg=new BaseDto();
+				paramImg.put("belongId", modId);
+				 imgBo = moduleImgAction.findOne(paramImg);
+				String modImg = imgBo.getAsString("modImgId");
+				if (modImg != null && !"".equals(modImg)) {
+					param.put("modImgId", modImg);
+					module.put("modNewImg", imgBo.getAsString("modImgName"));
+					model.addAttribute("modImgUrl", imgBo.getAsString("modImgUrl"));
+				}
+		// //查询菜单表
+
+		param.put("backup2", module.getAsString("modId"));
+		menuOne = menuAction.findNewOne(param);
+		if (menuOne != null && !menuOne.isEmpty()) {
+			model.addAttribute("menuName", menuOne.getAsString("menuName"));
+			model.addAttribute("menuId", menuOne.getAsString("menuId"));
+		}
+		if (modLevel != null && !"".equals(modLevel)
+				&& Integer.parseInt(modLevel) == 1) {
+			return "module/moduleEdit";
+		} else if(module.getAsString("modType").equals("02")){
+			return "module/moduleEdit";
+		}else {
+			Dto content = moduleContentAction.findNewOne(param);
+			model.addAttribute("content", content.get("content"));
+			return "module/moduleNewEdit";
+		}
+
+	}
+
+	/**
+	 * 获取一条记录详细信息，用来填充修改界面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getOne")
+	@ResponseBody
+	public Dto getModuleById(@RequestParam("modId") String modId, Model model) {
+		Dto param = new BaseDto();
+		param.put("modId", modId);
+
+		Dto module = moduleAction.findNewOne(param);
+		// 查询内容表
+		Dto content = moduleContentAction.findNewOne(param);
+		module.put("content", content.get("content"));
+
+		// 查询banner表
+		Dto paramBan=new BaseDto();
+		paramBan.put("belongId", modId);
+		Dto bannerBo = bannerAction.findOne(paramBan);
+		String banImgId = bannerBo.getAsString("banImgId");
+		if (banImgId != null && !"".equals(banImgId)) {
+			module.put("banImgId", banImgId);
+			module.put("modNewBanner", bannerBo.getAsString("banImgName"));
+		}
+		// 查询小图表
+		Dto paramImg=new BaseDto();
+		paramImg.put("belongId", modId);
+		Dto imgBo = moduleImgAction.findOne(paramImg);
+		String modImg = imgBo.getAsString("modImgId");
+		if (modImg != null && !"".equals(modImg)) {
+			module.put("modImgId", modImg);
+			module.put("modNewImg", imgBo.getAsString("modImgName"));
+		}
+		// 查询菜单表
+		param.put("backup2", modId);
+		Dto menuOne = menuAction.findNewOne(param);
+		if (!menuOne.isEmpty()) {
+			module.put("menuId", menuOne.getAsString("menuId"));
+		}
+
+		return module;
+	}
+
+	/**
+	 * 打开选项卡页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("add")
+	public String addModulePage(HttpServletRequest request, Model model) {
+		Dto paramAsDto = getParamAsDto(request);
+		String modId = paramAsDto.getAsString("modId");
+		if (modId != null && !modId.equals("")) {
+			model.addAllAttributes(paramAsDto);
+			String mName = CommUtil.convert(paramAsDto.getAsString("menuName"),
+					"UTF-8");
+			String modName = CommUtil.convert(
+					paramAsDto.getAsString("modName"), "UTF-8");
+			model.addAttribute("menuName", mName);
+			model.addAttribute("modName", modName);
+		}
+
+		return "module/moduleAdd";
+	}
+
+	/**
+	 * 新增下级栏目
+	 * 
+	 * @return
+	 */
+	@RequestMapping("addSubCol")
+	public String addSubColPage(HttpServletRequest request, Model model) {
+		Dto paramAsDto = getParamAsDto(request);
+		String modId = paramAsDto.getAsString("modId");
+		if (modId != null && !modId.equals("")) {
+			String mName = CommUtil.convert(paramAsDto.getAsString("modName"),
+					"UTF-8");
+			model.addAttribute("modParentName", mName);
+			model.addAttribute("modParentId", paramAsDto.getAsString("modId"));
+			model.addAttribute("menuType", paramAsDto.getAsString("menuType"));
+			model.addAttribute("modIsleaf", paramAsDto.getAsString("modIsleaf"));
+			model.addAttribute("modLevel", paramAsDto.getAsString("modLevel"));
+			model.addAttribute("menuId", paramAsDto.getAsString("menuId"));
+			model.addAttribute("parentId", paramAsDto.getAsString("parentId"));
+
+		}
+
+		return "module/moduleSubCloAdd";
+	}
+
+	/**
+	 * 新增叶子节点
+	 * 
+	 * @return
+	 */
+	@RequestMapping("addLeafCol")
+	public String addLeafCol(HttpServletRequest request, Model model) {
+		Dto paramAsDto = getParamAsDto(request);
+
+		String menuId = paramAsDto.getAsString("menuId");
+		model.addAttribute("modIsleaf", "1");
+		if (menuId != null && !menuId.equals("")) {
+			model.addAttribute(paramAsDto);
+			String mName = CommUtil.convert(paramAsDto.getAsString("menuName"),
+					"UTF-8");
+			model.addAttribute("modParentName", mName);
+			model.addAttribute("modParentId", paramAsDto.getAsString("menuId"));
+		}
+		String modId = paramAsDto.getAsString("modId");
+		if (modId != null && !modId.equals("")) {
+			model.addAttribute(paramAsDto);
+			String mName = CommUtil.convert(paramAsDto.getAsString("modName"),
+					"UTF-8");
+			model.addAttribute("modParentName", mName);
+			model.addAttribute("modParentId", paramAsDto.getAsString("modId"));
+		}
+		String pagePath = "";
+		if (paramAsDto.getAsString("leafType").equals("03")) {
+			// 03 内容模板
+			pagePath = "moduleDes/moduleDesAdd";
+			// 04 带图列表模板
+		} else if (paramAsDto.getAsString("leafType").equals("04")) {
+			pagePath = "moduleDes/imgListModuleAdd";
+		} else if (paramAsDto.getAsString("leafType").equals("05")) {
+			// 05 Logo列表模板
+			pagePath = "module/logoModelAdd";
+		} else {
+			// 06 不带图列表模板
+			pagePath = "moduleDes/withoutImgListModuleIndex";
+		}
+		model.addAttribute("modLevel", paramAsDto.getAsString("modLevel"));
+		model.addAttribute("leafType", paramAsDto.getAsString("leafType"));
+		model.addAttribute("parentId", paramAsDto.getAsString("parentId"));
+		model.addAttribute("menuId", paramAsDto.getAsString("menuId"));
+		return pagePath;
+	}
+
+	/**
+	 * 保存下级栏目
+	 */
+	@RequestMapping("addFormSub")
+	@ResponseBody
+	public ResponseEntity<String> addFormSub(HttpServletRequest request,
+			Model model) {
+		// 定义响应参数的格式防止弹出下载框
+		HttpHeaders resHeader = new HttpHeaders();
+		resHeader.setContentType(MediaType.TEXT_HTML);
+		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+		Map<String, String> map = new HashMap<String, String>();
+		Dto paramAsDto = getParamAsDto(request);
+		// String menId = paramAsDto.getAsString("editor");
+		//
+		String banerpath = (String) (ProperHelper.BANNERFODLER != null ? ProperHelper.BANNERFODLER
+				: FileHelper.buildFolder(request));// 获取tomcat目录
+		CommUtil.createFolder(banerpath);
+
+		String smalPath = (String) (ProperHelper.SMALLIMAGE != null ? ProperHelper.SMALLIMAGE
+				: FileHelper.buildFolder(request));// 获取tomcat目录
+		CommUtil.createFolder(smalPath);
+
+		String[] extendes = (Globals.DEFAULT_IMAGE_SUFFIX).split("[|]");
+
+		String bannerFilename = null;
+		String saveBannerName = null;
+		Map<String, Object> mapban = null;
+		String realBannerPath = null;
+		MultipartFile fmodBanner = multiRequest.getFile("modBanner");
+		String bannerUrl = null;
+		if (!fmodBanner.isEmpty()) {
+			// 保存banner到服务器
+			try {
+				bannerFilename = fmodBanner.getOriginalFilename();
+				// String getFileName2 =
+				// FileHelper.getFileName(multiRequest.getFile("modBanner").getName());
+				logger.info("开始上传文件:" + bannerFilename);
+
+				saveBannerName = CommonUtil.generateFileName(FilenameUtils
+						.getExtension(bannerFilename));
+				mapban = WebUtil.saveFileToServer(multiRequest, "modBanner",
+						banerpath, saveBannerName, extendes);
+				realBannerPath = request.getSession().getServletContext()
+						.getRealPath(UploadVertor.FILE_UPLOAD_BANNER);
+				FileUtils.copyInputStreamToFile(fmodBanner.getInputStream(),
+						new File(realBannerPath, saveBannerName));
+				// 获得http服务器路径
+				bannerUrl = WebUtil.getURL(request) + ""
+						+ UploadVertor.FILE_UPLOAD_BANNER + "/"
+						+ saveBannerName;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		MultipartFile fmodImg = multiRequest.getFile("modImg");
+		String imgFilename = null;
+		Map<String, Object> mapimg = null;
+		String saveImgName = null;
+		String realSmalImgPath = null;
+		String imgUrl = null;
+		if (!fmodImg.isEmpty()) {
+			imgFilename = fmodImg.getOriginalFilename();
+			// 保存小图片到服务器
+			saveImgName = CommonUtil.generateFileName(FilenameUtils
+					.getExtension(imgFilename));
+
+			try {
+				logger.info("开始上传文件:" + imgFilename);
+				mapimg = WebUtil.saveFileToServer(multiRequest, "modImg",
+						smalPath, saveImgName, extendes);
+				realSmalImgPath = request.getSession().getServletContext()
+						.getRealPath(UploadVertor.FILE_UPLOAD_SMALIMAGE);
+				FileUtils.copyInputStreamToFile(fmodImg.getInputStream(),
+						new File(realSmalImgPath, saveImgName));
+				imgUrl = WebUtil.getURL(request) + ""
+						+ UploadVertor.FILE_UPLOAD_SMALIMAGE + "/"
+						+ saveImgName;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		map.put(RTN_RESULT, "true");
+		String modId = null;
+		if ((mapban != null && !mapban.isEmpty())
+				&& !((List) mapban.get("error")).isEmpty()
+				&& ((List) mapban.get("error")) != null) {
+			map.put(MESSAGE_INFO, "新增失败！" + mapban.get("error"));
+			String json = JSONObject.fromObject(map).toString();
+			return new ResponseEntity<String>(json, resHeader, HttpStatus.OK);
+		} else if ((mapimg != null && !mapimg.isEmpty())
+				&& !((List) mapimg.get("error")).isEmpty()
+				&& ((List) mapimg.get("error")) != null) {
+			map.put(MESSAGE_INFO, "新增失败！" + mapimg.get("error"));
+			String json = JSONObject.fromObject(map).toString();
+			return new ResponseEntity<String>(json, resHeader, HttpStatus.OK);
+		} else {
+			// paramAsDto
+			modId = UUID.randomUUID().toString().replace("-", "");
+			paramAsDto.put("modId", modId);
+			int modLevel = Integer.parseInt(paramAsDto.getAsString("modLevel")) + 1;
+			paramAsDto.put("modLevel", modLevel);
+			int modIsleaf = Integer.parseInt(paramAsDto
+					.getAsString("modIsleaf"));
+			// 创建时间
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			paramAsDto.put("createdTime", timestamp);
+			if (modLevel == 4) {
+				paramAsDto.put("modIsleaf", "1");// "1"表示叶子节点
+			} else {
+				paramAsDto.put("modIsleaf", "0");
+			}
+			// 事实上，paramDto已有数据
+			paramAsDto.put(
+					"createdBy",
+					SecurityUserHolder.getCurrentUser() == null ? null : String
+							.valueOf(SecurityUserHolder.getCurrentUser()
+									.getUsername()));
+			paramAsDto.put("version", "1");
+			paramAsDto.put("delflag", "0");
+			// 保存先保存到到主表
+			moduleAction.insertObject(paramAsDto);
+			// 保存到menu
+			Dto menuDto = new BaseDto();
+			Dto findOne = null;
+			int menuId = 0;
+			do {
+				menuId = Integer.parseInt(CommUtil.randomInt(5));
+				menuDto.put("menuId", menuId);
+				findOne = menuAction.findOne(menuDto);
+
+			} while (!findOne.isEmpty());
+			menuDto.put("parentId", paramAsDto.getAsString("parentId") + "|"
+					+ paramAsDto.getAsString("menuId"));
+			menuDto.put("isLeaf", paramAsDto.getAsString("modIsleaf"));
+			menuDto.put("menuName", paramAsDto.getAsString("modName"));
+			if (modLevel == 4) {
+				paramAsDto.put("menuUrl", "");// "1"表示叶子节点
+			} else {
+				menuDto.put("menuUrl", "/module/subList");
+			}
+			menuDto.put("menuOrder", 999);
+			menuDto.put("menuStatus", 1);
+			menuDto.put("Backup2", modId);
+			String loginId = SecurityUserHolder.getCurrentUser() == null ? null
+					: String.valueOf(SecurityUserHolder.getCurrentUser()
+							.getId());
+			paramAsDto.put("creator", loginId);
+			menuDto.put("createTime", timestamp);
+			menuDto.put("isShow", 1);
+			menuAction.insertObject(menuDto);
+
+			// 更新到权限表Dto
+			Dto roleUserDto = new BaseDto();
+			roleUserDto.put("userId", loginId);
+			Dto roleUseOne = userRoleAction.findOne(roleUserDto);
+			Dto roleMenuDto = new BaseDto();
+			roleMenuDto.put("roleId", roleUseOne.getAsString("roleId"));
+			roleMenuDto.put("menuId", menuId);
+			roleMenuDto.put("creator", loginId);
+			roleMenuDto.put("createTime", timestamp);
+			roleMenuAction.insertObject(roleMenuDto);
+			
+			String banImgId=null;
+			if (!fmodBanner.isEmpty()) {
+				banImgId = UUID.randomUUID().toString().replace("-", "");
+				paramAsDto.put("modBanner", banImgId);	
+			}
+			paramAsDto.put("modType", "01");
+			String modImgId=null;
+			if(!fmodImg.isEmpty()){
+				 modImgId = UUID.randomUUID().toString().replace("-", "");
+				paramAsDto.put("modImg", modImgId);
+			}
+			//跟新到Des表
+			moduleDesAction.insertObject(paramAsDto);
+			
+			
+			// 更新到内容表
+			if (!StringUtils.isEmpty(paramAsDto.get("editor_name").toString())) {
+				String contentId = UUID.randomUUID().toString()
+						.replace("-", "");
+				paramAsDto.put("contentId", contentId);
+				paramAsDto.put("modNumber", "999");
+				paramAsDto.put("contentImg", "");
+				paramAsDto.put("hasBanner", "1");
+				paramAsDto.put("bannerId", banImgId);
+				paramAsDto.put("content", paramAsDto.get("editor_name"));
+				paramAsDto.put("isDisplay", "1");
+				moduleContentAction.insertObject(paramAsDto);
+			}
+
+			// 更新到banner表中
+			if (!fmodBanner.isEmpty()) {
+				paramAsDto.put("banId", banImgId);
+				// String banId = UUID.randomUUID().toString().replace("-", "");
+				paramAsDto.put("banImgId", banImgId);// 主键
+				paramAsDto.put("banImgName", bannerFilename);
+				paramAsDto.put("belongId", modId);
+				paramAsDto.put("banImgUrl", bannerUrl);
+
+				paramAsDto.put("banImgDes", "下级banner图");
+				paramAsDto.put("banImgOutside", "");
+				paramAsDto.put("banImgNum", "999");
+				paramAsDto.put("banImgRename", saveBannerName);
+				bannerAction.insertObject(paramAsDto);
+			}
+
+			if (!fmodImg.isEmpty()) {
+				// 小图
+				paramAsDto.put("modImgId", modImgId);
+				paramAsDto.put("modImgName", imgFilename);
+				// paramAsDto.put("belongId", modId);
+				paramAsDto.put("modImgUrl", imgUrl);
+				paramAsDto.put("modImgNum", "999");
+				paramAsDto.put("modImgRename", saveImgName);
+				paramAsDto.put("modImgDes", "下级小图片");
+				paramAsDto.put("modImgOutside", "");
+				moduleImgAction.insertObject(paramAsDto);
+			}
+			// 跳转到
+			map.put(MESSAGE_INFO, "新增成功！");
+			map.put(RTN_RESULT, "true");
+
+			map.put("reqMenuId", paramAsDto.getAsString("menuId"));
+			map.put("menuName", paramAsDto.getAsString("menuName"));
+			map.put("backUp2", paramAsDto.getAsString("modParentId"));
+			// model.addAttribute(MESSAGE_INFO, "新增成功！");
+			// model.addAttribute(RTN_RESULT, true);
+		}
+		logger.info("结束文件上传:" + bannerFilename + "|" + imgFilename);
+		String json = JSONObject.fromObject(map).toString();
+		return new ResponseEntity<String>(json, resHeader, HttpStatus.OK);
+	}
+
+	/**
+	 * 修改下级栏目
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("editFormSub")
+	@ResponseBody
+	public ResponseEntity<String> editFormSub(HttpServletRequest request,
+			Model model) {
+		// 定义响应参数的格式防止弹出下载框
+		HttpHeaders resHeader = new HttpHeaders();
+		resHeader.setContentType(MediaType.TEXT_HTML);
+		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+		Map<String, String> map = new HashMap<String, String>();
+		Dto paramAsDto = getParamAsDto(request);
+		String banerpath = (String) (ProperHelper.BANNERFODLER != null ? ProperHelper.BANNERFODLER
+				: FileHelper.buildFolder(request));// 获取tomcat目录
+		CommUtil.createFolder(banerpath);
+
+		String smalPath = (String) (ProperHelper.SMALLIMAGE != null ? ProperHelper.SMALLIMAGE
+				: FileHelper.buildFolder(request));// 获取tomcat目录
+		CommUtil.createFolder(smalPath);
+
+		String[] extendes = (Globals.DEFAULT_IMAGE_SUFFIX).split("[|]");
+
+		String bannerFilename = null;
+		String saveBannerName = null;
+		Map<String, Object> mapban = new BaseDto();
+		String realBannerPath = null;
+		MultipartFile fmodBanner = multiRequest.getFile("modNewBanner");
+		String bannerUrl = null;
+		if (!fmodBanner.isEmpty() && fmodBanner.getSize() > 0) {
+			// 保存banner到服务器
+			try {
+
+				bannerFilename = fmodBanner.getOriginalFilename();
+				// String getFileName2 =
+				// FileHelper.getFileName(multiRequest.getFile("modBanner").getName());
+				logger.info("开始上传文件:" + bannerFilename);
+
+				saveBannerName = CommonUtil.generateFileName(FilenameUtils
+						.getExtension(bannerFilename));
+				mapban = WebUtil.saveFileToServer(multiRequest, "modNewBanner",
+						banerpath, saveBannerName, extendes);
+				realBannerPath = request.getSession().getServletContext()
+						.getRealPath(UploadVertor.FILE_UPLOAD_BANNER);
+				FileUtils.copyInputStreamToFile(fmodBanner.getInputStream(),
+						new File(realBannerPath, saveBannerName));
+				// 获得http服务器路径
+				bannerUrl = WebUtil.getURL(request) + ""
+						+ UploadVertor.FILE_UPLOAD_BANNER + "/"
+						+ saveBannerName;
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		MultipartFile fmodImg = multiRequest.getFile("modNewImg");
+		String imgFilename = null;
+		Map<String, Object> mapimg = null;
+		String saveImgName = null;
+		String realSmalImgPath = null;
+		String imgUrl = null;
+		if (!fmodImg.isEmpty() && fmodImg.getSize() > 0) {
+
+			imgFilename = fmodImg.getOriginalFilename();
+			// 保存小图片到服务器
+			saveImgName = CommonUtil.generateFileName(FilenameUtils
+					.getExtension(imgFilename));
+
+			try {
+				logger.info("开始上传文件:" + imgFilename);
+				mapimg = WebUtil.saveFileToServer(multiRequest, "modNewImg",
+						smalPath, saveImgName, extendes);
+				realSmalImgPath = request.getSession().getServletContext()
+						.getRealPath(UploadVertor.FILE_UPLOAD_SMALIMAGE);
+				FileUtils.copyInputStreamToFile(fmodImg.getInputStream(),
+						new File(realSmalImgPath, saveImgName));
+				imgUrl = WebUtil.getURL(request) + ""
+						+ UploadVertor.FILE_UPLOAD_SMALIMAGE + "/"
+						+ saveImgName;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		map.put(RTN_RESULT, "true");
+		String modId = paramAsDto.getAsString("modId");
+		if ((mapban != null && !mapban.isEmpty())
+				&& ((List) mapban.get("error")) != null
+				&& ((List) mapban.get("error")).size() > 0) {
+			map.put(MESSAGE_INFO, "修改失败！" + mapban.get("error"));
+			String json = JSONObject.fromObject(map).toString();
+			return new ResponseEntity<String>(json, resHeader, HttpStatus.OK);
+		} else if ((mapimg != null && !mapimg.isEmpty())
+				&& ((List) mapimg.get("error")) != null
+				&& !((List) mapimg.get("error")).isEmpty()) {
+			map.put(MESSAGE_INFO, "修改失败！" + mapimg.get("error"));
+			String json = JSONObject.fromObject(map).toString();
+			return new ResponseEntity<String>(json, resHeader, HttpStatus.OK);
+		} else {
+			paramAsDto.put("modId", modId);
+			// 事实上，paramDto已有数据
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			paramAsDto.put("modifiedTime", timestamp);
+			paramAsDto.put(
+					"modifiedBy",
+					SecurityUserHolder.getCurrentUser() == null ? null : String
+							.valueOf(SecurityUserHolder.getCurrentUser()
+									.getUsername()));
+			paramAsDto
+					.put("version",
+							paramAsDto.getAsString("version") != null
+									&& !"".equals(paramAsDto
+											.getAsString("version")) ? Integer
+									.parseInt(paramAsDto.getAsString("version")) + 1
+									: "");
+			// 最后修改主表
+			moduleAction.updateObject(paramAsDto);
+
+			// 更新到des表,肯定会有一部分数据
+			moduleDesAction.updateObject(paramAsDto);
+
+			// 保存到menu
+			Dto menuDto = new BaseDto();
+			menuDto.put("menuId", paramAsDto.getAsString("menuId"));
+			menuDto.put("menuName", paramAsDto.getAsString("modName"));
+			menuDto.put("Backup2", modId);
+			String loginId = SecurityUserHolder.getCurrentUser() == null ? null
+					: String.valueOf(SecurityUserHolder.getCurrentUser()
+							.getId());
+			menuDto.put("lastModby", loginId);
+			menuDto.put("lastModtime", timestamp);
+			menuDto.put("isShow", 1);
+			menuAction.updateObject(menuDto);
+
+			// 更新到内容表
+			Dto contentDto=new BaseDto();
+			contentDto.put("modId", modId);
+			if (!StringUtils.isEmpty(paramAsDto.get("editor_name").toString())) {
+				Dto contentBo = moduleContentAction.findOne(contentDto);
+				if (!contentBo.isEmpty()) {
+					// contentBo.put("content",
+					// paramAsDto.getAsString("content"));
+					contentBo.put("content", paramAsDto.get("editor_name"));
+					contentBo.put("modifiedTime", timestamp);
+					contentBo.put(
+							"modifiedBy",
+							SecurityUserHolder.getCurrentUser() == null ? null
+									: String.valueOf(SecurityUserHolder
+											.getCurrentUser().getUsername()));
+					contentBo
+							.put("version",
+									contentBo.getAsInteger("version") != null
+											&& !"".equals(contentBo
+													.getAsInteger("version")) ? contentBo
+											.getAsInteger("version") + 1 : "");
+					moduleContentAction.updateObject(contentBo);
+				} else {
+					String contentId = UUID.randomUUID().toString()
+							.replace("-", "");
+					paramAsDto.put("contentId", contentId);
+					paramAsDto.put("modNumber", "999");
+					paramAsDto.put("contentImg", "");
+					paramAsDto.put("hasBanner", "1");
+					paramAsDto.put("content", paramAsDto.get("editor_name"));
+					paramAsDto.put("isDisplay", "1");
+					moduleContentAction.insertObject(paramAsDto);
+				}
+
+			}
+			Dto paramBan=new BaseDto();
+			paramBan.put("belongId", modId);
+			
+			// 更新到banner表中
+			if (fmodBanner.getSize() > 0 && !fmodBanner.isEmpty()) {
+				// 判断是否有更新
+				Dto bannerBo = bannerAction.findOne(paramBan);
+				String newBanImgId = bannerBo.getAsString("banImgId");
+				//
+				if (TKStringUtils.isEmpty(newBanImgId)) {
+					// banner图
+					String banImgId = UUID.randomUUID().toString()
+							.replace("-", "");
+					paramAsDto.put("banImgId", banImgId);
+					
+					paramAsDto.put("banId", banImgId);
+					paramAsDto.put("banImgName", bannerFilename);
+					paramAsDto.put("belongId", modId);
+					paramAsDto.put("banImgUrl", bannerUrl);
+					paramAsDto.put("banImgDes", "下级banner图");
+					paramAsDto.put("banImgOutside", "");
+					paramAsDto.put("banImgNum", "999");
+					paramAsDto.put("banImgRename", saveBannerName);
+					bannerAction.insertObject(paramAsDto);
+				} else {
+					paramAsDto.put("banImgId", newBanImgId);
+					paramAsDto.put("banImgName", bannerFilename);
+					// paramAsDto.put("banImgName", bannerFilename);
+					paramAsDto.put("belongId", modId);
+					paramAsDto.put("banImgUrl", bannerUrl);
+					paramAsDto.put("banImgDes", "下级banner图");
+					paramAsDto.put("banImgOutside", "");
+					paramAsDto.put("banImgNum", "999");
+					paramAsDto.put("banImgRename", saveBannerName);
+					bannerAction.updateObject(paramAsDto);
+				}
+
+			}
+			Dto paramImg=new BaseDto();
+			paramImg.put("belongId", modId);
+			
+			if (fmodImg.getSize() > 0 && !fmodImg.isEmpty()) {
+				// 小图
+				Dto imgBo = moduleImgAction.findOne(paramImg);
+				String newModImg = imgBo.getAsString("modImgId");
+				
+				if (TKStringUtils.isEmpty(newModImg)) {
+					String modImgId = UUID.randomUUID().toString()
+							.replace("-", "");
+					paramAsDto.put("modImgId", modImgId);
+					paramAsDto.put("modImgName", imgFilename);
+					// paramAsDto.put("belongId", modId);
+					paramAsDto.put("modImgUrl", imgUrl);
+					paramAsDto.put("modImgNum", "999");
+					paramAsDto.put("modImgRename", saveImgName);
+					paramAsDto.put("modImgDes", "下级小图片");
+					paramAsDto.put("modImgOutside", "");
+					paramAsDto.put("belongId", modId);
+					moduleImgAction.insertObject(paramAsDto);
+				} else {
+					paramAsDto.put("modImgId", newModImg);
+					paramAsDto.put("modImgName", imgFilename);
+					paramAsDto.put("modImgUrl", imgUrl);
+					paramAsDto.put("modImgNum", "999");
+					paramAsDto.put("modImgRename", saveImgName);
+					paramAsDto.put("modImgDes", "下级小图片");
+					paramAsDto.put("modImgOutside", "");
+					paramAsDto.put("belongId", modId);
+					moduleImgAction.updateObject(paramAsDto);
+				}
+			}
+
+			// 跳转到
+			map.put(MESSAGE_INFO, "修改成功！");
+			map.put(RTN_RESULT, "true");
+
+			map.put("reqMenuId", paramAsDto.getAsString("menuId"));
+			map.put("menuName", paramAsDto.getAsString("modParentName"));
+			map.put("backUp2", paramAsDto.getAsString("modParentId"));
+		}
+		logger.info("结束文件上传:" + bannerFilename + "|" + imgFilename);
+		String json = JSONObject.fromObject(map).toString();
+		return new ResponseEntity<String>(json, resHeader, HttpStatus.OK);
+	}
+
+	/**
+	 * 保存新增或修改的记录，将其持久化到数据库中
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/save")
+	@ResponseBody
+	private Map<String, String> saveModuleInfo(HttpServletRequest request) {
+		Map<String, String> map = new HashMap<String, String>();
+
+		Dto param = getParamAsDto(request);
+		if (param.get("rowId") == null || "".equals(param.get("rowId"))) {
+			moduleAction.insertObject(param);
+			map.put(MESSAGE_INFO, "新增成功！");
+		} else {
+			moduleAction.updateObject(param);
+			map.put(MESSAGE_INFO, "更新成功！");
+		}
+		map.put(RTN_RESULT, "true");
+
+		return map;
+	}
+
+	/**
+	 * 判断是否第四级
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/isFourLevel")
+	@ResponseBody
+	private Map<String, String> isFourMenuLevel(HttpServletRequest request) {
+		Map<String, String> map = new HashMap<String, String>();
+		Dto param = getParamAsDto(request);
+		Dto dto = moduleAction.findSubOneModule(param);
+
+		/*
+		 * String rtn = dto.getAsString("result");
+		 * if(!rtn.equalsIgnoreCase("ok")||StringUtils.isEmpty(rtn)) {
+		 * map.put(MESSAGE_INFO, "新增成功！"); }
+		 */
+
+		map.putAll(dto);
+		map.put(RTN_RESULT, "true");
+
+		return map;
+	}
+
+	/**
+	 * 删除一条或多条记录
+	 */
+	@RequestMapping(value = "/del")
+	@ResponseBody
+	public Map<String, String> deleteModule(
+			@RequestParam("modId") String modId,
+			@RequestParam("modLevel") String modLevel,
+			@RequestParam("menuId") String menuId,
+			@RequestParam("parentId") String parentId) {
+		Map<String, String> map = new HashMap<String, String>();
+		// 注意顺序
+		Dto param = new BaseDto();
+		param.put("modId", modId);
+		param.put("delflag", "1");
+		moduleAction.updateObject(param);
+		// param.put("belongId", "modId");
+		// param.put("backUp2", "modId");
+		// param.put("menuStatus", "0");
+		//
+		if (!modLevel.equals("4")) {
+
+			// 删除属所子节点
+			Dto moduleDto = new BaseDto();
+			moduleDto.put("mod_parent_id", modId);
+			List<Dto> modulefindAll = moduleAction.findAll(moduleDto);
+			if (!modulefindAll.isEmpty()) {
+				for (Dto dto : modulefindAll) {
+					Dto mdto = new BaseDto();
+					String subModId = dto.getAsString("MOD_ID");
+					mdto.put("modId", subModId);
+					mdto.put("delflag", "1");
+					moduleAction.updateObject(mdto);
+				}
+			}
+
+			Dto dto2 = new BaseDto();
+			dto2.put("parent_id", parentId + "|" + menuId);
+			List<Dto> findmenuAll = menuAction.findAll(dto2);
+
+			if (!findmenuAll.isEmpty()) {
+				for (Dto dto5 : findmenuAll) {
+					String subMenuId = dto5.getAsString("Menu_Id");
+					Dto dto4 = new BaseDto();
+					dto4.put("menuId", subMenuId);
+					dto4.put("menuStatus", "0");
+					menuAction.updateObject(dto4);
+					menuAction.deleteObject(dto4);
+				}
+			}
+		}
+
+		Dto dto3 = new BaseDto();
+		dto3.put("menuId", menuId);
+		dto3.put("menuStatus", "0");
+		menuAction.updateObject(dto3);
+
+		map.put(RTN_RESULT, "true");
+		map.put(MESSAGE_INFO, "操作成功！");
+
+		return map;
+	}
+}

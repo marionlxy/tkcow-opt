@@ -1,0 +1,181 @@
+package com.taikang.tkcoww.logo.model;
+
+import java.util.Arrays;
+import java.sql.Timestamp;
+import java.lang.String;
+import java.lang.Integer;
+import com.taikang.udp.framework.common.datastructre.impl.BaseBO;
+
+
+/**
+  * CooperLogoBO 
+  */
+public class CooperLogoBO  extends BaseBO {
+	
+	private static final long serialVersionUID = 1L;
+	
+	public CooperLogoBO(){
+		init();
+	}
+	
+	protected void init(){
+		super.init();
+		this.addList(Arrays.asList("cooper_logo_id","logo_squence","cooper_logo_name","belong_id","cooper_logo_imgname","cooper_logo_des","cooper_logo_url","cooper_logo_storname","create_time","created_by","modified_time","modified_by","version","delflag"));
+	}
+	
+		
+		
+	private String cooperLogoId;
+		public void setCooperLogoId(String cooperLogoId){
+		getData().put("cooper_logo_id",cooperLogoId);
+		this.cooperLogoId=cooperLogoId;
+	}
+	
+	public String getCooperLogoId(){
+		return (String)getData().get("cooper_logo_id");
+	}	
+		
+		
+	private Integer logoSquence;
+		public void setLogoSquence(Integer logoSquence){
+		getData().put("logo_squence",logoSquence);
+		this.logoSquence=logoSquence;
+	}
+	
+	public Integer getLogoSquence(){
+		return (Integer)getData().get("logo_squence");
+	}	
+		
+		
+	private String cooperLogoName;
+		public void setCooperLogoName(String cooperLogoName){
+		getData().put("cooper_logo_name",cooperLogoName);
+		this.cooperLogoName=cooperLogoName;
+	}
+	
+	public String getCooperLogoName(){
+		return (String)getData().get("cooper_logo_name");
+	}	
+		
+		
+	private String belongId;
+		public void setBelongId(String belongId){
+		getData().put("belong_id",belongId);
+		this.belongId=belongId;
+	}
+	
+	public String getBelongId(){
+		return (String)getData().get("belong_id");
+	}	
+		
+		
+	private String cooperLogoImgname;
+		public void setCooperLogoImgname(String cooperLogoImgname){
+		getData().put("cooper_logo_imgname",cooperLogoImgname);
+		this.cooperLogoImgname=cooperLogoImgname;
+	}
+	
+	public String getCooperLogoImgname(){
+		return (String)getData().get("cooper_logo_imgname");
+	}	
+		
+		
+	private String cooperLogoDes;
+		public void setCooperLogoDes(String cooperLogoDes){
+		getData().put("cooper_logo_des",cooperLogoDes);
+		this.cooperLogoDes=cooperLogoDes;
+	}
+	
+	public String getCooperLogoDes(){
+		return (String)getData().get("cooper_logo_des");
+	}	
+		
+		
+	private String cooperLogoUrl;
+		public void setCooperLogoUrl(String cooperLogoUrl){
+		getData().put("cooper_logo_url",cooperLogoUrl);
+		this.cooperLogoUrl=cooperLogoUrl;
+	}
+	
+	public String getCooperLogoUrl(){
+		return (String)getData().get("cooper_logo_url");
+	}	
+		
+		
+	private String cooperLogoStorname;
+		public void setCooperLogoStorname(String cooperLogoStorname){
+		getData().put("cooper_logo_storname",cooperLogoStorname);
+		this.cooperLogoStorname=cooperLogoStorname;
+	}
+	
+	public String getCooperLogoStorname(){
+		return (String)getData().get("cooper_logo_storname");
+	}	
+		
+		
+	private Timestamp createTime;
+		public void setCreateTime(Timestamp createTime){
+		getData().put("create_time",createTime);
+		this.createTime=createTime;
+	}
+	
+	public Timestamp getCreateTime(){
+		return (Timestamp)getData().get("create_time");
+	}	
+		
+		
+	private String createdBy;
+		public void setCreatedBy(String createdBy){
+		getData().put("created_by",createdBy);
+		this.createdBy=createdBy;
+	}
+	
+	public String getCreatedBy(){
+		return (String)getData().get("created_by");
+	}	
+		
+		
+	private Timestamp modifiedTime;
+		public void setModifiedTime(Timestamp modifiedTime){
+		getData().put("modified_time",modifiedTime);
+		this.modifiedTime=modifiedTime;
+	}
+	
+	public Timestamp getModifiedTime(){
+		return (Timestamp)getData().get("modified_time");
+	}	
+		
+		
+	private String modifiedBy;
+		public void setModifiedBy(String modifiedBy){
+		getData().put("modified_by",modifiedBy);
+		this.modifiedBy=modifiedBy;
+	}
+	
+	public String getModifiedBy(){
+		return (String)getData().get("modified_by");
+	}	
+		
+		
+	private Integer version;
+		public void setVersion(Integer version){
+		getData().put("version",version);
+		this.version=version;
+	}
+	
+	public Integer getVersion(){
+		return (Integer)getData().get("version");
+	}	
+		
+		
+	private String delflag;
+		public void setDelflag(String delflag){
+		getData().put("delflag",delflag);
+		this.delflag=delflag;
+	}
+	
+	public String getDelflag(){
+		return (String)getData().get("delflag");
+	}	
+	 }
+

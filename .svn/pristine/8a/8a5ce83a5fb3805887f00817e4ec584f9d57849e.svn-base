@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SysConfig">
+	<resultMap id="sysConfigResultMap" type="com.taikang.udp.sys.model.SysConfigBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="address" column="address"/>
+		<result property="bigheight" column="bigHeight"/>
+		<result property="bigwidth" column="bigWidth"/>
+		<result property="closereason" column="closeReason"/>
+		<result property="copyright" column="copyRight"/>
+		<result property="description" column="description"/>
+		<result property="emailenable" column="emailEnable"/>
+		<result property="emailhost" column="emailHost"/>
+		<result property="emailport" column="emailPort"/>
+		<result property="emailpws" column="emailPws"/>
+		<result property="emailtest" column="emailTest"/>
+		<result property="emailuser" column="emailUser"/>
+		<result property="emailusername" column="emailUserName"/>
+		<result property="hotsearch" column="hotSearch"/>
+		<result property="imagefilesize" column="imageFilesize"/>
+		<result property="imagesavetype" column="imageSaveType"/>
+		<result property="imagesuffix" column="imageSuffix"/>
+		<result property="integral" column="integral"/>
+		<result property="keywords" column="keywords"/>
+		<result property="middleheight" column="middleHeight"/>
+		<result property="middlewidth" column="middleWidth"/>
+		<result property="securitycodelogin" column="securityCodeLogin"/>
+		<result property="securitycoderegister" column="securityCodeRegister"/>
+		<result property="securitycodetype" column="securityCodeType"/>
+		<result property="smallheight" column="smallHeight"/>
+		<result property="smallwidth" column="smallWidth"/>
+		<result property="smsenbale" column="smsEnbale"/>
+		<result property="smspassword" column="smsPassword"/>
+		<result property="smstest" column="smsTest"/>
+		<result property="smsurl" column="smsURL"/>
+		<result property="smsusername" column="smsUserName"/>
+		<result property="syslanguage" column="sysLanguage"/>
+		<result property="title" column="title"/>
+		<result property="uploadfilepath" column="uploadFilePath"/>
+		<result property="visitorconsult" column="visitorConsult"/>
+		<result property="websitename" column="websiteName"/>
+		<result property="websitestate" column="websiteState"/>
+		<result property="membericonId" column="memberIcon_id"/>
+		<result property="websitelogoId" column="websiteLogo_id"/>
+		<result property="qqLogin" column="qq_login"/>
+		<result property="qqLoginId" column="qq_login_id"/>
+		<result property="qqLoginKey" column="qq_login_key"/>
+		<result property="qqDomainCode" column="qq_domain_code"/>
+		<result property="sinaDomainCode" column="sina_domain_code"/>
+		<result property="sinaLogin" column="sina_login"/>
+		<result property="sinaLoginId" column="sina_login_id"/>
+		<result property="sinaLoginKey" column="sina_login_key"/>
+		<result property="imagewebserver" column="imageWebServer"/>
+		<result property="serviceQqList" column="service_qq_list"/>
+		<result property="serviceTelphoneList" column="service_telphone_list"/>
+		<result property="currencyCode" column="currency_code"/>
+		<result property="websitecss" column="websiteCss"/>
+  	</resultMap>
+  
+  	<sql id="sysConfigWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null and deletestatus != '' and deletestatus != 'null' ">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" address != null and address != '' and address != 'null' ">
+			<![CDATA[ AND A.address = #{address} ]]>
+	  	</if>
+	  	<if test=" bigheight != null ">
+	  		<![CDATA[ AND A.bigHeight = ${bigheight} ]]>
+	  	</if>
+	  	<if test=" bigwidth != null ">
+	  		<![CDATA[ AND A.bigWidth = ${bigwidth} ]]>
+	  	</if>
+	  	<if test=" closereason != null and closereason != '' and closereason != 'null' ">
+			<![CDATA[ AND A.closeReason = #{closereason} ]]>
+	  	</if>
+	  	<if test=" copyright != null and copyright != '' and copyright != 'null' ">
+			<![CDATA[ AND A.copyRight = #{copyright} ]]>
+	  	</if>
+	  	<if test=" description != null and description != '' and description != 'null' ">
+			<![CDATA[ AND A.description = #{description} ]]>
+	  	</if>
+	  	<if test=" emailenable != null and emailenable != '' and emailenable != 'null' ">
+			<![CDATA[ AND A.emailEnable = #{emailenable} ]]>
+	  	</if>
+	  	<if test=" emailhost != null and emailhost != '' and emailhost != 'null' ">
+			<![CDATA[ AND A.emailHost = #{emailhost} ]]>
+	  	</if>
+	  	<if test=" emailport != null ">
+	  		<![CDATA[ AND A.emailPort = ${emailport} ]]>
+	  	</if>
+	  	<if test=" emailpws != null and emailpws != '' and emailpws != 'null' ">
+			<![CDATA[ AND A.emailPws = #{emailpws} ]]>
+	  	</if>
+	  	<if test=" emailtest != null and emailtest != '' and emailtest != 'null' ">
+			<![CDATA[ AND A.emailTest = #{emailtest} ]]>
+	  	</if>
+	  	<if test=" emailuser != null and emailuser != '' and emailuser != 'null' ">
+			<![CDATA[ AND A.emailUser = #{emailuser} ]]>
+	  	</if>
+	  	<if test=" emailusername != null and emailusername != '' and emailusername != 'null' ">
+			<![CDATA[ AND A.emailUserName = #{emailusername} ]]>
+	  	</if>
+	  	<if test=" hotsearch != null and hotsearch != '' and hotsearch != 'null' ">
+			<![CDATA[ AND A.hotSearch = #{hotsearch} ]]>
+	  	</if>
+	  	<if test=" imagefilesize != null ">
+	  		<![CDATA[ AND A.imageFilesize = ${imagefilesize} ]]>
+	  	</if>
+	  	<if test=" imagesavetype != null and imagesavetype != '' and imagesavetype != 'null' ">
+			<![CDATA[ AND A.imageSaveType = #{imagesavetype} ]]>
+	  	</if>
+	  	<if test=" imagesuffix != null and imagesuffix != '' and imagesuffix != 'null' ">
+			<![CDATA[ AND A.imageSuffix = #{imagesuffix} ]]>
+	  	</if>
+	  	<if test=" integral != null and integral != '' and integral != 'null' ">
+			<![CDATA[ AND A.integral = #{integral} ]]>
+	  	</if>
+	  	<if test=" keywords != null and keywords != '' and keywords != 'null' ">
+			<![CDATA[ AND A.keywords = #{keywords} ]]>
+	  	</if>
+	  	<if test=" middleheight != null ">
+	  		<![CDATA[ AND A.middleHeight = ${middleheight} ]]>
+	  	</if>
+	  	<if test=" middlewidth != null ">
+	  		<![CDATA[ AND A.middleWidth = ${middlewidth} ]]>
+	  	</if>
+	  	<if test=" securitycodelogin != null and securitycodelogin != '' and securitycodelogin != 'null' ">
+			<![CDATA[ AND A.securityCodeLogin = #{securitycodelogin} ]]>
+	  	</if>
+	  	<if test=" securitycoderegister != null">
+			<![CDATA[ AND A.securityCodeRegister = #{securitycoderegister} ]]>
+	  	</if>
+	  	<if test=" securitycodetype != null and securitycodetype != '' and securitycodetype != 'null' ">
+			<![CDATA[ AND A.securityCodeType = #{securitycodetype} ]]>
+	  	</if>
+	  	<if test=" smallheight != null ">
+	  		<![CDATA[ AND A.smallHeight = ${smallheight} ]]>
+	  	</if>
+	  	<if test=" smallwidth != null ">
+	  		<![CDATA[ AND A.smallWidth = ${smallwidth} ]]>
+	  	</if>
+	  	<if test=" smsenbale != null and smsenbale != '' and smsenbale != 'null' ">
+			<![CDATA[ AND A.smsEnbale = #{smsenbale} ]]>
+	  	</if>
+	  	<if test=" smspassword != null and smspassword != '' and smspassword != 'null' ">
+			<![CDATA[ AND A.smsPassword = #{smspassword} ]]>
+	  	</if>
+	  	<if test=" smstest != null and smstest != '' and smstest != 'null' ">
+			<![CDATA[ AND A.smsTest = #{smstest} ]]>
+	  	</if>
+	  	<if test=" smsurl != null and smsurl != '' and smsurl != 'null' ">
+			<![CDATA[ AND A.smsURL = #{smsurl} ]]>
+	  	</if>
+	  	<if test=" smsusername != null and smsusername != '' and smsusername != 'null' ">
+			<![CDATA[ AND A.smsUserName = #{smsusername} ]]>
+	  	</if>
+	  	<if test=" syslanguage != null and syslanguage != '' and syslanguage != 'null' ">
+			<![CDATA[ AND A.sysLanguage = #{syslanguage} ]]>
+	  	</if>
+	  	<if test=" title != null and title != '' and title != 'null' ">
+			<![CDATA[ AND A.title = #{title} ]]>
+	  	</if>
+	  	<if test=" uploadfilepath != null and uploadfilepath != '' and uploadfilepath != 'null' ">
+			<![CDATA[ AND A.uploadFilePath = #{uploadfilepath} ]]>
+	  	</if>
+	  	<if test=" visitorconsult != null and visitorconsult != '' and visitorconsult != 'null' ">
+			<![CDATA[ AND A.visitorConsult = #{visitorconsult} ]]>
+	  	</if>
+	  	<if test=" websitename != null and websitename != '' and websitename != 'null' ">
+			<![CDATA[ AND A.websiteName = #{websitename} ]]>
+	  	</if>
+	  	<if test=" websitestate != null and websitestate != '' and websitestate != 'null' ">
+			<![CDATA[ AND A.websiteState = #{websitestate} ]]>
+	  	</if>
+	  	<if test=" membericon_id != null ">
+	  		<![CDATA[ AND A.memberIcon_id = ${membericon_id} ]]>
+	  	</if>
+	  	<if test=" websitelogo_id != null ">
+	  		<![CDATA[ AND A.websiteLogo_id = ${websitelogo_id} ]]>
+	  	</if>
+	  	<if test=" qq_login != null and qq_login != '' and qq_login != 'null' ">
+			<![CDATA[ AND A.qq_login = #{qq_login} ]]>
+	  	</if>
+	  	<if test=" qq_login_id != null and qq_login_id != '' and qq_login_id != 'null' ">
+			<![CDATA[ AND A.qq_login_id = #{qq_login_id} ]]>
+	  	</if>
+	  	<if test=" qq_login_key != null and qq_login_key != '' and qq_login_key != 'null' ">
+			<![CDATA[ AND A.qq_login_key = #{qq_login_key} ]]>
+	  	</if>
+	  	<if test=" qq_domain_code != null and qq_domain_code != '' and qq_domain_code != 'null' ">
+			<![CDATA[ AND A.qq_domain_code = #{qq_domain_code} ]]>
+	  	</if>
+	  	<if test=" sina_domain_code != null and sina_domain_code != '' and sina_domain_code != 'null' ">
+			<![CDATA[ AND A.sina_domain_code = #{sina_domain_code} ]]>
+	  	</if>
+	  	<if test=" sina_login != null and sina_login != '' and sina_login != 'null' ">
+			<![CDATA[ AND A.sina_login = #{sina_login} ]]>
+	  	</if>
+	  	<if test=" sina_login_id != null and sina_login_id != '' and sina_login_id != 'null' ">
+			<![CDATA[ AND A.sina_login_id = #{sina_login_id} ]]>
+	  	</if>
+	  	<if test=" sina_login_key != null and sina_login_key != '' and sina_login_key != 'null' ">
+			<![CDATA[ AND A.sina_login_key = #{sina_login_key} ]]>
+	  	</if>
+	  	<if test=" imagewebserver != null and imagewebserver != '' and imagewebserver != 'null' ">
+			<![CDATA[ AND A.imageWebServer = #{imagewebserver} ]]>
+	  	</if>
+	  	<if test=" service_qq_list != null and service_qq_list != '' and service_qq_list != 'null' ">
+			<![CDATA[ AND A.service_qq_list = #{service_qq_list} ]]>
+	  	</if>
+	  	<if test=" service_telphone_list != null and service_telphone_list != '' and service_telphone_list != 'null' ">
+			<![CDATA[ AND A.service_telphone_list = #{service_telphone_list} ]]>
+	  	</if>
+	  	<if test=" currency_code != null and currency_code != '' and currency_code != 'null' ">
+			<![CDATA[ AND A.currency_code = #{currency_code} ]]>
+	  	</if>
+	  	<if test=" websitecss != null and websitecss != '' and websitecss != 'null' ">
+			<![CDATA[ AND A.websiteCss = #{websitecss} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addSysConfig"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO SYSCONFIG
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null and  addtime  != ''  and  addtime  != 'null' ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null and  modifytime  != ''  and  modifytime  != 'null' ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" address  != null and  address  != ''  and  address  != 'null' ">
+				<![CDATA[ address , ]]>
+	  		</if>
+	  		<if test=" bigheight  != null ">
+				<![CDATA[ bigHeight , ]]>
+	  		</if>
+	  		<if test=" bigwidth  != null ">
+				<![CDATA[ bigWidth , ]]>
+	  		</if>
+	  		<if test=" closereason  != null and  closereason  != ''  and  closereason  != 'null' ">
+				<![CDATA[ closeReason , ]]>
+	  		</if>
+	  		<if test=" copyright  != null and  copyright  != ''  and  copyright  != 'null' ">
+				<![CDATA[ copyRight , ]]>
+	  		</if>
+	  		<if test=" description  != null and  description  != ''  and  description  != 'null' ">
+				<![CDATA[ description , ]]>
+	  		</if>
+	  		<if test=" emailenable  != null and  emailenable  != ''  and  emailenable  != 'null' ">
+				<![CDATA[ emailEnable , ]]>
+	  		</if>
+	  		<if test=" emailhost  != null and  emailhost  != ''  and  emailhost  != 'null' ">
+				<![CDATA[ emailHost , ]]>
+	  		</if>
+	  		<if test=" emailport  != null ">
+				<![CDATA[ emailPort , ]]>
+	  		</if>
+	  		<if test=" emailpws  != null and  emailpws  != ''  and  emailpws  != 'null' ">
+				<![CDATA[ emailPws , ]]>
+	  		</if>
+	  		<if test=" emailtest  != null and  emailtest  != ''  and  emailtest  != 'null' ">
+				<![CDATA[ emailTest , ]]>
+	  		</if>
+	  		<if test=" emailuser  != null and  emailuser  != ''  and  emailuser  != 'null' ">
+				<![CDATA[ emailUser , ]]>
+	  		</if>
+	  		<if test=" emailusername  != null and  emailusername  != ''  and  emailusername  != 'null' ">
+				<![CDATA[ emailUserName , ]]>
+	  		</if>
+	  		<if test=" hotsearch  != null and  hotsearch  != ''  and  hotsearch  != 'null' ">
+				<![CDATA[ hotSearch , ]]>
+	  		</if>
+	  		<if test=" imagefilesize  != null ">
+				<![CDATA[ imageFilesize , ]]>
+	  		</if>
+	  		<if test=" imagesavetype  != null and  imagesavetype  != ''  and  imagesavetype  != 'null' ">
+				<![CDATA[ imageSaveType , ]]>
+	  		</if>
+	  		<if test=" imagesuffix  != null and  imagesuffix  != ''  and  imagesuffix  != 'null' ">
+				<![CDATA[ imageSuffix , ]]>
+	  		</if>
+	  		<if test=" integral  != null and  integral  != ''  and  integral  != 'null' ">
+				<![CDATA[ integral , ]]>
+	  		</if>
+	  		<if test=" keywords  != null and  keywords  != ''  and  keywords  != 'null' ">
+				<![CDATA[ keywords , ]]>
+	  		</if>
+	  		<if test=" middleheight  != null ">
+				<![CDATA[ middleHeight , ]]>
+	  		</if>
+	  		<if test=" middlewidth  != null ">
+				<![CDATA[ middleWidth , ]]>
+	  		</if>
+	  		<if test=" securitycodelogin  != null and  securitycodelogin  != ''  and  securitycodelogin  != 'null' ">
+				<![CDATA[ securityCodeLogin , ]]>
+	  		</if>
+	  		<if test=" securitycoderegister  != null and  securitycoderegister  != ''  and  securitycoderegister  != 'null' ">
+				<![CDATA[ securityCodeRegister , ]]>
+	  		</if>
+	  		<if test=" securitycodetype  != null and  securitycodetype  != ''  and  securitycodetype  != 'null' ">
+				<![CDATA[ securityCodeType , ]]>
+	  		</if>
+	  		<if test=" smallheight  != null ">
+				<![CDATA[ smallHeight , ]]>
+	  		</if>
+	  		<if test=" smallwidth  != null ">
+				<![CDATA[ smallWidth , ]]>
+	  		</if>
+	  		<if test=" smsenbale  != null and  smsenbale  != ''  and  smsenbale  != 'null' ">
+				<![CDATA[ smsEnbale , ]]>
+	  		</if>
+	  		<if test=" smspassword  != null and  smspassword  != ''  and  smspassword  != 'null' ">
+				<![CDATA[ smsPassword , ]]>
+	  		</if>
+	  		<if test=" smstest  != null and  smstest  != ''  and  smstest  != 'null' ">
+				<![CDATA[ smsTest , ]]>
+	  		</if>
+	  		<if test=" smsurl  != null and  smsurl  != ''  and  smsurl  != 'null' ">
+				<![CDATA[ smsURL , ]]>
+	  		</if>
+	  		<if test=" smsusername  != null and  smsusername  != ''  and  smsusername  != 'null' ">
+				<![CDATA[ smsUserName , ]]>
+	  		</if>
+	  		<if test=" syslanguage  != null and  syslanguage  != ''  and  syslanguage  != 'null' ">
+				<![CDATA[ sysLanguage , ]]>
+	  		</if>
+	  		<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+				<![CDATA[ title , ]]>
+	  		</if>
+	  		<if test=" uploadfilepath  != null and  uploadfilepath  != ''  and  uploadfilepath  != 'null' ">
+				<![CDATA[ uploadFilePath , ]]>
+	  		</if>
+	  		<if test=" visitorconsult  != null and  visitorconsult  != ''  and  visitorconsult  != 'null' ">
+				<![CDATA[ visitorConsult , ]]>
+	  		</if>
+	  		<if test=" websitename  != null and  websitename  != ''  and  websitename  != 'null' ">
+				<![CDATA[ websiteName , ]]>
+	  		</if>
+	  		<if test=" websitestate  != null and  websitestate  != ''  and  websitestate  != 'null' ">
+				<![CDATA[ websiteState , ]]>
+	  		</if>
+	  		<if test=" membericon_id  != null ">
+				<![CDATA[ memberIcon_id , ]]>
+	  		</if>
+	  		<if test=" websitelogo_id  != null ">
+				<![CDATA[ websiteLogo_id , ]]>
+	  		</if>
+	  		<if test=" qq_login  != null and  qq_login  != ''  and  qq_login  != 'null' ">
+				<![CDATA[ qq_login , ]]>
+	  		</if>
+	  		<if test=" qq_login_id  != null and  qq_login_id  != ''  and  qq_login_id  != 'null' ">
+				<![CDATA[ qq_login_id , ]]>
+	  		</if>
+	  		<if test=" qq_login_key  != null and  qq_login_key  != ''  and  qq_login_key  != 'null' ">
+				<![CDATA[ qq_login_key , ]]>
+	  		</if>
+	  		<if test=" qq_domain_code  != null and  qq_domain_code  != ''  and  qq_domain_code  != 'null' ">
+				<![CDATA[ qq_domain_code , ]]>
+	  		</if>
+	  		<if test=" sina_domain_code  != null and  sina_domain_code  != ''  and  sina_domain_code  != 'null' ">
+				<![CDATA[ sina_domain_code , ]]>
+	  		</if>
+	  		<if test=" sina_login  != null and  sina_login  != ''  and  sina_login  != 'null' ">
+				<![CDATA[ sina_login , ]]>
+	  		</if>
+	  		<if test=" sina_login_id  != null and  sina_login_id  != ''  and  sina_login_id  != 'null' ">
+				<![CDATA[ sina_login_id , ]]>
+	  		</if>
+	  		<if test=" sina_login_key  != null and  sina_login_key  != ''  and  sina_login_key  != 'null' ">
+				<![CDATA[ sina_login_key , ]]>
+	  		</if>
+	  		<if test=" imagewebserver  != null and  imagewebserver  != ''  and  imagewebserver  != 'null' ">
+				<![CDATA[ imageWebServer , ]]>
+	  		</if>
+	  		<if test=" service_qq_list  != null and  service_qq_list  != ''  and  service_qq_list  != 'null' ">
+				<![CDATA[ service_qq_list , ]]>
+	  		</if>
+	  		<if test=" service_telphone_list  != null and  service_telphone_list  != ''  and  service_telphone_list  != 'null' ">
+				<![CDATA[ service_telphone_list , ]]>
+	  		</if>
+	  		<if test=" currency_code  != null and  currency_code  != ''  and  currency_code  != 'null' ">
+				<![CDATA[ currency_code , ]]>
+	  		</if>
+	  		<if test=" websitecss  != null and  websitecss  != ''  and  websitecss  != 'null' ">
+				<![CDATA[ websiteCss , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+	  			<![CDATA[ #{deletestatus} , ]]>
+	  		</if>
+	  		<if test=" address  != null and  address  != ''  and  address  != 'null' ">
+	  			<![CDATA[ #{address} , ]]>
+	  		</if>
+	  		<if test=" bigheight  != null">
+	    		<![CDATA[ ${bigheight} , ]]>
+	  		</if>
+	  		<if test=" bigwidth  != null">
+	    		<![CDATA[ ${bigwidth} , ]]>
+	  		</if>
+	  		<if test=" closereason  != null and  closereason  != ''  and  closereason  != 'null' ">
+	  			<![CDATA[ #{closereason} , ]]>
+	  		</if>
+	  		<if test=" copyright  != null and  copyright  != ''  and  copyright  != 'null' ">
+	  			<![CDATA[ #{copyright} , ]]>
+	  		</if>
+	  		<if test=" description  != null and  description  != ''  and  description  != 'null' ">
+	  			<![CDATA[ #{description} , ]]>
+	  		</if>
+	  		<if test=" emailenable  != null and  emailenable  != ''  and  emailenable  != 'null' ">
+	  			<![CDATA[ #{emailenable} , ]]>
+	  		</if>
+	  		<if test=" emailhost  != null and  emailhost  != ''  and  emailhost  != 'null' ">
+	  			<![CDATA[ #{emailhost} , ]]>
+	  		</if>
+	  		<if test=" emailport  != null">
+	    		<![CDATA[ ${emailport} , ]]>
+	  		</if>
+	  		<if test=" emailpws  != null and  emailpws  != ''  and  emailpws  != 'null' ">
+	  			<![CDATA[ #{emailpws} , ]]>
+	  		</if>
+	  		<if test=" emailtest  != null and  emailtest  != ''  and  emailtest  != 'null' ">
+	  			<![CDATA[ #{emailtest} , ]]>
+	  		</if>
+	  		<if test=" emailuser  != null and  emailuser  != ''  and  emailuser  != 'null' ">
+	  			<![CDATA[ #{emailuser} , ]]>
+	  		</if>
+	  		<if test=" emailusername  != null and  emailusername  != ''  and  emailusername  != 'null' ">
+	  			<![CDATA[ #{emailusername} , ]]>
+	  		</if>
+	  		<if test=" hotsearch  != null and  hotsearch  != ''  and  hotsearch  != 'null' ">
+	  			<![CDATA[ #{hotsearch} , ]]>
+	  		</if>
+	  		<if test=" imagefilesize  != null">
+	    		<![CDATA[ ${imagefilesize} , ]]>
+	  		</if>
+	  		<if test=" imagesavetype  != null and  imagesavetype  != ''  and  imagesavetype  != 'null' ">
+	  			<![CDATA[ #{imagesavetype} , ]]>
+	  		</if>
+	  		<if test=" imagesuffix  != null and  imagesuffix  != ''  and  imagesuffix  != 'null' ">
+	  			<![CDATA[ #{imagesuffix} , ]]>
+	  		</if>
+	  		<if test=" integral  != null and  integral  != ''  and  integral  != 'null' ">
+	  			<![CDATA[ #{integral} , ]]>
+	  		</if>
+	  		<if test=" keywords  != null and  keywords  != ''  and  keywords  != 'null' ">
+	  			<![CDATA[ #{keywords} , ]]>
+	  		</if>
+	  		<if test=" middleheight  != null">
+	    		<![CDATA[ ${middleheight} , ]]>
+	  		</if>
+	  		<if test=" middlewidth  != null">
+	    		<![CDATA[ ${middlewidth} , ]]>
+	  		</if>
+	  		<if test=" securitycodelogin  != null and  securitycodelogin  != ''  and  securitycodelogin  != 'null' ">
+	  			<![CDATA[ #{securitycodelogin} , ]]>
+	  		</if>
+	  		<if test=" securitycoderegister  != null and  securitycoderegister  != ''  and  securitycoderegister  != 'null' ">
+	  			<![CDATA[ #{securitycoderegister} , ]]>
+	  		</if>
+	  		<if test=" securitycodetype  != null and  securitycodetype  != ''  and  securitycodetype  != 'null' ">
+	  			<![CDATA[ #{securitycodetype} , ]]>
+	  		</if>
+	  		<if test=" smallheight  != null">
+	    		<![CDATA[ ${smallheight} , ]]>
+	  		</if>
+	  		<if test=" smallwidth  != null">
+	    		<![CDATA[ ${smallwidth} , ]]>
+	  		</if>
+	  		<if test=" smsenbale  != null and  smsenbale  != ''  and  smsenbale  != 'null' ">
+	  			<![CDATA[ #{smsenbale} , ]]>
+	  		</if>
+	  		<if test=" smspassword  != null and  smspassword  != ''  and  smspassword  != 'null' ">
+	  			<![CDATA[ #{smspassword} , ]]>
+	  		</if>
+	  		<if test=" smstest  != null and  smstest  != ''  and  smstest  != 'null' ">
+	  			<![CDATA[ #{smstest} , ]]>
+	  		</if>
+	  		<if test=" smsurl  != null and  smsurl  != ''  and  smsurl  != 'null' ">
+	  			<![CDATA[ #{smsurl} , ]]>
+	  		</if>
+	  		<if test=" smsusername  != null and  smsusername  != ''  and  smsusername  != 'null' ">
+	  			<![CDATA[ #{smsusername} , ]]>
+	  		</if>
+	  		<if test=" syslanguage  != null and  syslanguage  != ''  and  syslanguage  != 'null' ">
+	  			<![CDATA[ #{syslanguage} , ]]>
+	  		</if>
+	  		<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+	  			<![CDATA[ #{title} , ]]>
+	  		</if>
+	  		<if test=" uploadfilepath  != null and  uploadfilepath  != ''  and  uploadfilepath  != 'null' ">
+	  			<![CDATA[ #{uploadfilepath} , ]]>
+	  		</if>
+	  		<if test=" visitorconsult  != null and  visitorconsult  != ''  and  visitorconsult  != 'null' ">
+	  			<![CDATA[ #{visitorconsult} , ]]>
+	  		</if>
+	  		<if test=" websitename  != null and  websitename  != ''  and  websitename  != 'null' ">
+	  			<![CDATA[ #{websitename} , ]]>
+	  		</if>
+	  		<if test=" websitestate  != null and  websitestate  != ''  and  websitestate  != 'null' ">
+	  			<![CDATA[ #{websitestate} , ]]>
+	  		</if>
+	  		<if test=" membericon_id  != null">
+	    		<![CDATA[ ${membericon_id} , ]]>
+	  		</if>
+	  		<if test=" websitelogo_id  != null">
+	    		<![CDATA[ ${websitelogo_id} , ]]>
+	  		</if>
+	  		<if test=" qq_login  != null and  qq_login  != ''  and  qq_login  != 'null' ">
+	  			<![CDATA[ #{qq_login} , ]]>
+	  		</if>
+	  		<if test=" qq_login_id  != null and  qq_login_id  != ''  and  qq_login_id  != 'null' ">
+	  			<![CDATA[ #{qq_login_id} , ]]>
+	  		</if>
+	  		<if test=" qq_login_key  != null and  qq_login_key  != ''  and  qq_login_key  != 'null' ">
+	  			<![CDATA[ #{qq_login_key} , ]]>
+	  		</if>
+	  		<if test=" qq_domain_code  != null and  qq_domain_code  != ''  and  qq_domain_code  != 'null' ">
+	  			<![CDATA[ #{qq_domain_code} , ]]>
+	  		</if>
+	  		<if test=" sina_domain_code  != null and  sina_domain_code  != ''  and  sina_domain_code  != 'null' ">
+	  			<![CDATA[ #{sina_domain_code} , ]]>
+	  		</if>
+	  		<if test=" sina_login  != null and  sina_login  != ''  and  sina_login  != 'null' ">
+	  			<![CDATA[ #{sina_login} , ]]>
+	  		</if>
+	  		<if test=" sina_login_id  != null and  sina_login_id  != ''  and  sina_login_id  != 'null' ">
+	  			<![CDATA[ #{sina_login_id} , ]]>
+	  		</if>
+	  		<if test=" sina_login_key  != null and  sina_login_key  != ''  and  sina_login_key  != 'null' ">
+	  			<![CDATA[ #{sina_login_key} , ]]>
+	  		</if>
+	  		<if test=" imagewebserver  != null and  imagewebserver  != ''  and  imagewebserver  != 'null' ">
+	  			<![CDATA[ #{imagewebserver} , ]]>
+	  		</if>
+	  		<if test=" service_qq_list  != null and  service_qq_list  != ''  and  service_qq_list  != 'null' ">
+	  			<![CDATA[ #{service_qq_list} , ]]>
+	  		</if>
+	  		<if test=" service_telphone_list  != null and  service_telphone_list  != ''  and  service_telphone_list  != 'null' ">
+	  			<![CDATA[ #{service_telphone_list} , ]]>
+	  		</if>
+	  		<if test=" currency_code  != null and  currency_code  != ''  and  currency_code  != 'null' ">
+	  			<![CDATA[ #{currency_code} , ]]>
+	  		</if>
+	  		<if test=" websitecss  != null and  websitecss  != ''  and  websitecss  != 'null' ">
+	  			<![CDATA[ #{websitecss} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateSysConfig" parameterType="java.util.Map">
+		<![CDATA[ UPDATE SYSCONFIG A ]]>
+		<set>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+	  	<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+	  		<![CDATA[ A.deleteStatus = #{deletestatus}, ]]>
+	  	</if>
+	  	<if test=" address  != null and  address  != ''  and  address  != 'null' ">
+	  		<![CDATA[ A.address = #{address}, ]]>
+	  	</if>
+		<if test=" bigheight  != null ">
+  			<![CDATA[ A.bigHeight = ${bigheight} , ]]>
+		</if>
+		<if test=" bigwidth  != null ">
+  			<![CDATA[ A.bigWidth = ${bigwidth} , ]]>
+		</if>
+	  	<if test=" closereason  != null and  closereason  != ''  and  closereason  != 'null' ">
+	  		<![CDATA[ A.closeReason = #{closereason}, ]]>
+	  	</if>
+	  	<if test=" copyright  != null and  copyright  != ''  and  copyright  != 'null' ">
+	  		<![CDATA[ A.copyRight = #{copyright}, ]]>
+	  	</if>
+	  	<if test=" description  != null and  description  != ''  and  description  != 'null' ">
+	  		<![CDATA[ A.description = #{description}, ]]>
+	  	</if>
+	  	<if test=" emailenable  != null and  emailenable  != ''  and  emailenable  != 'null' ">
+	  		<![CDATA[ A.emailEnable = #{emailenable}, ]]>
+	  	</if>
+	  	<if test=" emailhost  != null and  emailhost  != ''  and  emailhost  != 'null' ">
+	  		<![CDATA[ A.emailHost = #{emailhost}, ]]>
+	  	</if>
+		<if test=" emailport  != null ">
+  			<![CDATA[ A.emailPort = ${emailport} , ]]>
+		</if>
+	  	<if test=" emailpws  != null and  emailpws  != ''  and  emailpws  != 'null' ">
+	  		<![CDATA[ A.emailPws = #{emailpws}, ]]>
+	  	</if>
+	  	<if test=" emailtest  != null and  emailtest  != ''  and  emailtest  != 'null' ">
+	  		<![CDATA[ A.emailTest = #{emailtest}, ]]>
+	  	</if>
+	  	<if test=" emailuser  != null and  emailuser  != ''  and  emailuser  != 'null' ">
+	  		<![CDATA[ A.emailUser = #{emailuser}, ]]>
+	  	</if>
+	  	<if test=" emailusername  != null and  emailusername  != ''  and  emailusername  != 'null' ">
+	  		<![CDATA[ A.emailUserName = #{emailusername}, ]]>
+	  	</if>
+	  	<if test=" hotsearch  != null and  hotsearch  != ''  and  hotsearch  != 'null' ">
+	  		<![CDATA[ A.hotSearch = #{hotsearch}, ]]>
+	  	</if>
+		<if test=" imagefilesize  != null ">
+  			<![CDATA[ A.imageFilesize = ${imagefilesize} , ]]>
+		</if>
+	  	<if test=" imagesavetype  != null and  imagesavetype  != ''  and  imagesavetype  != 'null' ">
+	  		<![CDATA[ A.imageSaveType = #{imagesavetype}, ]]>
+	  	</if>
+	  	<if test=" imagesuffix  != null and  imagesuffix  != ''  and  imagesuffix  != 'null' ">
+	  		<![CDATA[ A.imageSuffix = #{imagesuffix}, ]]>
+	  	</if>
+	  	<if test=" integral  != null and  integral  != ''  and  integral  != 'null' ">
+	  		<![CDATA[ A.integral = #{integral}, ]]>
+	  	</if>
+	  	<if test=" keywords  != null and  keywords  != ''  and  keywords  != 'null' ">
+	  		<![CDATA[ A.keywords = #{keywords}, ]]>
+	  	</if>
+		<if test=" middleheight  != null ">
+  			<![CDATA[ A.middleHeight = ${middleheight} , ]]>
+		</if>
+		<if test=" middlewidth  != null ">
+  			<![CDATA[ A.middleWidth = ${middlewidth} , ]]>
+		</if>
+	  	<if test=" securitycodelogin  != null and  securitycodelogin  != ''  and  securitycodelogin  != 'null' ">
+	  		<![CDATA[ A.securityCodeLogin = #{securitycodelogin}, ]]>
+	  	</if>
+	  	<if test=" securitycoderegister  != null and  securitycoderegister  != ''  and  securitycoderegister  != 'null' ">
+	  		<![CDATA[ A.securityCodeRegister = #{securitycoderegister}, ]]>
+	  	</if>
+	  	<if test=" securitycodetype  != null and  securitycodetype  != ''  and  securitycodetype  != 'null' ">
+	  		<![CDATA[ A.securityCodeType = #{securitycodetype}, ]]>
+	  	</if>
+		<if test=" smallheight  != null ">
+  			<![CDATA[ A.smallHeight = ${smallheight} , ]]>
+		</if>
+		<if test=" smallwidth  != null ">
+  			<![CDATA[ A.smallWidth = ${smallwidth} , ]]>
+		</if>
+	  	<if test=" smsenbale  != null and  smsenbale  != ''  and  smsenbale  != 'null' ">
+	  		<![CDATA[ A.smsEnbale = #{smsenbale}, ]]>
+	  	</if>
+	  	<if test=" smspassword  != null and  smspassword  != ''  and  smspassword  != 'null' ">
+	  		<![CDATA[ A.smsPassword = #{smspassword}, ]]>
+	  	</if>
+	  	<if test=" smstest  != null and  smstest  != ''  and  smstest  != 'null' ">
+	  		<![CDATA[ A.smsTest = #{smstest}, ]]>
+	  	</if>
+	  	<if test=" smsurl  != null and  smsurl  != ''  and  smsurl  != 'null' ">
+	  		<![CDATA[ A.smsURL = #{smsurl}, ]]>
+	  	</if>
+	  	<if test=" smsusername  != null and  smsusername  != ''  and  smsusername  != 'null' ">
+	  		<![CDATA[ A.smsUserName = #{smsusername}, ]]>
+	  	</if>
+	  	<if test=" syslanguage  != null and  syslanguage  != ''  and  syslanguage  != 'null' ">
+	  		<![CDATA[ A.sysLanguage = #{syslanguage}, ]]>
+	  	</if>
+	  	<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+	  		<![CDATA[ A.title = #{title}, ]]>
+	  	</if>
+	  	<if test=" uploadfilepath  != null and  uploadfilepath  != ''  and  uploadfilepath  != 'null' ">
+	  		<![CDATA[ A.uploadFilePath = #{uploadfilepath}, ]]>
+	  	</if>
+	  	<if test=" visitorconsult  != null and  visitorconsult  != ''  and  visitorconsult  != 'null' ">
+	  		<![CDATA[ A.visitorConsult = #{visitorconsult}, ]]>
+	  	</if>
+	  	<if test=" websitename  != null and  websitename  != ''  and  websitename  != 'null' ">
+	  		<![CDATA[ A.websiteName = #{websitename}, ]]>
+	  	</if>
+	  	<if test=" websitestate  != null and  websitestate  != ''  and  websitestate  != 'null' ">
+	  		<![CDATA[ A.websiteState = #{websitestate}, ]]>
+	  	</if>
+		<if test=" membericon_id  != null ">
+  			<![CDATA[ A.memberIcon_id = ${membericon_id} , ]]>
+		</if>
+		<if test=" websitelogo_id  != null ">
+  			<![CDATA[ A.websiteLogo_id = ${websitelogo_id} , ]]>
+		</if>
+	  	<if test=" qq_login  != null and  qq_login  != ''  and  qq_login  != 'null' ">
+	  		<![CDATA[ A.qq_login = #{qq_login}, ]]>
+	  	</if>
+	  	<if test=" qq_login_id  != null and  qq_login_id  != ''  and  qq_login_id  != 'null' ">
+	  		<![CDATA[ A.qq_login_id = #{qq_login_id}, ]]>
+	  	</if>
+	  	<if test=" qq_login_key  != null and  qq_login_key  != ''  and  qq_login_key  != 'null' ">
+	  		<![CDATA[ A.qq_login_key = #{qq_login_key}, ]]>
+	  	</if>
+	  	<if test=" qq_domain_code  != null and  qq_domain_code  != ''  and  qq_domain_code  != 'null' ">
+	  		<![CDATA[ A.qq_domain_code = #{qq_domain_code}, ]]>
+	  	</if>
+	  	<if test=" sina_domain_code  != null and  sina_domain_code  != ''  and  sina_domain_code  != 'null' ">
+	  		<![CDATA[ A.sina_domain_code = #{sina_domain_code}, ]]>
+	  	</if>
+	  	<if test=" sina_login  != null and  sina_login  != ''  and  sina_login  != 'null' ">
+	  		<![CDATA[ A.sina_login = #{sina_login}, ]]>
+	  	</if>
+	  	<if test=" sina_login_id  != null and  sina_login_id  != ''  and  sina_login_id  != 'null' ">
+	  		<![CDATA[ A.sina_login_id = #{sina_login_id}, ]]>
+	  	</if>
+	  	<if test=" sina_login_key  != null and  sina_login_key  != ''  and  sina_login_key  != 'null' ">
+	  		<![CDATA[ A.sina_login_key = #{sina_login_key}, ]]>
+	  	</if>
+	  	<if test=" imagewebserver  != null and  imagewebserver  != ''  and  imagewebserver  != 'null' ">
+	  		<![CDATA[ A.imageWebServer = #{imagewebserver}, ]]>
+	  	</if>
+	  	<if test=" service_qq_list  != null and  service_qq_list  != ''  and  service_qq_list  != 'null' ">
+	  		<![CDATA[ A.service_qq_list = #{service_qq_list}, ]]>
+	  	</if>
+	  	<if test=" service_telphone_list  != null and  service_telphone_list  != ''  and  service_telphone_list  != 'null' ">
+	  		<![CDATA[ A.service_telphone_list = #{service_telphone_list}, ]]>
+	  	</if>
+	  	<if test=" currency_code  != null and  currency_code  != ''  and  currency_code  != 'null' ">
+	  		<![CDATA[ A.currency_code = #{currency_code}, ]]>
+	  	</if>
+	  	<if test=" websitecss  != null and  websitecss  != ''  and  websitecss  != 'null' ">
+	  		<![CDATA[ A.websiteCss = #{websitecss}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteSysConfig" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM SYSCONFIG  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneSysConfig" parameterType="java.util.Map" resultMap="sysConfigResultMap">
+		<![CDATA[ SELECT A.* FROM SYSCONFIG A  ]]>
+		<include refid="sysConfigWhereCondition" />
+  	</select>
+    
+  	<select id="findAllSysConfig" parameterType="java.util.Map" resultMap="sysConfigResultMap" >
+		<![CDATA[ SELECT A.* FROM SYSCONFIG A ]]>
+		<include refid="sysConfigWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapSysConfig" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM SYSCONFIG A ]]>
+		<include refid="sysConfigWhereCondition" />
+	</select>
+  
+  	<select id="findSysConfigTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM SYSCONFIG A ]]>
+		<include refid="sysConfigWhereCondition" />
+  	</select>
+  
+  	<select id="querySysConfigForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM SYSCONFIG A ]]>
+		<include refid="sysConfigWhereCondition" />
+  	</select>
+</mapper>

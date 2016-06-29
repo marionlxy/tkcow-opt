@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ComRela">
+	<resultMap id="comRelaResultMap" type="com.taikang.udp.sys.model.ComRelaBO">
+		<result property="parentId" column="Parent_Id"/>
+		<result property="childId" column="Child_Id"/>
+		<result property="createUser" column="Create_User"/>
+		<result property="createTime" column="Create_Time"/>
+		<result property="lastModifyUser" column="Last_Modify_User"/>
+		<result property="lastModifyTime" column="Last_Modify_Time"/>
+  	</resultMap>
+  
+  	<sql id="comRelaWhereCondition">
+		<where>
+	  	<if test=" parent_id != null ">
+	  		<![CDATA[ AND A.Parent_Id = ${parent_id} ]]>
+	  	</if>
+	  	<if test=" child_id != null ">
+	  		<![CDATA[ AND A.Child_Id = ${child_id} ]]>
+	  	</if>
+	  	<if test=" create_user != null ">
+	  		<![CDATA[ AND A.Create_User = ${create_user} ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ AND A.Create_Time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" last_modify_user != null ">
+	  		<![CDATA[ AND A.Last_Modify_User = ${last_modify_user} ]]>
+	  	</if>
+	  	<if test=" last_modify_time != null and last_modify_time != '' and last_modify_time  != 'null' ">
+	    	<![CDATA[ AND A.Last_Modify_Time = DATE_FORMAT(#{last_modify_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addComRela"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO BSC_COM_RELA_T
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" parent_id  != null ">
+				<![CDATA[ Parent_Id , ]]>
+	  		</if>
+	  		<if test=" child_id  != null ">
+				<![CDATA[ Child_Id , ]]>
+	  		</if>
+	  		<if test=" create_user  != null ">
+				<![CDATA[ Create_User , ]]>
+	  		</if>
+	  		<if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+				<![CDATA[ Create_Time , ]]>
+	  		</if>
+	  		<if test=" last_modify_user  != null ">
+				<![CDATA[ Last_Modify_User , ]]>
+	  		</if>
+	  		<if test=" last_modify_time  != null and  last_modify_time  != ''  and  last_modify_time  != 'null' ">
+				<![CDATA[ Last_Modify_Time , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" parent_id  != null">
+	    		<![CDATA[ ${parent_id} , ]]>
+	  		</if>
+	  		<if test=" child_id  != null">
+	    		<![CDATA[ ${child_id} , ]]>
+	  		</if>
+	  		<if test=" create_user  != null">
+	    		<![CDATA[ ${create_user} , ]]>
+	  		</if>
+	  		<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" last_modify_user  != null">
+	    		<![CDATA[ ${last_modify_user} , ]]>
+	  		</if>
+	  		<if test=" last_modify_time != null and last_modify_time != '' and last_modify_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{last_modify_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateComRela" parameterType="java.util.Map">
+		<![CDATA[ UPDATE BSC_COM_RELA_T A ]]>
+		<set>
+		<if test=" parent_id  != null ">
+  			<![CDATA[ A.Parent_Id = ${parent_id} , ]]>
+		</if>
+		<if test=" child_id  != null ">
+  			<![CDATA[ A.Child_Id = ${child_id} , ]]>
+		</if>
+		<if test=" create_user  != null ">
+  			<![CDATA[ A.Create_User = ${create_user} , ]]>
+		</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ A.Create_Time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		<if test=" last_modify_user  != null ">
+  			<![CDATA[ A.Last_Modify_User = ${last_modify_user} , ]]>
+		</if>
+	  	<if test=" last_modify_time != null and last_modify_time != '' and last_modify_time  != 'null' ">
+	    	<![CDATA[ A.Last_Modify_Time = DATE_FORMAT(#{last_modify_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.PARENT_ID=#{parent_id} AND A.CHILD_ID = #{child_id}]]>
+  	</update>
+  
+  	<delete id="deleteComRela" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM BSC_COM_RELA_T where PARENT_ID=#{parent_id}]]>
+	</delete>
+  
+	<select id="findOneComRela" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM BSC_COM_RELA_T A  ]]>
+		<include refid="comRelaWhereCondition" />
+  	</select>
+    
+  	<select id="findAllComRela" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM BSC_COM_RELA_T A ]]>
+		<include refid="comRelaWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapComRela" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM BSC_COM_RELA_T A ]]>
+		<include refid="comRelaWhereCondition" />
+	</select>
+  
+  	<select id="findComRelaTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM BSC_COM_RELA_T A ]]>
+		<include refid="comRelaWhereCondition" />
+  	</select>
+  
+  	<select id="queryComRelaForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM BSC_COM_RELA_T A ]]>
+		<include refid="comRelaWhereCondition" />
+  	</select>
+  	
+    <delete id="deleteComRelaByParentId" parameterType="java.util.Map">
+        <![CDATA[ DELETE FROM BSC_COM_RELA_T where PARENT_ID=#{parent_id}]]>
+    </delete>
+    <delete id="deleteComRelaByChildId" parameterType="java.util.Map">
+        <![CDATA[ DELETE FROM BSC_COM_RELA_T where CHILD_ID=#{child_id}]]>
+    </delete>
+    <delete id="deleteObjectByParentIdAndChild" parameterType="java.util.Map">
+        <![CDATA[ DELETE FROM BSC_COM_RELA_T where PARENT_ID=#{parent_id} AND CHILD_ID=#{child_id}]]>
+    </delete>    
+</mapper>

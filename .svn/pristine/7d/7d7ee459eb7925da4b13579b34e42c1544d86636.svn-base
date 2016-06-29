@@ -1,0 +1,87 @@
+package com.taikang.tkcoww.moduleDes.action.impl;
+
+
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+import javax.annotation.Resource;
+import com.taikang.tkcoww.moduleDes.action.IModuleDesAction;
+import java.util.List;
+import com.taikang.udp.framework.core.action.impl.BaseActionImpl;
+import com.taikang.tkcoww.moduleDes.model.ModuleDesBO;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import java.util.Arrays;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import org.springframework.stereotype.Service;
+import com.taikang.tkcoww.moduleDes.service.IModuleDesService;
+
+/**
+  * ModuleDesAction
+  */
+  @Service(IModuleDesAction.ACTION_ID)
+public class ModuleDesActionImpl extends BaseActionImpl 
+  implements IModuleDesAction {
+
+    /**
+      * 注入service
+      */
+    @Resource(name=IModuleDesService.SERVICE_ID)
+	private IModuleDesService<ModuleDesBO> moduleDesService;	
+	
+	/**
+	  * 增加数据
+	  */
+	public void insertObject(Dto param) {
+		logger.debug("<======ModuleDesAction--addModuleDes======>");
+		
+		ModuleDesBO moduleDesBO = BaseDto.toModel(ModuleDesBO.class , param);
+		moduleDesService.insertObject(moduleDesBO);
+	}
+	
+	/**
+      * 修改数据
+      */
+	public void updateObject(Dto param){
+		logger.debug("<======ModuleDesAction--updateModuleDes======>");
+		
+		ModuleDesBO moduleDesBO = BaseDto.toModel(ModuleDesBO.class , param);
+		moduleDesService.updateObject(moduleDesBO);
+	}
+
+	 /**
+      * 删除数据
+      */
+	public void deleteObject(Dto param) {
+		logger.debug("<======ModuleDesAction--deleteModuleDes======>");
+		
+		ModuleDesBO moduleDesBO = BaseDto.toModel(ModuleDesBO.class , param);
+		moduleDesService.deleteObject(moduleDesBO);
+	}
+	
+	/**
+      * 查询单条数据
+      */
+	public Dto findOne(Dto param) {
+		logger.debug("<======ModuleDesAction--findOneModuleDes======>");
+		
+		ModuleDesBO moduleDesBO = BaseDto.toModel(ModuleDesBO.class , param);
+		return moduleDesService.findOne(moduleDesBO).toDto();//返回的BO对象自动转换成Dto返回
+	}  
+	
+	/**
+      * 查询所有数据
+      */
+	public List<Dto> findAll(Dto param) {
+		logger.debug("<======ModuleDesAction--findAllModuleDes======>");
+				
+		return moduleDesService.findAllMap(param);
+	} 
+	
+		
+	 /**
+      * 分页查询数据
+      */
+	public CurrentPage queryForPage(CurrentPage currentPage){
+		logger.debug("<======ModuleDesAction--queryModuleDesForPage======>");
+		
+		return moduleDesService.queryForPage(currentPage);
+	}	
+}

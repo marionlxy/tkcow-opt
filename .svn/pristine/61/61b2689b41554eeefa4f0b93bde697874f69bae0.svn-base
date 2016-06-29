@@ -1,0 +1,161 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<%@ include file="/include.jsp"%>
+	<script src="<%=basePath%>/static/js/imageValidate.js"></script>
+	<script src="<%=basePath%>/static/ckeditor/ckeditor.js"></script>
+	<script src="<%=basePath%>/static/ckeditor/samples/js/sample.js"></script>
+    <title></title>
+</head>
+<body>
+<div fit="true" style="margin-top: 10px; margin-left: 10px;">
+	<form id="dataFormLogoAdd" enctype="multipart/form-data" method="post">
+			<div class="fitem">
+		    	<label>Logo名称:</label>
+		        <input id="cooperLogoName" name="cooperLogoName" class="easyui-textbox" data-options="required:true" style="width: 400px;">
+			</div>
+			<div class="fitem">
+		    	<label>描述:</label>
+		        <textarea rows=5 id="cooperLogoDes" name="cooperLogoDes" class="textarea easyui-validatebox" validType="length[0,2000]" style="width: 400px;"></textarea>
+			</div>
+			<div class="fitem">
+		    	<label>Logo图:</label>
+		        <input class="easyui-validatebox" validType="img_upload" name="logoFile" id="logoFile" type="file" onchange="javascript:setImagePreview();" data-options="required:true" accept=".jpg,.gif,.ico,.png, bmp">
+			</div>
+			<div class="fitem" id="localImag">
+		        <img id="logoImg" style="display: block; width: 80px; height: 80px; padding-left: 100px;" />
+			</div>
+	</form>
+    <div id="dlg-buttons" align="center">
+       <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" id="save" onclick="saveOrUpdate()" style="width:90px">提交</a>
+       <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="goBack(0)" style="width:90px">取消</a>
+   </div>
+</div>
+    
+<script type="text/javascript">
+
+var rowId;
+jQuery(function(){ 
+
+	//初始化下拉框-示例，请根据需要自定义实现
+   	/*
+   	 $('#combo1').combobox({    
+  	        url:'${rootPath}/getDictlist?dicttypeid=userstatus',    
+  	        valueField:'dictid',    
+  	        textField:'dictname',
+  	     	panelHeight:'auto'
+  	    }); 
+  	  */ 
+	
+	rowId ='${rowId}';
+	
+	if (rowId != null && rowId != "" && rowId!=0){
+		var url='${rootPath}/cooperLogo/getOne?rowId=' + rowId;
+		$('#dataFormLogoAdd').form('load', url);
+	}
+});
+
+//提交记录
+function saveOrUpdate()
+{
+	var r = $('#dataFormLogoAdd').form('validate');
+	if(!r) {
+		return false;
+	} else {
+		
+		var docObj = document.getElementById("logoFile");
+		
+		$('#save').linkbutton('disable');
+		var name = $("#cooperLogoName").val();
+		var des = $("#cooperLogoDes").val();
+		$.ajaxFileUpload({
+            url: "${rootPath}/cooperLogo/save", 
+            type: 'post',
+            secureuri: false, //一般设置为false
+            complete:null,
+            fileElementId: 'logoFile',
+            data: { cooperLogoName: name, cooperLogoDes: des },
+            dataType: 'text', //返回值类型，必须text
+            success: function(data, status,msg){
+            	if (data == null || data == '') {
+            		com.message("error", "Logo图片上传失败!！");
+            		$.messager.alert('提示',"Logo图片上传失败！",'error');
+            		//com.message("error", "Logo图片上传失败！");
+
+            	} else {
+            		var daObj = eval('(' + data + ')');
+            		if (daObj.code == '0') {
+            			$.messager.alert('提示','Logo图片上传成功！');
+            			//$.messager.show({title:'提示',msg:'Logo图片上传成功！',showType:'show'});
+            			goBack(1);
+            		} else {
+
+            			com.message("error", "Logo图片上传失败！");
+
+            			$.messager.alert('提示',"Logo图片上传失败！",'error');
+            			//com.message("error", "Logo图片上传失败！");
+
+            		}
+            	}
+            }
+        });
+	}
+}
+ 
+/* //返回父页面  
+function goBack(flag){
+	parent.returnParent(flag);
+} */
+
+//下面用于图片上传预览功能
+function setImagePreview() {
+	var docObj = document.getElementById("logoFile");
+
+	var imgObjPreview = document.getElementById("logoImg");
+	if (docObj.files && docObj.files[0]) {
+		//火狐下，直接设img属性
+		imgObjPreview.style.display = 'block';
+		imgObjPreview.style.width = '80px';
+		imgObjPreview.style.height = '80px';
+		//imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+		//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+		imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+	} else {
+		//IE下，使用滤镜
+		docObj.select();
+		var imgSrc = document.selection.createRange().text;
+		var localImagId = document.getElementById("localImag");
+		//必须设置初始大小
+		localImagId.style.width = "80px";
+		localImagId.style.height = "80px";
+		//图片异常的捕捉，防止用户修改后缀来伪造图片
+		try {
+			localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+			localImagId.filters
+					.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+		} catch (e) {
+			$.messager.alert("您上传的图片格式不正确，请重新选择!");
+			return false;
+		}
+		imgObjPreview.style.display = 'none';
+		document.selection.empty();
+	}
+	return true;
+}
+
+//返回父页面  
+function goBack(flag) {
+	$('#divDialog').dialog('close')
+	var url = '${rootPath}/cooperLogo/list';
+	$('#dataTable').datagrid('reload', url);
+}
+</script>
+
+</body>
+</html>

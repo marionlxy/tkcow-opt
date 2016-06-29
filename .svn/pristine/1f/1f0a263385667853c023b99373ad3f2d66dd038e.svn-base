@@ -1,0 +1,14 @@
+package com.taikang.tkcoww.logo.action;
+
+import java.util.Arrays;
+import com.taikang.udp.framework.core.action.IBaseAction;
+
+
+/**
+  * ICooperLogoAction
+  */
+
+public interface ICooperLogoAction extends IBaseAction { 
+
+	final String ACTION_ID = "cooperLogoAction"; 	
+}

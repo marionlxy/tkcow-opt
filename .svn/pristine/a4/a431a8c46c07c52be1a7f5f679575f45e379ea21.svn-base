@@ -1,0 +1,29 @@
+package com.taikang.udp.sys.util;
+
+import org.slf4j.Logger;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import com.taikang.udp.framework.common.util.logger.LoggerFactory;
+
+public class CommonUtil {
+	public static final Logger logger = LoggerFactory.getLogger();
+
+	public static boolean closeTheadPool(ThreadPoolTaskExecutor taskExecutor)
+			throws InterruptedException {
+
+		if (taskExecutor == null) {
+			return false;
+		} else {
+			while (true) {
+				int count = taskExecutor.getActiveCount();
+				logger.debug("目前的线程数为：" + count);
+				Thread.sleep(1000);
+				if (count == 0) {
+					taskExecutor.shutdown();
+					break;
+				}
+			}
+		}
+		return true;
+	}
+}

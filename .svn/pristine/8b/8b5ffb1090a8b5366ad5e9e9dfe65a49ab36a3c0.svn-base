@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Accessory">
+	<resultMap id="accessoryResultMap" type="com.taikang.udp.accessory.model.AccessoryBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="ext" column="ext"/>
+		<result property="height" column="height"/>
+		<result property="info" column="info"/>
+		<result property="name" column="name"/>
+		<result property="path" column="path"/>
+		<result property="size" column="size"/>
+		<result property="width" column="width"/>
+		<result property="albumId" column="album_id"/>
+		<result property="userId" column="user_id"/>
+  	</resultMap>
+  
+  	<sql id="accessoryWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" ext != null and ext != '' and ext != 'null' ">
+			<![CDATA[ AND A.ext = #{ext} ]]>
+	  	</if>
+	  	<if test=" height != null ">
+	  		<![CDATA[ AND A.height = ${height} ]]>
+	  	</if>
+	  	<if test=" info != null and info != '' and info != 'null' ">
+			<![CDATA[ AND A.info = #{info} ]]>
+	  	</if>
+	  	<if test=" name != null and name != '' and name != 'null' ">
+			<![CDATA[ AND A.name = #{name} ]]>
+	  	</if>
+	  	<if test=" path != null and path != '' and path != 'null' ">
+			<![CDATA[ AND A.path = #{path} ]]>
+	  	</if>
+	  	<if test=" size != null ">
+	  		<![CDATA[ AND A.size = ${size} ]]>
+	  	</if>
+	  	<if test=" width != null ">
+	  		<![CDATA[ AND A.width = ${width} ]]>
+	  	</if>
+	  	<if test=" album_id != null ">
+	  		<![CDATA[ AND A.album_id = ${album_id} ]]>
+	  	</if>
+	  	<if test=" user_id != null ">
+	  		<![CDATA[ AND A.user_id = ${user_id} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addAccessory"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ACCESSORY
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null and  addtime  != ''  and  addtime  != 'null' ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null and  modifytime  != ''  and  modifytime  != 'null' ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" ext  != null and  ext  != ''  and  ext  != 'null' ">
+				<![CDATA[ ext , ]]>
+	  		</if>
+	  		<if test=" height  != null ">
+				<![CDATA[ height , ]]>
+	  		</if>
+	  		<if test=" info  != null and  info  != ''  and  info  != 'null' ">
+				<![CDATA[ info , ]]>
+	  		</if>
+	  		<if test=" name  != null and  name  != ''  and  name  != 'null' ">
+				<![CDATA[ name , ]]>
+	  		</if>
+	  		<if test=" path  != null and  path  != ''  and  path  != 'null' ">
+				<![CDATA[ path , ]]>
+	  		</if>
+	  		<if test=" size  != null ">
+				<![CDATA[ size , ]]>
+	  		</if>
+	  		<if test=" width  != null ">
+				<![CDATA[ width , ]]>
+	  		</if>
+	  		<if test=" album_id  != null ">
+				<![CDATA[ album_id , ]]>
+	  		</if>
+	  		<if test=" user_id  != null ">
+				<![CDATA[ user_id , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+	  			<![CDATA[ #{deletestatus} , ]]>
+	  		</if>
+	  		<if test=" ext  != null and  ext  != ''  and  ext  != 'null' ">
+	  			<![CDATA[ #{ext} , ]]>
+	  		</if>
+	  		<if test=" height  != null">
+	    		<![CDATA[ ${height} , ]]>
+	  		</if>
+	  		<if test=" info  != null and  info  != ''  and  info  != 'null' ">
+	  			<![CDATA[ #{info} , ]]>
+	  		</if>
+	  		<if test=" name  != null and  name  != ''  and  name  != 'null' ">
+	  			<![CDATA[ #{name} , ]]>
+	  		</if>
+	  		<if test=" path  != null and  path  != ''  and  path  != 'null' ">
+	  			<![CDATA[ #{path} , ]]>
+	  		</if>
+	  		<if test=" size  != null">
+	    		<![CDATA[ ${size} , ]]>
+	  		</if>
+	  		<if test=" width  != null">
+	    		<![CDATA[ ${width} , ]]>
+	  		</if>
+	  		<if test=" album_id  != null">
+	    		<![CDATA[ ${album_id} , ]]>
+	  		</if>
+	  		<if test=" user_id  != null">
+	    		<![CDATA[ ${user_id} , ]]>
+	  		</if>
+		</trim>
+		<selectKey keyProperty="id" resultType="long" order="AFTER">
+			select
+			LAST_INSERT_ID() as id
+		</selectKey>
+  	</insert>
+ 
+  	<update id="updateAccessory" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ACCESSORY A ]]>
+		<set>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+	  	<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+	  		<![CDATA[ A.deleteStatus = #{deletestatus}, ]]>
+	  	</if>
+	  	<if test=" ext  != null and  ext  != ''  and  ext  != 'null' ">
+	  		<![CDATA[ A.ext = #{ext}, ]]>
+	  	</if>
+		<if test=" height  != null ">
+  			<![CDATA[ A.height = ${height} , ]]>
+		</if>
+	  	<if test=" info  != null and  info  != ''  and  info  != 'null' ">
+	  		<![CDATA[ A.info = #{info}, ]]>
+	  	</if>
+	  	<if test=" name  != null and  name  != ''  and  name  != 'null' ">
+	  		<![CDATA[ A.name = #{name}, ]]>
+	  	</if>
+	  	<if test=" path  != null and  path  != ''  and  path  != 'null' ">
+	  		<![CDATA[ A.path = #{path}, ]]>
+	  	</if>
+		<if test=" size  != null ">
+  			<![CDATA[ A.size = ${size} , ]]>
+		</if>
+		<if test=" width  != null ">
+  			<![CDATA[ A.width = ${width} , ]]>
+		</if>
+		<if test=" album_id  != null ">
+  			<![CDATA[ A.album_id = ${album_id} , ]]>
+		</if>
+		<if test=" user_id  != null ">
+  			<![CDATA[ A.user_id = ${user_id} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteAccessory" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ACCESSORY  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneAccessory" parameterType="java.util.Map" resultMap="accessoryResultMap">
+		<![CDATA[ SELECT A.* FROM ACCESSORY A  ]]>
+		<include refid="accessoryWhereCondition" />
+  	</select>
+    
+  	<select id="findAllAccessory" parameterType="java.util.Map" resultMap="accessoryResultMap" >
+		<![CDATA[ SELECT A.* FROM ACCESSORY A ]]>
+		<include refid="accessoryWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapAccessory" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ACCESSORY A ]]>
+		<include refid="accessoryWhereCondition" />
+	</select>
+  
+  	<select id="findAccessoryTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ACCESSORY A ]]>
+		<include refid="accessoryWhereCondition" />
+  	</select>
+  
+  	<select id="queryAccessoryForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ACCESSORY A ]]>
+		<include refid="accessoryWhereCondition" />
+  	</select>
+</mapper>

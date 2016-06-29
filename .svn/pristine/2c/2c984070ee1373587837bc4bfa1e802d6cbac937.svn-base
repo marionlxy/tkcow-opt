@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ModuleDes">
+	<resultMap id="moduleDesResultMap" type="com.taikang.tkcoww.moduleDes.model.ModuleDesBO">
+		<result property="modId" column="MOD_ID"/>
+		<result property="modName" column="MOD_NAME"/>
+		<result property="modByname" column="MOD_BYNAME"/>
+		<result property="modSeo" column="MOD_SEO"/>
+		<result property="modUrl" column="MOD_URL"/>
+		<result property="modDes" column="MOD_DES"/>
+		<result property="modBanner" column="MOD_BANNER"/>
+		<result property="modImg" column="MOD_IMG"/>
+		<result property="createdTime" column="CREATED_TIME"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="modifiedTime" column="MODIFIED_TIME"/>
+		<result property="modifiedBy" column="MODIFIED_BY"/>
+		<result property="version" column="VERSION"/>
+		<result property="delflag" column="DELFLAG"/>
+  	</resultMap>
+  
+  	<sql id="moduleDesWhereCondition">
+		<where>
+	  	<if test=" mod_id != null and mod_id != '' and mod_id != 'null' ">
+			<![CDATA[ AND A.MOD_ID = #{mod_id} ]]>
+	  	</if>
+	  	<if test=" mod_name != null and mod_name != '' and mod_name != 'null' ">
+			<![CDATA[ AND A.MOD_NAME = #{mod_name} ]]>
+	  	</if>
+	  	<if test=" mod_byname != null and mod_byname != '' and mod_byname != 'null' ">
+			<![CDATA[ AND A.MOD_BYNAME = #{mod_byname} ]]>
+	  	</if>
+	  	<if test=" mod_seo != null and mod_seo != '' and mod_seo != 'null' ">
+			<![CDATA[ AND A.MOD_SEO = #{mod_seo} ]]>
+	  	</if>
+	  	<if test=" mod_url != null and mod_url != '' and mod_url != 'null' ">
+			<![CDATA[ AND A.MOD_URL = #{mod_url} ]]>
+	  	</if>
+	  	<if test=" mod_des != null and mod_des != '' and mod_des != 'null' ">
+			<![CDATA[ AND A.MOD_DES = #{mod_des} ]]>
+	  	</if>
+	  	<if test=" mod_banner != null and mod_banner != '' and mod_banner != 'null' ">
+			<![CDATA[ AND A.MOD_BANNER = #{mod_banner} ]]>
+	  	</if>
+	  	<if test=" mod_img != null and mod_img != '' and mod_img != 'null' ">
+			<![CDATA[ AND A.MOD_IMG = #{mod_img} ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" created_by != null and created_by != '' and created_by != 'null' ">
+			<![CDATA[ AND A.CREATED_BY = #{created_by} ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ AND A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modified_by != null and modified_by != '' and modified_by != 'null' ">
+			<![CDATA[ AND A.MODIFIED_BY = #{modified_by} ]]>
+	  	</if>
+	  	<if test=" version != null ">
+	  		<![CDATA[ AND A.VERSION = ${version} ]]>
+	  	</if>
+	  	<if test=" delflag != null and delflag != '' and delflag != 'null' ">
+			<![CDATA[ AND A.DELFLAG = #{delflag} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addModuleDes"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ZJOW_MODULE_DES
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+				<![CDATA[ MOD_ID , ]]>
+	  		</if>
+	  		<if test=" mod_name  != null and  mod_name  != ''  and  mod_name  != 'null' ">
+				<![CDATA[ MOD_NAME , ]]>
+	  		</if>
+	  		<if test=" mod_byname  != null and  mod_byname  != ''  and  mod_byname  != 'null' ">
+				<![CDATA[ MOD_BYNAME , ]]>
+	  		</if>
+	  		<if test=" mod_seo  != null and  mod_seo  != ''  and  mod_seo  != 'null' ">
+				<![CDATA[ MOD_SEO , ]]>
+	  		</if>
+	  		<if test=" mod_url  != null and  mod_url  != ''  and  mod_url  != 'null' ">
+				<![CDATA[ MOD_URL , ]]>
+	  		</if>
+	  		<if test=" mod_des  != null and  mod_des  != ''  and  mod_des  != 'null' ">
+				<![CDATA[ MOD_DES , ]]>
+	  		</if>
+	  		<if test=" mod_banner  != null and  mod_banner  != ''  and  mod_banner  != 'null' ">
+				<![CDATA[ MOD_BANNER , ]]>
+	  		</if>
+	  		<if test=" mod_img  != null and  mod_img  != ''  and  mod_img  != 'null' ">
+				<![CDATA[ MOD_IMG , ]]>
+	  		</if>
+	  		<if test=" created_time  != null and  created_time  != ''  and  created_time  != 'null' ">
+				<![CDATA[ CREATED_TIME , ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+				<![CDATA[ CREATED_BY , ]]>
+	  		</if>
+	  		<if test=" modified_time  != null and  modified_time  != ''  and  modified_time  != 'null' ">
+				<![CDATA[ MODIFIED_TIME , ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+				<![CDATA[ MODIFIED_BY , ]]>
+	  		</if>
+	  		<if test=" version  != null ">
+				<![CDATA[ VERSION , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+				<![CDATA[ DELFLAG , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+	  			<![CDATA[ #{mod_id} , ]]>
+	  		</if>
+	  		<if test=" mod_name  != null and  mod_name  != ''  and  mod_name  != 'null' ">
+	  			<![CDATA[ #{mod_name} , ]]>
+	  		</if>
+	  		<if test=" mod_byname  != null and  mod_byname  != ''  and  mod_byname  != 'null' ">
+	  			<![CDATA[ #{mod_byname} , ]]>
+	  		</if>
+	  		<if test=" mod_seo  != null and  mod_seo  != ''  and  mod_seo  != 'null' ">
+	  			<![CDATA[ #{mod_seo} , ]]>
+	  		</if>
+	  		<if test=" mod_url  != null and  mod_url  != ''  and  mod_url  != 'null' ">
+	  			<![CDATA[ #{mod_url} , ]]>
+	  		</if>
+	  		<if test=" mod_des  != null and  mod_des  != ''  and  mod_des  != 'null' ">
+	  			<![CDATA[ #{mod_des} , ]]>
+	  		</if>
+	  		<if test=" mod_banner  != null and  mod_banner  != ''  and  mod_banner  != 'null' ">
+	  			<![CDATA[ #{mod_banner} , ]]>
+	  		</if>
+	  		<if test=" mod_img  != null and  mod_img  != ''  and  mod_img  != 'null' ">
+	  			<![CDATA[ #{mod_img} , ]]>
+	  		</if>
+	  		<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  			<![CDATA[ #{created_by} , ]]>
+	  		</if>
+	  		<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  			<![CDATA[ #{modified_by} , ]]>
+	  		</if>
+	  		<if test=" version  != null">
+	    		<![CDATA[ ${version} , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  			<![CDATA[ #{delflag} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateModuleDes" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ZJOW_MODULE_DES A ]]>
+		<set>
+	  	<if test=" mod_name  != null and  mod_name  != ''  and  mod_name  != 'null' ">
+	  		<![CDATA[ A.MOD_NAME = #{mod_name}, ]]>
+	  	</if>
+	  	<if test=" mod_byname  != null and  mod_byname  != ''  and  mod_byname  != 'null' ">
+	  		<![CDATA[ A.MOD_BYNAME = #{mod_byname}, ]]>
+	  	</if>
+	  	<if test=" mod_seo  != null and  mod_seo  != ''  and  mod_seo  != 'null' ">
+	  		<![CDATA[ A.MOD_SEO = #{mod_seo}, ]]>
+	  	</if>
+	  	<if test=" mod_url  != null and  mod_url  != ''  and  mod_url  != 'null' ">
+	  		<![CDATA[ A.MOD_URL = #{mod_url}, ]]>
+	  	</if>
+	  	<if test=" mod_des  != null and  mod_des  != ''  and  mod_des  != 'null' ">
+	  		<![CDATA[ A.MOD_DES = #{mod_des}, ]]>
+	  	</if>
+	  	<if test=" mod_banner  != null and  mod_banner  != ''  and  mod_banner  != 'null' ">
+	  		<![CDATA[ A.MOD_BANNER = #{mod_banner}, ]]>
+	  	</if>
+	  	<if test=" mod_img  != null and  mod_img  != ''  and  mod_img  != 'null' ">
+	  		<![CDATA[ A.MOD_IMG = #{mod_img}, ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  		<![CDATA[ A.CREATED_BY = #{created_by}, ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  		<![CDATA[ A.MODIFIED_BY = #{modified_by}, ]]>
+	  	</if>
+		<if test=" version  != null ">
+  			<![CDATA[ A.VERSION = ${version} , ]]>
+		</if>
+	  	<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  		<![CDATA[ A.DELFLAG = #{delflag}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.MOD_ID = #{mod_id}]]>
+  	</update>
+  
+  	<delete id="deleteModuleDes" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ZJOW_MODULE_DES A where A.MOD_ID = #{mod_id} ]]>
+	</delete>
+  
+	<select id="findOneModuleDes" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_DES A  ]]>
+		<include refid="moduleDesWhereCondition" />
+  	</select>
+    
+  	<select id="findAllModuleDes" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_DES A ]]>
+		<include refid="moduleDesWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapModuleDes" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_DES A ]]>
+		<include refid="moduleDesWhereCondition" />
+	</select>
+  
+  	<select id="findModuleDesTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ZJOW_MODULE_DES A ]]>
+		<include refid="moduleDesWhereCondition" />
+  	</select>
+  
+  	<select id="queryModuleDesForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_DES A ]]>
+		<include refid="moduleDesWhereCondition" />
+  	</select>
+</mapper>

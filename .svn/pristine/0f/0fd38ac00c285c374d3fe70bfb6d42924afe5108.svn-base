@@ -1,0 +1,402 @@
+package com.taikang.udp.sys.service.impl;
+ 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.framework.common.util.TKDateTimeUtils;
+import com.taikang.udp.framework.core.exception.app.TKBizException;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.core.service.impl.BaseServiceImpl;
+import com.taikang.udp.security.service.SecurityUserHolder;
+import com.taikang.udp.sys.model.MenuBO;
+import com.taikang.udp.sys.model.RoleMenuBO;
+import com.taikang.udp.sys.model.UserBO;
+import com.taikang.udp.sys.service.IMenuService;
+import com.taikang.udp.sys.service.IRoleMenuService;
+import com.taikang.udp.sys.util.vo.MenuTree;
+ 
+  
+/**
+  * MenuServiceImpl
+  */
+ @Service(IMenuService.SERVICE_ID)
+ public class MenuServiceImpl extends BaseServiceImpl 
+ implements IMenuService<MenuBO>  
+  {
+  	
+	/**
+      * 注入service
+      */
+    @Resource(name=IRoleMenuService.SERVICE_ID)
+	private IRoleMenuService<RoleMenuBO> roleMenuService;
+    
+ 	/**
+	  * 增加数据
+	  */
+	public void insertObject(MenuBO menu) {
+		logger.debug("<======MenuServiceImpl--insertMenu======>");
+		// 保存前校验menuId是否存在
+		MenuBO queryMenu = new MenuBO();
+		queryMenu.setMenuId(menu.getMenuId());
+
+		MenuBO checkMbo = this.findOne(queryMenu);
+		if (checkMbo == null || "".equals(checkMbo.getMenuId())
+		        || checkMbo.getMenuId() == null
+		        || "null".equals(checkMbo.getMenuId())) {
+			// 保存
+			appDao.insert("Menu.addMenu", menu);
+		} else {
+			throw new TKBizException("err1", this.getClass().getName(), "insertObject",
+			        "该菜单id:" + menu.getMenuId() + "已经存在！", null);
+		}
+	} 	
+ 	
+ 	/**
+      * 修改数据
+      */
+	public void updateObject(MenuBO menu) {
+		logger.debug("<======MenuServiceImpl--updateMenu======>");
+		appDao.update("Menu.updateMenu",menu);
+	}
+
+	 /**
+      * 删除数据
+      */
+	public void deleteObject(MenuBO menu) {
+		logger.debug("<======MenuServiceImpl--deleteMenu======>");
+		appDao.delete("Menu.deleteMenu",menu);
+	}
+	
+	/**
+      * 查询数据
+      */
+	public MenuBO findOne(MenuBO menu) {
+		logger.debug("<======MenuServiceImpl--findMenu======>");
+		
+		MenuBO menuBackBO=appDao.queryOneObject("Menu.findOneMenu", menu);
+		return menuBackBO;		
+	}
+	
+	/**
+      * 查询所有数据
+      */
+	public List<MenuBO> findAll(MenuBO  menu) {
+		logger.debug("<======MenuServiceImpl--findAllMenu======>");
+		return appDao.queryForEntityList("Menu.findAllMenu", menu);
+	}
+	
+	
+	 /**
+      * 分页查询数据
+      */
+	public CurrentPage queryForPage(CurrentPage currentPage) {
+		logger.debug("<======MenuServiceImpl--queryMenuForPage======>");
+		return appDao.queryForPage("Menu.queryMenuForPage", currentPage);
+	}
+		
+	/**
+      * 查询所有数据 ，重新组装为map
+      */
+	public List<Dto> findAllMap(Dto param){
+		logger.debug("<======MenuServiceImpl--findAllMapMenu======>");		
+		return appDao.queryForMapList("Menu.findAllMapMenu", param);
+	}
+	
+	/**
+	 * 查询指定角色的菜单<br/>
+	 * 
+	 * @param param
+	 * @return
+	*/
+	public List<Dto> findAllMenuTreeMap(Dto param) {
+		logger.debug("<======MenuServiceImpl--findAllMapMenu======>");		
+		
+		String roleId = param.getAsString("roleId");
+		RoleMenuBO queryParam = new RoleMenuBO();
+		if (roleId != null && !"".equals(roleId)) {
+			queryParam.setRoleId(Integer.valueOf(roleId));
+		}
+		List<RoleMenuBO> roleMenuBOlist = roleMenuService.findAll(queryParam);
+		List<Dto> menuBOLst = null;
+		param.put("menu_status", "1");
+		menuBOLst = appDao.queryForMapList("Menu.findAllMapMenu", param);
+		String havedMenuIdLst = "";
+		// 组织该角色已有的菜单
+		if (roleMenuBOlist != null && roleMenuBOlist.size() != 0) {
+			for (RoleMenuBO rowMenuBO : roleMenuBOlist) {
+				if ("".equals(havedMenuIdLst)) {
+					havedMenuIdLst = String.valueOf(rowMenuBO.getMenuId());
+				} else {
+					havedMenuIdLst = havedMenuIdLst + "_" + rowMenuBO.getMenuId();
+				}
+			}
+		}
+		if (menuBOLst != null && menuBOLst.size() > 0) {
+			for(int i=0;i<menuBOLst.size();i++){
+				Dto dto = menuBOLst.get(i);
+				//List list = dto.getDefaultAList();
+				Integer menuId = dto.getAsInteger("Menu_Id");
+				String[] Parent_Id = dto.getAsString("Parent_Id").split("\\|");
+				int last = Parent_Id.length-1;
+				menuBOLst.get(i).put("_parentId", Integer.valueOf(Parent_Id[last]));
+				menuBOLst.get(i).put("state", "open");
+				//menuBOLst.get(i).put("checked", false);
+				menuBOLst.get(i).put("_havedMenuId", havedMenuIdLst);
+				
+				if (roleMenuBOlist == null || roleMenuBOlist.size() == 0) {
+					// 该角色没有菜单
+					menuBOLst.get(i).put("okflag", 0);
+				} else {
+					if (this.checkMenuIdInList(menuId, roleMenuBOlist)) {
+						// 该角色有该菜单
+						menuBOLst.get(i).put("okflag", 1);
+					} else {
+						// 该角色没有该菜单
+						menuBOLst.get(i).put("okflag", 0);
+					}
+				}
+			}
+		}
+		return menuBOLst;
+	}
+
+	/**
+	 * 判断指定菜单是否存在于菜单List中<br/>
+	 * @param menuId
+	 * @param roleMenuBOs
+	 * @return   
+	 * boolean true 存在该菜单 false 不存在该菜单
+	 */
+	boolean checkMenuIdInList(Integer menuId, List<RoleMenuBO>  roleMenuBOs) {
+		RoleMenuBO roleMenuBO = null;
+		for (int i = 0; i < roleMenuBOs.size(); i++) {
+			roleMenuBO = roleMenuBOs.get(i);
+			if (roleMenuBO.getMenuId() == menuId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 查询所有子目录<br/>
+	 * 
+	 * @param param
+	 * @return
+	 */
+    public List<Dto> findAllMenuTreeLeafMap(Dto param) {
+    	logger.debug("<======MenuServiceImpl--findAllMapMenu======>");		
+		List<Dto> menuBOLst = null;
+		param.put("is_show", "1");
+		param.put("menu_status", "1");
+		menuBOLst = appDao.queryForMapList("Menu.findAllMapMenu", param);
+		for(int i=0;i<menuBOLst.size();i++){
+			Dto dto = menuBOLst.get(i);
+			//List list = dto.getDefaultAList();
+			String[] Parent_Id = dto.getAsString("Parent_Id").split("\\|");
+			int last = Parent_Id.length-1;
+			menuBOLst.get(i).put("_parentId", Integer.valueOf(Parent_Id[last]));
+			//menuBOLst.get(i).put("_parentId", dto.getAsInteger("Parent_Id"));
+			menuBOLst.get(i).put("state", "open");
+			menuBOLst.get(i).put("checked", false);
+		}
+		return menuBOLst;
+    }
+    
+	/**
+	 * 批量保存按钮信息，将其持久化到数据库中<br/>
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public void bachDealButtons(Dto param) {
+
+		List<MenuBO> boListDel = new ArrayList<MenuBO>();
+		List<MenuBO> boListSave = new ArrayList<MenuBO>();
+		Map buttonMaps = (Map) param.get("buttonMaps");
+		List insertedlst = (List) buttonMaps.get("inserted");
+		List deleteddlst = (List) buttonMaps.get("deleted");
+		List updatedlst = (List) buttonMaps.get("updated");
+		String str = (String) param.get("parentId");
+		Integer parentId = Integer.valueOf(str);
+
+		Integer loginId = Integer.valueOf((String) param.get("loginId"));
+
+		MenuBO menuBO = null;
+		MenuBO insertmenuBO = null;
+		// 准备删除数据
+		if (deleteddlst != null && deleteddlst.size() > 0) {
+			for (int i = 0; i < deleteddlst.size(); i++) {
+				menuBO = new MenuBO();
+				Map map = (Map) deleteddlst.get(i);
+				Integer menu_Id = (Integer) map.get("Menu_Id");
+				menuBO.setMenuId(menu_Id);
+				boListDel.add(menuBO);
+			}
+		}
+		// 准备保存数据
+		if (insertedlst != null && insertedlst.size() > 0) {
+			for (int i = 0; i < insertedlst.size(); i++) {
+				menuBO = new MenuBO();
+				insertmenuBO = new MenuBO();
+				Map map = (Map) insertedlst.get(i);
+				String md = String.valueOf(map.get("Menu_Id"));
+				Integer menu_Id = Integer.valueOf((md));
+				menuBO.setMenuId(menu_Id);
+				boListDel.add(menuBO);
+
+				insertmenuBO.setMenuId(menu_Id);
+				insertmenuBO.setParentId(str);
+				insertmenuBO.setMenuName((String) map.get("Menu_Name"));
+				insertmenuBO.setIsLeaf("");
+				insertmenuBO.setMenuUrl((String) map.get("Menu_Url"));
+				String menuOrder = (String) map.get("Menu_Order");
+				if (menuOrder != null && !"".equals(menuOrder)) {
+					insertmenuBO.setMenuOrder(Integer.valueOf(menuOrder));
+				}
+				insertmenuBO.setMenuStatus("1");
+				insertmenuBO.setCreator(loginId);
+				insertmenuBO.setCreateTime(TKDateTimeUtils.getTodayTimeStamp());
+				insertmenuBO.setLastModby(loginId);
+				insertmenuBO.setLastModtime(TKDateTimeUtils.getTodayTimeStamp());
+				insertmenuBO.setIcon((String) map.get("Icon"));
+				insertmenuBO.setIsShow("0");
+				insertmenuBO.setPermission((String) map.get("Permission"));
+				boListSave.add(insertmenuBO);
+			}
+		}
+		// 准备更新数据
+		if (updatedlst != null && updatedlst.size() > 0) {
+			for (int i = 0; i < updatedlst.size(); i++) {
+				menuBO = new MenuBO();
+				insertmenuBO = new MenuBO();
+				Map map = (Map) updatedlst.get(i);
+				String md = String.valueOf(map.get("Menu_Id"));
+				Integer menu_Id = Integer.valueOf((md));
+				menuBO.setMenuId(menu_Id);
+				boListDel.add(menuBO);
+
+				insertmenuBO.setMenuId(menu_Id);
+				insertmenuBO.setParentId(str);
+				insertmenuBO.setMenuName((String) map.get("Menu_Name"));
+				insertmenuBO.setIsLeaf("");
+				insertmenuBO.setMenuUrl((String) map.get("Menu_Url"));
+				String val = String.valueOf(map.get("Menu_Order"));
+				if (val!= null && !"".equals(val)) {
+					insertmenuBO.setMenuOrder(Integer.valueOf(val));
+				}
+				insertmenuBO.setMenuStatus("1");
+				insertmenuBO.setCreator(loginId);
+				insertmenuBO.setCreateTime(TKDateTimeUtils.getTodayTimeStamp());
+				insertmenuBO.setLastModby(loginId);
+				insertmenuBO.setLastModtime(TKDateTimeUtils.getTodayTimeStamp());
+				insertmenuBO.setIcon((String) map.get("Icon"));
+				insertmenuBO.setIsShow("0");
+				insertmenuBO.setPermission((String) map.get("Permission"));
+				boListSave.add(insertmenuBO);
+			}
+		}
+		if (boListDel != null && boListDel.size() >=1) {
+			// 批量删除
+			appDao.batchDeleteByBO("Menu.deleteMenu", boListDel);
+		}
+		if (boListSave != null && boListSave.size() >=1) {
+			// 批量保存
+			appDao.batchDeleteByBO("Menu.addMenu", boListSave);
+		}
+	}
+	
+	/**
+	 * 获取指定用户页面按钮信息<br/>
+	 * @param param
+	 * @return
+	 */
+	public List<Dto> getbtnAccess(Dto param) {
+		String reqMenuId = String.valueOf(param.get("reqMenuId"));
+		String loginId = String.valueOf(param.get("loginId"));
+		param.put("parent_id", reqMenuId);
+		param.put("user_Id", loginId);
+		List<Dto> dtoList = appDao.queryForMapList("getbtnAccess", param);
+		return dtoList;
+	}
+
+	/**
+	 * 获取指定菜单的树机构信息<br/>
+	 * @param menuId
+	 * @param state
+	 * @param currId
+	 * @param parentIcon
+	 * @param childIcon
+	 * @return
+	 */
+	public List<MenuTree> getMenuTree(String menuId, String state,
+	        String currId,String parentIcon, String childIcon) {
+		List<MenuTree> treeLst = new ArrayList<MenuTree>();
+		MenuTree tree;
+		//LoginUser user = UserUtils.getUser();
+		UserBO user = SecurityUserHolder.getCurrentUser();
+		String loginId = String.valueOf(user.getId());
+		
+		MenuBO menuParent = new MenuBO();
+		menuParent.setParentId(menuId);
+		menuParent.setString("userId", loginId);
+		List<MenuBO> menuLst = appDao.queryForEntityList("Menu.findUserMenu",
+		        menuParent);
+		if (menuId == null || "".equals(menuId)) {
+			menuId = currId;
+		}
+		for (int i = 0; i < menuLst.size(); i++) {
+			MenuBO childMenuBO = (MenuBO) menuLst.get(i);
+			tree = new MenuTree();
+			// 设定指定菜单信息
+			tree.setMenuBO(childMenuBO);
+			String transId = "";
+			if (menuId == null || "".equals(menuId)) {
+				transId = String.valueOf(childMenuBO.getMenuId());
+			} else {
+				transId = menuId + "|" + childMenuBO.getMenuId();
+			}
+			tree.setId(String.valueOf(childMenuBO.getMenuId()));
+			tree.setText(childMenuBO.getMenuName());
+			tree.setMenuName(childMenuBO.getMenuName());
+			tree.setCheckUrl(childMenuBO.getMenuUrl());
+			//
+			tree.setUrl(childMenuBO.getMenuUrl() + "?reqMenuId=" + childMenuBO.getMenuId()/*+
+					"&menuName=" +childMenuBO.getMenuName()*/+"&parentId="+childMenuBO.getParentId()+"&backUp2="+childMenuBO.getBackup2()+"&isLeaf="+childMenuBO.getIsLeaf()+"&status="+childMenuBO.getMenuStatus());
+			tree.setState(state);
+			//
+			List<MenuTree> childrenLst = this.getMenuTree(transId, state,
+			        String.valueOf(childMenuBO.getMenuId()),parentIcon,childIcon);
+			tree.setChildren(childrenLst);
+			if (childrenLst != null && childrenLst.size() >= 1) {
+				tree.setIconCls(parentIcon);
+			} else {
+				tree.setIconCls(childIcon);
+			}
+			treeLst.add(tree);
+		}
+		return treeLst;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taikang.udp.sys.service.IMenuService#updateMenuSubObject(com.taikang.udp.sys.model.MenuBO)
+	 */
+	@Override
+	public void updateMenuSubObject(MenuBO menuBO) {
+		// TODO Auto-generated method stub
+		logger.debug("<======MenuServiceImpl--updateMenu======>");
+		if(!menuBO.getBackup2().isEmpty()){
+			appDao.update("Menu.updateSubMenu",menuBO);
+		}
+		if(!menuBO.getParentId().isEmpty()){
+			appDao.update("Menu.updateParenTSubMenu",menuBO);
+		}
+	}
+ }
+  

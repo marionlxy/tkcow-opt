@@ -1,0 +1,476 @@
+package com.taikang.tkcoww.orderVisit.controller;
+
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.taikang.tkcoww.orderVisit.action.IOrderVisitAction;
+import com.taikang.udp.common.util.ExcelUtil;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+import com.taikang.udp.framework.common.util.TKDateTimeUtils;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.core.web.BaseController;
+import com.taikang.udp.security.service.SecurityUserHolder;
+import com.taikang.udp.sys.model.DictEntryBO;
+import com.taikang.udp.sys.util.CommonUtil;
+import com.taikang.udp.sys.util.DictUtils;
+
+
+/**
+  * OrderVisitController
+  */
+@Controller("orderVisitController")
+@RequestMapping(value="/orderVisit")
+public class OrderVisitController  extends BaseController  {
+		
+	@Resource(name=IOrderVisitAction.ACTION_ID)
+	private IOrderVisitAction orderVisitAction;
+		
+	/**
+	 * 打开主查询页面
+	 * @return 页面地址
+	 */
+	@RequestMapping("")
+	public String showOrderVisitIndexPage() {
+		return "ordervisit/ordervisitIndex"; 
+	}
+	
+	/**
+	 * 查询信息列表
+	 * @return 分页列表数据
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public Map<String,Object> getOrderVisitList(HttpServletRequest request,CurrentPage page){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		page.setParamObject(CommonUtil.getParamAsDto(request));
+		CurrentPage currentPage = orderVisitAction.getOrderVisitList(page);
+		
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+		
+		return map;
+	}
+
+	/**
+	 * 打开新增或修改页面
+	 * @return
+	 */
+	@RequestMapping("edit")
+	public String showOrderVisitEditPage(String visitId,Model model) {
+		
+		if(visitId!=null && !visitId.equals(""))
+		{
+			model.addAttribute("visitId",visitId);
+		}
+		
+		return "ordervisit/ordervisitEdit"; 
+	}
+	
+	/**
+	 * 获取一条记录详细信息，用来填充修改界面
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/getOne")
+	@ResponseBody
+	public Dto getOrderVisitById(@RequestParam("visitId")String visitId)
+	{
+		Dto param = new BaseDto();
+		param.put("visitId", visitId);
+		Dto info = orderVisitAction.findOne(param);
+		String dateTime = info.getAsString("visitTime");
+		String date = dateTime.substring(0,10);
+		String time = dateTime.substring(11,16);
+		info.put("date", date);
+		info.put("time", time);
+		return info ;
+	}
+	
+	/**
+	 * 保存新增或修改的记录，将其持久化到数据库中
+	 * @return
+	 */
+	@RequestMapping("/save")
+	@ResponseBody
+	private Map<String,String> saveOrderVisitInfo(HttpServletRequest request)
+	{
+		Map<String,String> map=new HashMap<String,String>();
+		
+		Dto param = CommonUtil.getParamAsDto(request);
+		if(param.get("visitId") ==null ||"".equals(param.get("visitId")))
+		{
+			orderVisitAction.insertObject(param);
+			map.put(MESSAGE_INFO, "新增成功！");
+		}
+		else
+		{
+			orderVisitAction.updateObject(param);
+			map.put(MESSAGE_INFO, "更新成功！");
+		}
+		map.put(RTN_RESULT, "true");
+		
+		return map;
+	}
+	
+	/**
+	*删除一条或多条记录
+	*/
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/del")
+	@ResponseBody
+	public Map<String, String> deleteOrderVisit(@RequestParam("visitId") String visitId) {
+		Map<String, String> map = new HashMap<String, String>();
+		Dto param = new BaseDto();
+		Dto user = SecurityUserHolder.getCurrentUser().toDto();
+	
+		param.put("visitId", visitId);
+		param.put("modifiedTime", TKDateTimeUtils.getTodayTimeStamp());
+		param.put("modifiedBy", user.getAsString("id"));
+		param.put("delflag", "1");
+		orderVisitAction.updateObject(param);
+		
+		map.put(RTN_RESULT, "true");
+		map.put(MESSAGE_INFO, "操作成功！");
+		
+		return map;
+	}
+	
+	/**
+	 * 导出excel
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	  @RequestMapping(value="/downloadOrderVisit")
+	    public String downloadOrderVisit(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	        String fileName="excel";
+	        String visitTel =request.getParameter("visitTel");
+	        byte[] newvisitName =request.getParameter("visitName").getBytes("iso-8859-1");
+	        String visitName = new String(newvisitName,"UTF-8");
+	        String startTime =request.getParameter("startTime");
+	        String endTime =request.getParameter("endTime");//endTime
+	        String visitFrom =request.getParameter("visitFrom");//endTime
+	        
+	        //填充projects数据
+	        List<Dto> projects=createData(visitTel,visitName,startTime,endTime,visitFrom);
+	        
+	    	List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+		    Map<String, Object> map = new HashMap<String, Object>();
+		    map.put("sheetName", "sheet1");
+		    listmap.add(map);
+		    if (projects != null) {
+		    	for (int i = 0, size = projects.size(); i < size; i++) {
+		    		Dto temp = projects.get(i);
+		    		Map<String, Object> mapValue = new HashMap<String, Object>();
+		    		
+		    		
+		            String visitAge = temp.getAsString("VISIT_AGE");
+		            List<DictEntryBO> listDe = DictUtils.getDictEntryList("nianl");
+		            for (DictEntryBO de : listDe) {
+		            	if (visitAge.equals(de.getDictId())) {
+		            		mapValue.put("visitAge", de.getDictName());
+		            		break;
+		            	}
+		            }
+		         
+		            String visitService = temp.getAsString("VISIT_SERVICE");
+		            List<DictEntryBO> listMean = DictUtils.getDictEntryList("service");
+		            for (DictEntryBO del : listMean) {
+		            	if (visitService.equals(del.getDictId())) {
+		            		mapValue.put("visitService", del.getDictName());
+		            		break;
+		            	}
+		            }
+		      
+		            String visitSite = temp.getAsString("VISIT_SITE");
+		            List<DictEntryBO> listan = DictUtils.getDictEntryList("tiyan");
+		            for (DictEntryBO dels : listan) {
+		            	if (visitSite.equals(dels.getDictId())) {
+		            		mapValue.put("visitSite", dels.getDictName());
+		            		break;
+		            	}
+		            }
+		          
+		            String visitform = temp.getAsString("VISIT_FROM");
+		            List<DictEntryBO> listform = DictUtils.getDictEntryList("customfrom");
+		            for (DictEntryBO defo : listform) {
+		            	if (visitform.equals(defo.getDictId())) {
+		            		mapValue.put("visitFrom", defo.getDictName());
+		            		break;
+		            	}
+		            }
+		            mapValue.put("visitName",temp.getAsString("VISIT_NAME"));
+		            mapValue.put("visitTel",temp.getAsString("VISIT_TEL"));
+		            mapValue.put("visitCount", temp.getAsString("VISIT_COUNT"));
+		            mapValue.put("visitTime", temp.getAsString("VISIT_TIME"));
+		            mapValue.put("visitSex",temp.getAsString("VISIT_SEX"));
+		            mapValue.put("visitBak",temp.getAsString("VISIT_BAK"));
+		            mapValue.put("userIp",temp.getAsString("user_ip"));
+		            mapValue.put("createdTime",temp.getAsString("CREATED_TIME"));
+		            
+		            listmap.add(mapValue);
+		    	}
+	        
+		    }
+	        
+	        
+	        
+	        //List<Map<String,Object>> list=createExcelRecord(projects);
+	        String columnNames[]={"联系人","联系电话","参观人数","预约时间","预约场所","年龄","性别","养老服务","备注","来源","IP","提交时间"};//列名
+	        String keys[]   =    {"visitName","visitTel","visitCount","visitTime","visitSite","visitAge","visitSex","visitService","visitBak","visitFrom","userIp","createdTime"};//map中的key
+	        
+	        ByteArrayOutputStream os = new ByteArrayOutputStream();
+	        try {
+	            ExcelUtil.createWorkBook(listmap,keys,columnNames).write(os);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        byte[] content = os.toByteArray();
+	        InputStream is = new ByteArrayInputStream(content);
+	        // 设置response参数，可以打开下载页面
+	        response.reset();
+	        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+	        response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+	        ServletOutputStream out = response.getOutputStream();
+	        BufferedInputStream bis = null;
+	        BufferedOutputStream bos = null;
+	        try {
+	            bis = new BufferedInputStream(is);
+	            bos = new BufferedOutputStream(out);
+	            byte[] buff = new byte[2048];
+	            int bytesRead;
+	            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+	                bos.write(buff, 0, bytesRead);
+	            }
+	        } catch (final IOException e) {
+	            throw e;
+	        } finally {
+	            if (bis != null)
+	                bis.close();
+	            if (bos != null)
+	                bos.close();
+	        }
+	        return null;
+	    }
+	  
+	    @SuppressWarnings("unchecked")
+		private List<Dto> createData(String visitTel,String visitName,String startTime,String endTime,String visitFrom){
+	    	Dto param = new BaseDto();
+	    	if(visitTel != null){
+	    		param.put("visitTel", visitTel);
+	    	}
+	    	if(visitName != null){
+	    		param.put("visitName", visitName);
+	    	}
+	    	if(startTime != null){
+	    		param.put("startTime", startTime);
+	    	}
+	    	if(endTime != null){
+	    		param.put("endTime", endTime);
+	    	}
+	    	if(visitFrom != null){
+	    		param.put("visitFrom", visitFrom);
+	    	}
+	    	List <Dto> list = orderVisitAction.getvisitList(param);
+	        return list;
+	    }
+	    
+	    @SuppressWarnings("unused")
+		private List<Map<String, Object>> createExcelRecord(List<Dto> projects) {
+	        List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+	        Map<String, Object> map = new HashMap<String, Object>();
+	        map.put("sheetName", "sheet1");
+	        listmap.add(map);
+	        Dto temp=null;
+	        for (int j = 0; j < projects.size(); j++) {
+	        	temp=projects.get(j);
+	            Map<String, Object> mapValue = new HashMap<String, Object>();
+	            mapValue.put("visitName",temp.getAsString("VISIT_NAME"));
+	            mapValue.put("visitTel",temp.getAsString("VISIT_TEL"));
+	            mapValue.put("visitCount", temp.getAsString("VISIT_COUNT"));
+	            mapValue.put("visitTime", temp.getAsString("VISIT_TIME"));
+	            mapValue.put("visitSite",temp.getAsString("VISIT_SITE"));
+	            mapValue.put("visitAge",temp.getAsString("VISIT_AGE"));
+	            mapValue.put("visitSex",temp.getAsString("VISIT_SEX"));
+	            mapValue.put("visitService",temp.getAsString("VISIT_BAK"));
+	            mapValue.put("visitBak",temp.getAsString("VISIT_BAK"));
+	            mapValue.put("visitFrom",temp.getAsString("VISIT_FROM"));
+	            mapValue.put("userIp",temp.getAsString("user_ip"));
+	            mapValue.put("createdTime",temp.getAsString("CREATED_TIME"));
+	            listmap.add(mapValue);
+	        }
+	        return listmap;
+	    }
+	
+	    
+	    /**
+	     * 预约统计页面
+	     * 2016年2月2日
+	     * t-mahe
+	     * 下午3:06:32
+	     *
+	     */
+		@RequestMapping("/showOrderVisitIndex")
+		public String showOrderVisitIndex() {
+			return "ordervisit/showOrderVisitIndex"; 
+		}
+		
+		
+		/**
+		 * 获取当前时间、昨天时间的数据，全部数据数量
+		 * 2016年2月2日
+		 * t-mahe
+		 * 下午3:07:03
+		 * @throws ParseException 
+		 *
+		 */
+		@SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
+		@RequestMapping("/getTime")
+		@ResponseBody
+		public String getOrderVisitByTime(String dateTime) throws ParseException
+		{
+			Dto paramToJson = new BaseDto();
+			Dto param = new BaseDto();
+			Dto todayParam = new BaseDto();
+			Dto yesterdayParam = new BaseDto();
+			Timestamp NewDate =  TKDateTimeUtils.getTodayTimeStamp();
+			//今天日期
+			 String today= new SimpleDateFormat("yyyy-MM-dd").format(NewDate);
+			 
+			 
+			 Calendar calendar = new GregorianCalendar();
+			 calendar.setTime(NewDate);
+			 calendar.add(calendar.DATE, -1);
+			 java.util.Date yesterday1 = calendar.getTime();
+			 //昨天日期
+			 String yesterday= new SimpleDateFormat("yyyy-MM-dd").format(yesterday1);
+			 
+			 
+			 
+			 List arr =  orderVisitAction.findAllT(param);//获取所有的数据
+			 int intArr = arr.size();
+			 String stringA = Integer.toString(intArr);
+			 
+			 yesterdayParam.put("createdTime",yesterday );
+			 List yesterdayArr =  orderVisitAction.findAllT(yesterdayParam);//获取昨天所有的数据
+			 int intYes = yesterdayArr.size();
+			 String stringYes = Integer.toString(intYes);
+			 
+			 todayParam.put("createdTime", today);
+			 List todayArr =  orderVisitAction.findAllT(todayParam);//获取今天所有的数据
+			 int intTod = todayArr.size();
+			 String stringTod = Integer.toString(intTod);
+			 //判断是否点击查询按钮
+			 Dto num = new BaseDto();
+			 if(dateTime.equals("") || dateTime ==null ){
+				 
+				 //获取当前日期以后的14天的数据，数量
+				 num =  getNum(today);
+			 }else{
+				 DateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+				 java.util.Date timeT = format.parse(dateTime);
+				 Calendar c = Calendar.getInstance();
+				   c.setTime(timeT); 
+				   c.add(c.DATE, 13);  
+				   java.util.Date temp_date = c.getTime();
+				   String oldTime=format.format(temp_date);
+				 num =  getNum(oldTime);
+
+			 }
+			 
+			 paramToJson.put("all", stringA);
+			 paramToJson.put("yesterday", stringYes);
+			 paramToJson.put("today", stringTod);
+			 paramToJson.put("num", num);
+			 System.out.println("--------->"+paramToJson.toJson());
+			return paramToJson.toJson();
+		}
+		
+		/**
+		 * 
+		 * 获取当前日期以后的14天的数据，数量
+		 * 2016年2月2日
+		 * t-mahe
+		 * 下午3:19:24
+		 * @throws ParseException 
+		 *
+		 */
+		@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
+		@RequestMapping("/getNum")
+		@ResponseBody
+		public Dto getNum(String dateTime) throws ParseException{
+			Dto param = new BaseDto();
+			 DateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			 java.util.Date time = format.parse(dateTime);
+			 List listTime = new LinkedList();
+			 List listTimeT = new LinkedList();
+			 List listTimeL = new LinkedList();
+			Calendar c = Calendar.getInstance(); 
+			//查询出14天的数据
+			int intTotal = 0;
+			for (int i = 14; i >0; i--) {
+				
+				 Dto dtoDate  = new BaseDto();
+				   
+				   c.setTime(time); 
+				   c.add(c.DATE, -(i-1));  
+				   java.util.Date temp_date = c.getTime();
+				   String dayTime=format.format(temp_date);
+				  
+				  
+				   dtoDate.put("createdTime", dayTime);
+				  
+				 List arr =  orderVisitAction.findAllT(dtoDate);//获取14天的日期
+				 int intA = arr.size();
+				 intTotal+=intA;
+				 listTime.add(intA);
+				 listTimeT.add(dayTime);
+			}
+			for (int i = 1; i <= listTimeT.size(); i=i+2) {
+				listTimeL.add(listTimeT.get(i));
+			}
+			String startTime = (String) listTimeT.get(0);//开始时间
+			String endTime = (String) listTimeT.get(13);//结束时间
+			
+			param.put("listTime", listTime);
+			param.put("listTimeT", listTimeL);
+			param.put("startTime", startTime);
+			param.put("endTime", endTime);
+			param.put("intTotal", intTotal);
+
+			return param ;
+		}
+		
+		
+}
+

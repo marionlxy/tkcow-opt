@@ -1,0 +1,14 @@
+package com.taikang.tkcoww.banner.action;
+
+import com.taikang.udp.framework.core.action.IBaseAction;
+import java.util.Arrays;
+
+
+/**
+  * IBannerAction
+  */
+
+public interface IBannerAction extends IBaseAction { 
+
+	final String ACTION_ID = "bannerAction"; 	
+}

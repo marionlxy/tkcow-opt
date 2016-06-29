@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Log">
+	<resultMap id="logResultMap" type="com.taikang.udp.sys.model.LogBO">
+		<result property="logId" column="Log_ID"/>
+		<result property="logType" column="Log_Type"/>
+		<result property="operType" column="Oper_Type"/>
+		<result property="operName" column="Oper_Name"/>
+		<result property="message" column="Message"/>
+		<result property="logLevel" column="Log_Level"/>
+		<result property="userId" column="User_Id"/>
+		<result property="userName" column="User_Name"/>
+		<result property="createTime" column="Create_Time"/>
+		<result property="clientIp" column="Client_Ip"/>
+		<result property="reqUrl" column="Req_Url"/>
+		<result property="reqMethod" column="Req_Method"/>
+		<result property="reqParam" column="Req_Param"/>
+		<result property="backup1" column="Backup1"/>
+		<result property="backup2" column="Backup2"/>
+  	</resultMap>
+  
+  	<sql id="logWhereCondition">
+		<where>
+	  	<if test=" log_id != null ">
+	  		<![CDATA[ AND A.Log_ID = ${log_id} ]]>
+	  	</if>
+	  	<if test=" log_type != null ">
+	  		<![CDATA[ AND A.Log_Type = ${log_type} ]]>
+	  	</if>
+	  	<if test=" oper_type != null and oper_type != '' and oper_type != 'null' ">
+			<![CDATA[ AND A.Oper_Type = #{oper_type} ]]>
+	  	</if>
+	  	<if test=" oper_name != null and oper_name != '' and oper_name != 'null' ">
+			<![CDATA[ AND A.Oper_Name = #{oper_name} ]]>
+	  	</if>
+	  	<if test=" message != null and message != '' and message != 'null' ">
+			<![CDATA[ AND A.Message = #{message} ]]>
+	  	</if>
+	  	<if test=" log_level != null and log_level != '' and log_level != 'null' ">
+			<![CDATA[ AND A.Log_Level = #{log_level} ]]>
+	  	</if>
+	  	<if test=" user_id != null and user_id != '' and user_id != 'null' ">
+			<![CDATA[ AND A.User_Id = #{user_id} ]]>
+	  	</if>
+	  	<if test=" user_name != null and user_name != '' and user_name != 'null' ">
+			<![CDATA[ AND A.User_Name = #{user_name} ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ AND A.Create_Time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" client_ip != null and client_ip != '' and client_ip != 'null' ">
+			<![CDATA[ AND A.Client_Ip = #{client_ip} ]]>
+	  	</if>
+	  	<if test=" req_url != null and req_url != '' and req_url != 'null' ">
+			<![CDATA[ AND A.Req_Url = #{req_url} ]]>
+	  	</if>
+	  	<if test=" req_method != null and req_method != '' and req_method != 'null' ">
+			<![CDATA[ AND A.Req_Method = #{req_method} ]]>
+	  	</if>
+	  	<if test=" req_param != null and req_param != '' and req_param != 'null' ">
+			<![CDATA[ AND A.Req_Param = #{req_param} ]]>
+	  	</if>
+	  	<if test=" backup1 != null and backup1 != '' and backup1 != 'null' ">
+			<![CDATA[ AND A.Backup1 = #{backup1} ]]>
+	  	</if>
+	  	<if test=" backup2 != null and backup2 != '' and backup2 != 'null' ">
+			<![CDATA[ AND A.Backup2 = #{backup2} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addLog"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO BSC_LOG_T
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" log_id  != null ">
+				<![CDATA[ Log_ID , ]]>
+	  		</if>
+	  		<if test=" log_type  != null ">
+				<![CDATA[ Log_Type , ]]>
+	  		</if>
+	  		<if test=" oper_type  != null and  oper_type  != ''  and  oper_type  != 'null' ">
+				<![CDATA[ Oper_Type , ]]>
+	  		</if>
+	  		<if test=" oper_name  != null and  oper_name  != ''  and  oper_name  != 'null' ">
+				<![CDATA[ Oper_Name , ]]>
+	  		</if>
+	  		<if test=" message  != null and  message  != ''  and  message  != 'null' ">
+				<![CDATA[ Message , ]]>
+	  		</if>
+	  		<if test=" log_level  != null and  log_level  != ''  and  log_level  != 'null' ">
+				<![CDATA[ Log_Level , ]]>
+	  		</if>
+	  		<if test=" user_id  != null and  user_id  != ''  and  user_id  != 'null' ">
+				<![CDATA[ User_Id , ]]>
+	  		</if>
+	  		<if test=" user_name  != null and  user_name  != ''  and  user_name  != 'null' ">
+				<![CDATA[ User_Name , ]]>
+	  		</if>
+	  		<if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+				<![CDATA[ Create_Time , ]]>
+	  		</if>
+	  		<if test=" client_ip  != null and  client_ip  != ''  and  client_ip  != 'null' ">
+				<![CDATA[ Client_Ip , ]]>
+	  		</if>
+	  		<if test=" req_url  != null and  req_url  != ''  and  req_url  != 'null' ">
+				<![CDATA[ Req_Url , ]]>
+	  		</if>
+	  		<if test=" req_method  != null and  req_method  != ''  and  req_method  != 'null' ">
+				<![CDATA[ Req_Method , ]]>
+	  		</if>
+	  		<if test=" req_param  != null and  req_param  != ''  and  req_param  != 'null' ">
+				<![CDATA[ Req_Param , ]]>
+	  		</if>
+	  		<if test=" backup1  != null and  backup1  != ''  and  backup1  != 'null' ">
+				<![CDATA[ Backup1 , ]]>
+	  		</if>
+	  		<if test=" backup2  != null and  backup2  != ''  and  backup2  != 'null' ">
+				<![CDATA[ Backup2 , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" log_id  != null">
+	    		<![CDATA[ ${log_id} , ]]>
+	  		</if>
+	  		<if test=" log_type  != null">
+	    		<![CDATA[ ${log_type} , ]]>
+	  		</if>
+	  		<if test=" oper_type  != null and  oper_type  != ''  and  oper_type  != 'null' ">
+	  			<![CDATA[ #{oper_type} , ]]>
+	  		</if>
+	  		<if test=" oper_name  != null and  oper_name  != ''  and  oper_name  != 'null' ">
+	  			<![CDATA[ #{oper_name} , ]]>
+	  		</if>
+	  		<if test=" message  != null and  message  != ''  and  message  != 'null' ">
+	  			<![CDATA[ #{message} , ]]>
+	  		</if>
+	  		<if test=" log_level  != null and  log_level  != ''  and  log_level  != 'null' ">
+	  			<![CDATA[ #{log_level} , ]]>
+	  		</if>
+	  		<if test=" user_id  != null and  user_id  != ''  and  user_id  != 'null' ">
+	  			<![CDATA[ #{user_id} , ]]>
+	  		</if>
+	  		<if test=" user_name  != null and  user_name  != ''  and  user_name  != 'null' ">
+	  			<![CDATA[ #{user_name} , ]]>
+	  		</if>
+	  		<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" client_ip  != null and  client_ip  != ''  and  client_ip  != 'null' ">
+	  			<![CDATA[ #{client_ip} , ]]>
+	  		</if>
+	  		<if test=" req_url  != null and  req_url  != ''  and  req_url  != 'null' ">
+	  			<![CDATA[ #{req_url} , ]]>
+	  		</if>
+	  		<if test=" req_method  != null and  req_method  != ''  and  req_method  != 'null' ">
+	  			<![CDATA[ #{req_method} , ]]>
+	  		</if>
+	  		<if test=" req_param  != null and  req_param  != ''  and  req_param  != 'null' ">
+	  			<![CDATA[ #{req_param} , ]]>
+	  		</if>
+	  		<if test=" backup1  != null and  backup1  != ''  and  backup1  != 'null' ">
+	  			<![CDATA[ #{backup1} , ]]>
+	  		</if>
+	  		<if test=" backup2  != null and  backup2  != ''  and  backup2  != 'null' ">
+	  			<![CDATA[ #{backup2} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateLog" parameterType="java.util.Map">
+		<![CDATA[ UPDATE BSC_LOG_T A ]]>
+		<set>
+		<if test=" log_type  != null ">
+  			<![CDATA[ A.Log_Type = ${log_type} , ]]>
+		</if>
+	  	<if test=" oper_type  != null and  oper_type  != ''  and  oper_type  != 'null' ">
+	  		<![CDATA[ A.Oper_Type = #{oper_type}, ]]>
+	  	</if>
+	  	<if test=" oper_name  != null and  oper_name  != ''  and  oper_name  != 'null' ">
+	  		<![CDATA[ A.Oper_Name = #{oper_name}, ]]>
+	  	</if>
+	  	<if test=" message  != null and  message  != ''  and  message  != 'null' ">
+	  		<![CDATA[ A.Message = #{message}, ]]>
+	  	</if>
+	  	<if test=" log_level  != null and  log_level  != ''  and  log_level  != 'null' ">
+	  		<![CDATA[ A.Log_Level = #{log_level}, ]]>
+	  	</if>
+	  	<if test=" user_id  != null and  user_id  != ''  and  user_id  != 'null' ">
+	  		<![CDATA[ A.User_Id = #{user_id}, ]]>
+	  	</if>
+	  	<if test=" user_name  != null and  user_name  != ''  and  user_name  != 'null' ">
+	  		<![CDATA[ A.User_Name = #{user_name}, ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ A.Create_Time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" client_ip  != null and  client_ip  != ''  and  client_ip  != 'null' ">
+	  		<![CDATA[ A.Client_Ip = #{client_ip}, ]]>
+	  	</if>
+	  	<if test=" req_url  != null and  req_url  != ''  and  req_url  != 'null' ">
+	  		<![CDATA[ A.Req_Url = #{req_url}, ]]>
+	  	</if>
+	  	<if test=" req_method  != null and  req_method  != ''  and  req_method  != 'null' ">
+	  		<![CDATA[ A.Req_Method = #{req_method}, ]]>
+	  	</if>
+	  	<if test=" req_param  != null and  req_param  != ''  and  req_param  != 'null' ">
+	  		<![CDATA[ A.Req_Param = #{req_param}, ]]>
+	  	</if>
+	  	<if test=" backup1  != null and  backup1  != ''  and  backup1  != 'null' ">
+	  		<![CDATA[ A.Backup1 = #{backup1}, ]]>
+	  	</if>
+	  	<if test=" backup2  != null and  backup2  != ''  and  backup2  != 'null' ">
+	  		<![CDATA[ A.Backup2 = #{backup2}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.LOG_ID = #{log_id}]]>
+  	</update>
+  
+  	<delete id="deleteLog" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM BSC_LOG_T A where A.LOG_ID = #{log_id} ]]>
+	</delete>
+  
+	<select id="findOneLog" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM BSC_LOG_T A  ]]>
+		<include refid="logWhereCondition" />
+  	</select>
+    
+  	<select id="findAllLog" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM BSC_LOG_T A ]]>
+		<include refid="logWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapLog" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM BSC_LOG_T A ]]>
+		<include refid="logWhereCondition" />
+	</select>
+  
+  	<select id="findLogTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM BSC_LOG_T A ]]>
+		<include refid="logWhereCondition" />
+  	</select>
+  
+  	<select id="queryLogForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM BSC_LOG_T A ]]>
+		<include refid="logWhereCondition" />
+  	</select>
+  	
+  	<select id="searchLogByconForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+        SELECT A.*
+		  FROM BSC_LOG_T A
+		<where>
+	        <if test=" startTime != null and startTime != '' and startTime != 'null' ">
+	            <![CDATA[ AND A.Create_Time >= DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%i:%s') ]]>
+	        </if>
+			<if test=" endTime != null and endTime != '' and endTime != 'null' ">
+	            <![CDATA[ AND A.Create_Time <= DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%i:%s') ]]>
+	        </if>
+			<if test=" logType != null and logType != '' and logType != 'null' ">
+	            <![CDATA[ AND A.Log_Type = #{logType} ]]>
+	        </if>   
+			   
+			<if test=" operType != null and operType != '' and operType != 'null' ">
+	            <![CDATA[ and A.Oper_Type = #{operType} ]]>
+	        </if> 
+	        <if test=" operName != null and operName != '' and operName != 'null' ">
+	            <![CDATA[ AND A.Oper_Name like concat('%', #{operName}, '%') ]]>
+	        </if> 
+	        <if test=" message != null and message != '' and message != 'null' ">
+	            <![CDATA[ AND A.Message like concat('%', #{message}, '%') ]]>
+	        </if> 
+        </where>
+    </select>
+
+</mapper>

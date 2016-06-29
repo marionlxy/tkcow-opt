@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArticleClass">
+	<resultMap id="articleClassResultMap" type="com.taikang.udp.manage.model.ArticleClassBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="classname" column="className"/>
+		<result property="mark" column="mark"/>
+		<result property="sequence" column="sequence"/>
+		<result property="parentId" column="parent_id"/>
+  	</resultMap>
+  
+  	<sql id="articleClassWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" classname != null and classname != '' and classname != 'null' ">
+			<![CDATA[ AND A.className = #{classname} ]]>
+	  	</if>
+	  	<if test=" level != null ">
+	  		<![CDATA[ AND A.level = ${level} ]]>
+	  	</if>
+	  	<if test=" mark != null and mark != '' and mark != 'null' ">
+			<![CDATA[ AND A.mark = #{mark} ]]>
+	  	</if>
+	  	<if test=" sequence != null ">
+	  		<![CDATA[ AND A.sequence = ${sequence} ]]>
+	  	</if>
+	  	
+	  	<if test=" parent_id != null ">
+	  		<![CDATA[ AND A.parent_id = ${parent_id} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addArticleClass"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ARTICLECLASS
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null and  addtime  != ''  and  addtime  != 'null' ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null and  modifytime  != ''  and  modifytime  != 'null' ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" classname  != null and  classname  != ''  and  classname  != 'null' ">
+				<![CDATA[ className , ]]>
+	  		</if>
+	  		<if test=" level  != null ">
+				<![CDATA[ level , ]]>
+	  		</if>
+	  		<if test=" mark  != null and  mark  != ''  and  mark  != 'null' ">
+				<![CDATA[ mark , ]]>
+	  		</if>
+	  		<if test=" sequence  != null ">
+				<![CDATA[ sequence , ]]>
+	  		</if>
+	  		
+	  		<if test=" parent_id  != null ">
+				<![CDATA[ parent_id , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+	  			<![CDATA[ #{deletestatus} , ]]>
+	  		</if>
+	  		<if test=" classname  != null and  classname  != ''  and  classname  != 'null' ">
+	  			<![CDATA[ #{classname} , ]]>
+	  		</if>
+	  		<if test=" level  != null">
+	    		<![CDATA[ ${level} , ]]>
+	  		</if>
+	  		<if test=" mark  != null and  mark  != ''  and  mark  != 'null' ">
+	  			<![CDATA[ #{mark} , ]]>
+	  		</if>
+	  		<if test=" sequence  != null">
+	    		<![CDATA[ ${sequence} , ]]>
+	  		</if>
+	  		
+	  		<if test=" parent_id  != null">
+	    		<![CDATA[ ${parent_id} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateArticleClass" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ARTICLECLASS A ]]>
+		<set>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+	  	<if test=" deletestatus  != null">
+	  		<![CDATA[ A.deleteStatus = #{deletestatus}, ]]>
+	  	</if>
+	  	<if test=" classname  != null and  classname  != ''  and  classname  != 'null' ">
+	  		<![CDATA[ A.className = #{classname}, ]]>
+	  	</if>
+		<if test=" level  != null ">
+  			<![CDATA[ A.level = ${level} , ]]>
+		</if>
+	  	<if test=" mark  != null and  mark  != ''  and  mark  != 'null' ">
+	  		<![CDATA[ A.mark = #{mark}, ]]>
+	  	</if>
+		<if test=" sequence  != null ">
+  			<![CDATA[ A.sequence = ${sequence} , ]]>
+		</if>
+	  	
+		<if test=" parent_id  != null ">
+  			<![CDATA[ A.parent_id = ${parent_id} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteArticleClass" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ARTICLECLASS  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneArticleClass" parameterType="java.util.Map" resultMap="articleClassResultMap">
+		<![CDATA[ SELECT A.* FROM ARTICLECLASS A  ]]>
+		<include refid="articleClassWhereCondition" />
+  	</select>
+    
+  	<select id="findAllArticleClass" parameterType="java.util.Map" resultMap="articleClassResultMap" >
+		<![CDATA[ SELECT A.* FROM ARTICLECLASS A ]]>
+		<include refid="articleClassWhereCondition" />
+  	</select>
+  	
+  	<select id="listRoot" parameterType="java.util.Map" resultMap="articleClassResultMap" >
+		<![CDATA[  select A.* from ARTICLECLASS A ]]>
+		where deletestatus = 0 
+		and parent_id IS NULL
+		order by sequence asc
+  	</select>
+  	
+  	<select id="listChilds" parameterType="java.util.Map" resultMap="articleClassResultMap" >
+		<![CDATA[ select A.* from ARTICLECLASS A ]]>
+		where deletestatus = 0 
+		and parent_id = #{parent_id}
+  	</select>
+  	
+  	<select id="findAllMapArticleClass" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ARTICLECLASS A ]]>
+		<include refid="articleClassWhereCondition" />
+	</select>
+  
+  	<select id="findArticleClassTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ARTICLECLASS A ]]>
+		<include refid="articleClassWhereCondition" />
+  	</select>
+  
+  	<select id="queryArticleClassForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ARTICLECLASS A ]]>
+		<include refid="articleClassWhereCondition" />
+  	</select>
+</mapper>

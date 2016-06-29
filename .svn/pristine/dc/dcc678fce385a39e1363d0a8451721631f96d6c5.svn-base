@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserRole">
+	<resultMap id="userRoleResultMap" type="com.taikang.udp.sys.model.UserRoleBO">
+		<result property="userId" column="User_Id"/>
+		<result property="roleId" column="Role_Id"/>
+		<result property="creator" column="CREATOR"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="lastModby" column="LAST_MODBY"/>
+		<result property="lastModtime" column="LAST_MODTIME"/>
+  	</resultMap>
+  
+  	<sql id="userRoleWhereCondition">
+		<where>
+	  	<if test=" user_id != null ">
+	  		<![CDATA[ AND A.User_Id = ${user_id} ]]>
+	  	</if>
+	  	<if test=" role_id != null ">
+	  		<![CDATA[ AND A.Role_Id = ${role_id} ]]>
+	  	</if>
+	  	<if test=" creator != null ">
+	  		<![CDATA[ AND A.CREATOR = ${creator} ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATE_TIME = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" last_modby != null ">
+	  		<![CDATA[ AND A.LAST_MODBY = ${last_modby} ]]>
+	  	</if>
+	  	<if test=" last_modtime != null and last_modtime != '' and last_modtime  != 'null' ">
+	    	<![CDATA[ AND A.LAST_MODTIME = DATE_FORMAT(#{last_modtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addUserRole"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO BSC_USER_ROLE_T
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" user_id  != null ">
+				<![CDATA[ User_Id , ]]>
+	  		</if>
+	  		<if test=" role_id  != null ">
+				<![CDATA[ Role_Id , ]]>
+	  		</if>
+	  		<if test=" creator  != null ">
+				<![CDATA[ CREATOR , ]]>
+	  		</if>
+	  		<if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+				<![CDATA[ CREATE_TIME , ]]>
+	  		</if>
+	  		<if test=" last_modby  != null ">
+				<![CDATA[ LAST_MODBY , ]]>
+	  		</if>
+	  		<if test=" last_modtime  != null and  last_modtime  != ''  and  last_modtime  != 'null' ">
+				<![CDATA[ LAST_MODTIME , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" user_id  != null">
+	    		<![CDATA[ ${user_id} , ]]>
+	  		</if>
+	  		<if test=" role_id  != null">
+	    		<![CDATA[ ${role_id} , ]]>
+	  		</if>
+	  		<if test=" creator  != null">
+	    		<![CDATA[ ${creator} , ]]>
+	  		</if>
+	  		<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" last_modby  != null">
+	    		<![CDATA[ ${last_modby} , ]]>
+	  		</if>
+	  		<if test=" last_modtime != null and last_modtime != '' and last_modtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{last_modtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateUserRole" parameterType="java.util.Map">
+		<![CDATA[ UPDATE BSC_USER_ROLE_T A ]]>
+		<set>
+		<if test=" role_id  != null ">
+  			<![CDATA[ A.Role_Id = ${role_id} , ]]>
+		</if>
+		<if test=" creator  != null ">
+  			<![CDATA[ A.CREATOR = ${creator} , ]]>
+		</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ A.CREATE_TIME = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		<if test=" last_modby  != null ">
+  			<![CDATA[ A.LAST_MODBY = ${last_modby} , ]]>
+		</if>
+	  	<if test=" last_modtime != null and last_modtime != '' and last_modtime  != 'null' ">
+	    	<![CDATA[ A.LAST_MODTIME = DATE_FORMAT(#{last_modtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.USER_ID = #{user_id}]]>
+  	</update>
+  
+  	<delete id="deleteUserRole" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM BSC_USER_ROLE_T where USER_ID = #{user_id} ]]>
+	</delete>
+  
+	<select id="findOneUserRole" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM BSC_USER_ROLE_T A  ]]>
+		<include refid="userRoleWhereCondition" />
+  	</select>
+    
+  	<select id="findAllUserRole" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM BSC_USER_ROLE_T A ]]>
+		<include refid="userRoleWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapUserRole" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM BSC_USER_ROLE_T A ]]>
+		<include refid="userRoleWhereCondition" />
+	</select>
+  
+  	<select id="findUserRoleTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM BSC_USER_ROLE_T A ]]>
+		<include refid="userRoleWhereCondition" />
+  	</select>
+  
+  	<select id="queryUserRoleForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM BSC_USER_ROLE_T A ]]>
+		<include refid="userRoleWhereCondition" />
+  	</select>
+</mapper>

@@ -1,0 +1,195 @@
+package com.taikang.tkcoww.logo.controller;
+
+import com.taikang.tkcoww.logo.action.ICooperLogoAction;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import org.springframework.web.bind.annotation.RequestParam;
+import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+import java.util.HashMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.ui.Model;
+import com.taikang.udp.framework.core.web.BaseController;
+import com.taikang.udp.security.service.SecurityUserHolder;
+import com.taikang.udp.sys.model.UserBO;
+import com.taikang.udp.sys.util.CommonUtil;
+
+import java.util.Map;
+import java.util.UUID;
+
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.core.properties.PropertiesFile;
+import com.taikang.udp.framework.core.properties.PropertiesHandler;
+import com.taikang.udp.framework.core.properties.PropertiesHandlerFactory;
+import com.taikang.udp.common.util.ProperHelper;
+import com.taikang.udp.framework.common.datastructre.Dto;
+
+/**
+ * CooperLogoController
+ */
+@Controller("cooperLogoController")
+@RequestMapping(value = "/cooperLogo")
+public class CooperLogoController extends BaseController {
+
+	@Resource(name = ICooperLogoAction.ACTION_ID)
+	private ICooperLogoAction cooperLogoAction;
+	// init.config.properties
+	private static PropertiesHandler initProperty = PropertiesHandlerFactory
+			.getPropertiesHelper(PropertiesFile.FRAMEWORK);
+
+	/**
+	 * 打开主查询页面
+	 * 
+	 * @return 页面地址
+	 */
+	@RequestMapping("")
+	public String showCooperLogoIndexPage() {
+		return "cooperLogo/cooperlogoIndex";
+	}
+
+	/**
+	 * 查询信息列表
+	 * 
+	 * @return 分页列表数据
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public Map<String, Object> getCooperLogoList(HttpServletRequest request, CurrentPage page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		page.setParamObject(getParamAsDto(request));
+		CurrentPage currentPage = cooperLogoAction.queryForPage(page);
+
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+
+		return map;
+	}
+
+	/**
+	 * 打开新增页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("Add")
+	public String showCooperLogoAddPage(String rowId, Model model) {
+
+		if (rowId != null && !rowId.equals("")) {
+			model.addAttribute("rowId", rowId);
+		}
+
+		return "cooperLogo/cooperlogoAdd";
+	}
+
+	/**
+	 * 修改页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("edit")
+	public String showCooperLogoEditPage(String rowId, Model model) {
+
+		if (rowId != null && !rowId.equals("")) {
+			model.addAttribute("rowId", rowId);
+		}
+		Dto param = new BaseDto();
+		param.put("cooperLogoId", rowId);
+		Dto result =  cooperLogoAction.findOne(param);
+		model.addAttribute("data", result);
+
+		return "cooperLogo/cooperlogoEdit";
+	}
+
+	/**
+	 * 获取一条记录详细信息，用来填充修改界面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/getOne")
+	@ResponseBody
+	public Dto getCooperLogoById(@RequestParam("rowId") String rowId) {
+		Dto param = new BaseDto();
+		param.put("rowId", rowId);
+		return cooperLogoAction.findOne(param);
+	}
+
+	/**
+	 * 保存新增或修改的记录，将其持久化到数据库中
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/save")
+	private void saveCooperLogoInfo(HttpServletRequest request, HttpServletResponse response) {
+		String path = ProperHelper.LOGOFOLDER;
+		Dto result = new BaseDto();
+		Dto param = getParamAsDto(request);
+		Dto upload = CommonUtil.generateFile2Server("logoFile", path, request);
+		if (StringUtils.isBlank(param.getAsString("cooperLogoId"))) {
+			if (upload == null || upload.isAllEmpty() || !"0".equals(upload.getAsString("code"))) {
+				result.put("code", "1");
+			} else {
+				param.put("cooperLogoImgname", upload.getAsString("fileName"));
+				param.put("cooperLogoUrl", upload.getAsString("storePath"));
+				param.put("cooperLogoStorname", upload.getAsString("realFileName"));
+				Timestamp time = new Timestamp(System.currentTimeMillis());
+				param.put("createTime", time);
+				UserBO user = SecurityUserHolder.getCurrentUser();
+				param.put("createdBy", user.getUsername());
+				param.put("delflag", "0");
+				String Id = UUID.randomUUID().toString().replace("-", "");
+				param.put("cooperLogoId", Id);
+				cooperLogoAction.insertObject(param);
+				
+				result.put("code", "0");
+			}
+		} else {
+			if ("0".equals(upload.getAsString("code"))) {
+				param.put("cooperLogoImgname", upload.getAsString("fileName"));
+				param.put("cooperLogoUrl", upload.getAsString("storePath"));
+				param.put("cooperLogoStorname", upload.getAsString("realFileName"));
+			}
+			param.put("cooperLogoId", param.getAsString("cooperLogoId"));
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			param.put("modifiedTime", time);
+			UserBO user = SecurityUserHolder.getCurrentUser();
+			param.put("modifiedBy", user.getUsername());
+			param.put("delflag", "0");
+			cooperLogoAction.updateObject(param);
+			result.put("code", "0");
+		}
+
+		response.setContentType("text/html;charset=utf-8");
+    	try {
+			response.getWriter().write(result.toJson());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 删除一条或多条记录
+	 */
+	@RequestMapping(value = "/del")
+	@ResponseBody
+	public Map<String, String> deleteCooperLogo(@RequestParam("rowId") String rowId) {
+		Map<String, String> map = new HashMap<String, String>();
+		Dto param = new BaseDto();
+		param.put("cooperLogoId", rowId);
+		param.put("delflag", "1");
+		cooperLogoAction.updateObject(param);
+
+		map.put(RTN_RESULT, "true");
+		map.put(MESSAGE_INFO, "操作成功！");
+
+		return map;
+	}
+}

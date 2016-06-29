@@ -1,0 +1,109 @@
+package com.taikang.tkcoww.moduleContent.service.impl;
+
+import java.io.UnsupportedEncodingException;
+import java.sql.Blob;
+import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.stereotype.Service;
+
+import com.taikang.tkcoww.moduleContent.model.ModuleContentBO;
+import com.taikang.tkcoww.moduleContent.service.IModuleContentService;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.framework.common.util.Encodes;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.core.service.impl.BaseServiceImpl;
+
+/**
+ * ModuleContentServiceImpl
+ */
+@Service(IModuleContentService.SERVICE_ID)
+public class ModuleContentServiceImpl extends BaseServiceImpl implements
+		IModuleContentService<ModuleContentBO> {
+
+	/**
+	 * 增加数据
+	 */
+	public void insertObject(ModuleContentBO moduleContent) {
+		logger.debug("<======ModuleContentServiceImpl--insertModuleContent======>");
+		appDao.insert("ModuleContent.addModuleContent", moduleContent);
+	}
+
+	/**
+	 * 修改数据
+	 */
+	public void updateObject(ModuleContentBO moduleContent) {
+		logger.debug("<======ModuleContentServiceImpl--updateModuleContent======>");
+		appDao.update("ModuleContent.updateModuleContent", moduleContent);
+	}
+
+	/**
+	 * 删除数据
+	 */
+	public void deleteObject(ModuleContentBO moduleContent) {
+		logger.debug("<======ModuleContentServiceImpl--deleteModuleContent======>");
+		appDao.delete("ModuleContent.deleteModuleContent", moduleContent);
+	}
+
+	/**
+	 * 查询数据
+	 */
+	public ModuleContentBO findOne(ModuleContentBO moduleContent) {
+		logger.debug("<======ModuleContentServiceImpl--findModuleContent======>");
+
+		ModuleContentBO moduleContentBackBO = appDao.queryOneObject(
+				"ModuleContent.findOneModuleContent", moduleContent);
+		return moduleContentBackBO;
+	}
+
+	/**
+	 * 查询数据（新）
+	 */
+	public ModuleContentBO findNewOne(ModuleContentBO moduleContent) {
+		logger.debug("<======ModuleContentServiceImpl--findModuleContent======>");
+
+		ModuleContentBO moduleContentBackBO = appDao.queryOneObject(
+				"ModuleContent.findNewOneModuleContent", moduleContent);
+		// 对BLOB类型的数据进行处理
+		// String content = new
+		// String((byte[])moduleContentBackBO.getData().get("content"));
+		Object content = moduleContentBackBO.getData().get("content");
+		if (content != null && !"".equals(content)) {
+			String contentNew = null;
+
+			contentNew = new String((byte[]) moduleContentBackBO.getData().get(
+					"content"));
+			// decContent=new String(Encodes.decodeBase64(contentNew));
+			// String newContent = new String(Base64.decodeBase64(contentNew));
+			moduleContentBackBO.getData().put("content", contentNew);
+		}
+		return moduleContentBackBO;
+	}
+
+	/**
+	 * 查询所有数据
+	 */
+	public List<ModuleContentBO> findAll(ModuleContentBO moduleContent) {
+		logger.debug("<======ModuleContentServiceImpl--findAllModuleContent======>");
+		return appDao.queryForEntityList("ModuleContent.findAllModuleContent",
+				moduleContent);
+	}
+
+	/**
+	 * 分页查询数据
+	 */
+	public CurrentPage queryForPage(CurrentPage currentPage) {
+		logger.debug("<======ModuleContentServiceImpl--queryModuleContentForPage======>");
+		return appDao.queryForPage("ModuleContent.queryModuleContentForPage",
+				currentPage);
+	}
+
+	/**
+	 * 查询所有数据 ，重新组装为map
+	 */
+	public List<Dto> findAllMap(Dto param) {
+		logger.debug("<======ModuleContentServiceImpl--findAllMapModuleContent======>");
+		return appDao.queryForMapList("ModuleContent.findAllMapModuleContent",
+				param);
+	}
+}

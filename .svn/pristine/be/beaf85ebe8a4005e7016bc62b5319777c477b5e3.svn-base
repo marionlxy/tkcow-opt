@@ -1,0 +1,16 @@
+package com.taikang.tkcoww.module.service;
+
+import com.taikang.udp.framework.core.service.IBaseService;
+import java.util.Arrays;
+
+/**
+  * IModuleService
+  */
+ 
+ public interface IModuleService<T> extends IBaseService<T>{
+ 
+ 	final String SERVICE_ID = "moduleService";  	
+ }
+ 
+ 
+ 

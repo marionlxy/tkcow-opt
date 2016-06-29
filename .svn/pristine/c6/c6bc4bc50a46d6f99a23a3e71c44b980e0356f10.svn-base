@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AskforClaim">
+	<resultMap id="askforClaimResultMap" type="com.taikang.tkcoww.askforClaim.model.AskforClaimBO">
+		<result property="claimid" column="claimId"/>
+		<result property="meansName" column="means_name"/>
+		<result property="meansMethod" column="means_method"/>
+		<result property="meansEmail" column="means_email"/>
+		<result property="meansBak" column="means_bak"/>
+		<result property="visitFrom" column="VISIT_FROM"/>
+		<result property="userIp" column="user_ip"/>
+		<result property="createdTime" column="CREATED_TIME"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="modifiedTime" column="MODIFIED_TIME"/>
+		<result property="modifiedBy" column="MODIFIED_BY"/>
+		<result property="version" column="VERSION"/>
+		<result property="delflag" column="DELFLAG"/>
+		<result property="meansNum" column="means_num"/>
+  	</resultMap>
+  
+  	<sql id="askforClaimWhereCondition">
+		<where>
+	  	<if test=" claimid != null and claimid != '' and claimid != 'null' ">
+			<![CDATA[ AND A.claimId = #{claimid} ]]>
+	  	</if>
+	  	<if test=" means_name != null and means_name != '' and means_name != 'null' ">
+			<![CDATA[ AND A.means_name = #{means_name} ]]>
+	  	</if>
+	  	<if test=" means_method != null and means_method != '' and means_method != 'null' ">
+			<![CDATA[ AND A.means_method = #{means_method} ]]>
+	  	</if>
+	  	<if test=" means_email != null and means_email != '' and means_email != 'null' ">
+			<![CDATA[ AND A.means_email = #{means_email} ]]>
+	  	</if>
+	  	<if test=" means_bak != null and means_bak != '' and means_bak != 'null' ">
+			<![CDATA[ AND A.means_bak = #{means_bak} ]]>
+	  	</if>
+	  	<if test=" visit_from != null and visit_from != '' and visit_from != 'null' ">
+			<![CDATA[ AND A.VISIT_FROM = #{visit_from} ]]>
+	  	</if>
+	  	<if test=" user_ip != null and user_ip != '' and user_ip != 'null' ">
+			<![CDATA[ AND A.user_ip = #{user_ip} ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" created_by != null and created_by != '' and created_by != 'null' ">
+			<![CDATA[ AND A.CREATED_BY = #{created_by} ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ AND A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modified_by != null and modified_by != '' and modified_by != 'null' ">
+			<![CDATA[ AND A.MODIFIED_BY = #{modified_by} ]]>
+	  	</if>
+	  	<if test=" version != null ">
+	  		<![CDATA[ AND A.VERSION = ${version} ]]>
+	  	</if>
+	  	<if test=" delflag != null and delflag != '' and delflag != 'null' ">
+			<![CDATA[ AND A.DELFLAG = #{delflag} ]]>
+	  	</if>
+	  	<if test=" means_num != null ">
+	  		<![CDATA[ AND A.means_num = ${means_num} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addAskforClaim"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ZJOW_ASKFOR_CLAIM
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" claimid  != null and  claimid  != ''  and  claimid  != 'null' ">
+				<![CDATA[ claimId , ]]>
+	  		</if>
+	  		<if test=" means_name  != null and  means_name  != ''  and  means_name  != 'null' ">
+				<![CDATA[ means_name , ]]>
+	  		</if>
+	  		<if test=" means_method  != null and  means_method  != ''  and  means_method  != 'null' ">
+				<![CDATA[ means_method , ]]>
+	  		</if>
+	  		<if test=" means_email  != null and  means_email  != ''  and  means_email  != 'null' ">
+				<![CDATA[ means_email , ]]>
+	  		</if>
+	  		<if test=" means_bak  != null and  means_bak  != ''  and  means_bak  != 'null' ">
+				<![CDATA[ means_bak , ]]>
+	  		</if>
+	  		<if test=" visit_from  != null and  visit_from  != ''  and  visit_from  != 'null' ">
+				<![CDATA[ VISIT_FROM , ]]>
+	  		</if>
+	  		<if test=" user_ip  != null and  user_ip  != ''  and  user_ip  != 'null' ">
+				<![CDATA[ user_ip , ]]>
+	  		</if>
+	  		<if test=" created_time  != null and  created_time  != ''  and  created_time  != 'null' ">
+				<![CDATA[ CREATED_TIME , ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+				<![CDATA[ CREATED_BY , ]]>
+	  		</if>
+	  		<if test=" modified_time  != null and  modified_time  != ''  and  modified_time  != 'null' ">
+				<![CDATA[ MODIFIED_TIME , ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+				<![CDATA[ MODIFIED_BY , ]]>
+	  		</if>
+	  		<if test=" version  != null ">
+				<![CDATA[ VERSION , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+				<![CDATA[ DELFLAG , ]]>
+	  		</if>
+	  		<if test=" means_num  != null ">
+				<![CDATA[ means_num , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" claimid  != null and  claimid  != ''  and  claimid  != 'null' ">
+	  			<![CDATA[ #{claimid} , ]]>
+	  		</if>
+	  		<if test=" means_name  != null and  means_name  != ''  and  means_name  != 'null' ">
+	  			<![CDATA[ #{means_name} , ]]>
+	  		</if>
+	  		<if test=" means_method  != null and  means_method  != ''  and  means_method  != 'null' ">
+	  			<![CDATA[ #{means_method} , ]]>
+	  		</if>
+	  		<if test=" means_email  != null and  means_email  != ''  and  means_email  != 'null' ">
+	  			<![CDATA[ #{means_email} , ]]>
+	  		</if>
+	  		<if test=" means_bak  != null and  means_bak  != ''  and  means_bak  != 'null' ">
+	  			<![CDATA[ #{means_bak} , ]]>
+	  		</if>
+	  		<if test=" visit_from  != null and  visit_from  != ''  and  visit_from  != 'null' ">
+	  			<![CDATA[ #{visit_from} , ]]>
+	  		</if>
+	  		<if test=" user_ip  != null and  user_ip  != ''  and  user_ip  != 'null' ">
+	  			<![CDATA[ #{user_ip} , ]]>
+	  		</if>
+	  		<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  			<![CDATA[ #{created_by} , ]]>
+	  		</if>
+	  		<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  			<![CDATA[ #{modified_by} , ]]>
+	  		</if>
+	  		<if test=" version  != null">
+	    		<![CDATA[ ${version} , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  			<![CDATA[ #{delflag} , ]]>
+	  		</if>
+	  		<if test=" means_num  != null">
+	    		<![CDATA[ ${means_num} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateAskforClaim" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ZJOW_ASKFOR_CLAIM A ]]>
+		<set>
+	  	<if test=" means_name  != null and  means_name  != ''  and  means_name  != 'null' ">
+	  		<![CDATA[ A.means_name = #{means_name}, ]]>
+	  	</if>
+	  	<if test=" means_method  != null and  means_method  != ''  and  means_method  != 'null' ">
+	  		<![CDATA[ A.means_method = #{means_method}, ]]>
+	  	</if>
+	  	<if test=" means_email  != null and  means_email  != ''  and  means_email  != 'null' ">
+	  		<![CDATA[ A.means_email = #{means_email}, ]]>
+	  	</if>
+	  	<if test=" means_bak  != null and  means_bak  != ''  and  means_bak  != 'null' ">
+	  		<![CDATA[ A.means_bak = #{means_bak}, ]]>
+	  	</if>
+	  	<if test=" visit_from  != null and  visit_from  != ''  and  visit_from  != 'null' ">
+	  		<![CDATA[ A.VISIT_FROM = #{visit_from}, ]]>
+	  	</if>
+	  	<if test=" user_ip  != null and  user_ip  != ''  and  user_ip  != 'null' ">
+	  		<![CDATA[ A.user_ip = #{user_ip}, ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  		<![CDATA[ A.CREATED_BY = #{created_by}, ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  		<![CDATA[ A.MODIFIED_BY = #{modified_by}, ]]>
+	  	</if>
+		<if test=" version  != null ">
+  			<![CDATA[ A.VERSION = ${version} , ]]>
+		</if>
+	  	<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  		<![CDATA[ A.DELFLAG = #{delflag}, ]]>
+	  	</if>
+		<if test=" means_num  != null ">
+  			<![CDATA[ A.means_num = ${means_num} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.CLAIMID = #{claimid}]]>
+  	</update>
+  
+  	<delete id="deleteAskforClaim" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ZJOW_ASKFOR_CLAIM A where A.CLAIMID = #{claimid} ]]>
+	</delete>
+  
+	<select id="findOneAskforClaim" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM ZJOW_ASKFOR_CLAIM A  ]]>
+		<include refid="askforClaimWhereCondition" />
+  	</select>
+    
+  	<select id="findAllAskforClaim" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM ZJOW_ASKFOR_CLAIM A ]]>
+		<include refid="askforClaimWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapAskforClaim" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ZJOW_ASKFOR_CLAIM A ]]>
+		<include refid="askforClaimWhereCondition" />
+	</select>
+  
+  	<select id="findAskforClaimTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ZJOW_ASKFOR_CLAIM A ]]>
+		<include refid="askforClaimWhereCondition" />
+  	</select>
+  
+  	<select id="queryAskforClaimForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ZJOW_ASKFOR_CLAIM A ]]>
+		<include refid="askforClaimWhereCondition" />
+  	</select>
+  		
+	
+	<select id="getAskforClaimList" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		 SELECT A.* FROM ZJOW_ASKFOR_CLAIM A                           
+		  where 1=1 
+          AND A.DELFLAG = '0' 
+        <if test=" startTime != null and startTime != '' and startTime != 'null' ">
+            <![CDATA[ AND A.CREATED_TIME >= DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+		<if test=" endTime != null and endTime != '' and endTime != 'null' ">
+            <![CDATA[ AND A.CREATED_TIME <= DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+        <if test=" meansMethod != null and meansMethod != '' and meansMethod != 'null' ">
+			<![CDATA[ AND A.VISIT_NAME like concat('%', #{meansMethod}, '%') ]]>
+	  	</if>
+         ORDER BY  CREATED_TIME DESC
+  	</select>
+  	<select id="getAskforClaimListDto" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+	  SELECT A.* FROM ZJOW_ASKFOR_CLAIM A
+	  where 1=1 
+          AND A.DELFLAG = '0' 
+        <if test=" startTime != null and startTime != '' and startTime != 'null' ">
+            <![CDATA[ AND A.CREATED_TIME >= DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+		<if test=" endTime != null and endTime != '' and endTime != 'null' ">
+            <![CDATA[ AND A.CREATED_TIME <= DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+        <if test=" meansMethod != null and meansMethod != '' and meansMethod != 'null' ">
+			<![CDATA[ AND A.means_method like concat('%', #{meansMethod}, '%') ]]>
+	  	</if>
+         ORDER BY  CREATED_TIME DESC
+	</select>
+</mapper>

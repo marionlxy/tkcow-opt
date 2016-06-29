@@ -1,0 +1,96 @@
+package com.taikang.tkcoww.logo.service.impl;
+ 
+import java.util.Arrays;
+import java.util.List;
+import com.taikang.tkcoww.logo.model.CooperLogoBO;
+import org.springframework.stereotype.Service;
+import com.taikang.tkcoww.logo.service.ICooperLogoService;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.framework.core.service.impl.BaseServiceImpl;
+ 
+  
+/**
+  * CooperLogoServiceImpl
+  */
+ @Service(ICooperLogoService.SERVICE_ID)
+ public class CooperLogoServiceImpl extends BaseServiceImpl 
+ implements ICooperLogoService<CooperLogoBO>  
+  {
+  	 	 	
+ 	/**
+	  * 增加数据
+	  */
+	public void insertObject(CooperLogoBO cooperLogo) {
+		logger.debug("<======CooperLogoServiceImpl--insertCooperLogo======>");		
+		appDao.insert("CooperLogo.addCooperLogo",cooperLogo);
+	} 	
+ 	
+ 	/**
+      * 修改数据
+      */
+	public void updateObject(CooperLogoBO cooperLogo) {
+		logger.debug("<======CooperLogoServiceImpl--updateCooperLogo======>");
+		appDao.update("CooperLogo.updateCooperLogo",cooperLogo);
+	}
+
+	 /**
+      * 删除数据
+      */
+	public void deleteObject(CooperLogoBO cooperLogo) {
+		logger.debug("<======CooperLogoServiceImpl--deleteCooperLogo======>");
+		appDao.delete("CooperLogo.deleteCooperLogo",cooperLogo);
+	}
+	
+	/**
+      * 查询数据
+      */
+	public CooperLogoBO findOne(CooperLogoBO cooperLogo) {
+		logger.debug("<======CooperLogoServiceImpl--findCooperLogo======>");
+		
+		CooperLogoBO cooperLogoBackBO=appDao.queryOneObject("CooperLogo.findOneCooperLogo", cooperLogo);
+		return cooperLogoBackBO;		
+	}
+	
+	/**
+      * 查询所有数据
+      */
+	public List<CooperLogoBO> findAll(CooperLogoBO  cooperLogo) {
+		logger.debug("<======CooperLogoServiceImpl--findAllCooperLogo======>");
+		return appDao.queryForEntityList("CooperLogo.findAllCooperLogo", cooperLogo);
+	}
+	
+	
+	 /**
+      * 分页查询数据
+      */
+	public CurrentPage queryForPage(CurrentPage currentPage) {
+		logger.debug("<======CooperLogoServiceImpl--queryCooperLogoForPage======>");
+		return appDao.queryForPage("CooperLogo.queryCooperLogoForPage", currentPage);
+	}
+		
+	/**
+      * 查询所有数据 ，重新组装为map
+      */
+	public List<Dto> findAllMap(Dto param){
+		logger.debug("<======CooperLogoServiceImpl--findAllMapCooperLogo======>");		
+		return appDao.queryForMapList("CooperLogo.findAllMapCooperLogo", param);
+	}
+
+	@Override
+	public CurrentPage getLogoModelPage(CurrentPage page) {
+		logger.debug("<======CooperLogoServiceImpl--getLogoModelPage======>");
+		return appDao.queryForPage("CooperLogo.getLogoModelPage", page);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taikang.tkcoww.logo.service.ICooperLogoService#getTypeCooperLogoList()
+	 */
+	@Override
+	public CurrentPage getTypeCooperLogoList(CurrentPage page) {
+		// TODO Auto-generated method stub
+		logger.debug("<======CooperLogoServiceImpl--getTypeCooperLogoList======>");
+		return appDao.queryForPage("CooperLogo.getTypeCooperLogoList", page);
+	}
+ }
+  

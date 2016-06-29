@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Module">
+	<resultMap id="moduleResultMap" type="com.taikang.tkcoww.module.model.ModuleBO">
+		<result property="modId" column="MOD_ID"/>
+		<result property="modName" column="MOD_NAME"/>
+		<result property="modParentId" column="MOD_PARENT_ID"/>
+		<result property="modIsleaf" column="MOD_ISLEAF"/>
+		<result property="modChildId" column="MOD_CHILD_ID"/>
+		<result property="modUrl" column="MOD_URL"/>
+		<result property="createdTime" column="CREATED_TIME"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="modifiedTime" column="MODIFIED_TIME"/>
+		<result property="modifiedBy" column="MODIFIED_BY"/>
+		<result property="version" column="VERSION"/>
+		<result property="delflag" column="DELFLAG"/>
+  	</resultMap>
+  
+  	<sql id="moduleWhereCondition">
+		<where>
+	  	<if test=" mod_id != null and mod_id != '' and mod_id != 'null' ">
+			<![CDATA[ AND A.MOD_ID = #{mod_id} ]]>
+	  	</if>
+	  	<if test=" mod_name != null and mod_name != '' and mod_name != 'null' ">
+			<![CDATA[ AND A.MOD_NAME = #{mod_name} ]]>
+	  	</if>
+	  	<if test=" mod_parent_id != null and mod_parent_id != '' and mod_parent_id != 'null' ">
+			<![CDATA[ AND A.MOD_PARENT_ID = #{mod_parent_id} ]]>
+	  	</if>
+	  	<if test=" mod_isleaf != null and mod_isleaf != '' and mod_isleaf != 'null' ">
+			<![CDATA[ AND A.MOD_ISLEAF = #{mod_isleaf} ]]>
+	  	</if>
+	  	<if test=" mod_child_id != null and mod_child_id != '' and mod_child_id != 'null' ">
+			<![CDATA[ AND A.MOD_CHILD_ID = #{mod_child_id} ]]>
+	  	</if>
+	  	<if test=" mod_url != null and mod_url != '' and mod_url != 'null' ">
+			<![CDATA[ AND A.MOD_URL = #{mod_url} ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" created_by != null and created_by != '' and created_by != 'null' ">
+			<![CDATA[ AND A.CREATED_BY = #{created_by} ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ AND A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modified_by != null and modified_by != '' and modified_by != 'null' ">
+			<![CDATA[ AND A.MODIFIED_BY = #{modified_by} ]]>
+	  	</if>
+	  	<if test=" version != null ">
+	  		<![CDATA[ AND A.VERSION = ${version} ]]>
+	  	</if>
+	  	<if test=" delflag != null and delflag != '' and delflag != 'null' ">
+			<![CDATA[ AND A.DELFLAG = #{delflag} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addModule"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ZJOW_MODULE
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+				<![CDATA[ MOD_ID , ]]>
+	  		</if>
+	  		<if test=" mod_name  != null and  mod_name  != ''  and  mod_name  != 'null' ">
+				<![CDATA[ MOD_NAME , ]]>
+	  		</if>
+	  		<if test=" mod_parent_id  != null and  mod_parent_id  != ''  and  mod_parent_id  != 'null' ">
+				<![CDATA[ MOD_PARENT_ID , ]]>
+	  		</if>
+	  		<if test=" mod_isleaf  != null and  mod_isleaf  != ''  and  mod_isleaf  != 'null' ">
+				<![CDATA[ MOD_ISLEAF , ]]>
+	  		</if>
+	  		<if test=" mod_child_id  != null and  mod_child_id  != ''  and  mod_child_id  != 'null' ">
+				<![CDATA[ MOD_CHILD_ID , ]]>
+	  		</if>
+	  		<if test=" mod_url  != null and  mod_url  != ''  and  mod_url  != 'null' ">
+				<![CDATA[ MOD_URL , ]]>
+	  		</if>
+	  		<if test=" created_time  != null and  created_time  != ''  and  created_time  != 'null' ">
+				<![CDATA[ CREATED_TIME , ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+				<![CDATA[ CREATED_BY , ]]>
+	  		</if>
+	  		<if test=" modified_time  != null and  modified_time  != ''  and  modified_time  != 'null' ">
+				<![CDATA[ MODIFIED_TIME , ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+				<![CDATA[ MODIFIED_BY , ]]>
+	  		</if>
+	  		<if test=" version  != null ">
+				<![CDATA[ VERSION , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+				<![CDATA[ DELFLAG , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+	  			<![CDATA[ #{mod_id} , ]]>
+	  		</if>
+	  		<if test=" mod_name  != null and  mod_name  != ''  and  mod_name  != 'null' ">
+	  			<![CDATA[ #{mod_name} , ]]>
+	  		</if>
+	  		<if test=" mod_parent_id  != null and  mod_parent_id  != ''  and  mod_parent_id  != 'null' ">
+	  			<![CDATA[ #{mod_parent_id} , ]]>
+	  		</if>
+	  		<if test=" mod_isleaf  != null and  mod_isleaf  != ''  and  mod_isleaf  != 'null' ">
+	  			<![CDATA[ #{mod_isleaf} , ]]>
+	  		</if>
+	  		<if test=" mod_child_id  != null and  mod_child_id  != ''  and  mod_child_id  != 'null' ">
+	  			<![CDATA[ #{mod_child_id} , ]]>
+	  		</if>
+	  		<if test=" mod_url  != null and  mod_url  != ''  and  mod_url  != 'null' ">
+	  			<![CDATA[ #{mod_url} , ]]>
+	  		</if>
+	  		<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  			<![CDATA[ #{created_by} , ]]>
+	  		</if>
+	  		<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  			<![CDATA[ #{modified_by} , ]]>
+	  		</if>
+	  		<if test=" version  != null">
+	    		<![CDATA[ ${version} , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  			<![CDATA[ #{delflag} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateModule" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ZJOW_MODULE A ]]>
+		<set>
+	  	<if test=" mod_name  != null and  mod_name  != ''  and  mod_name  != 'null' ">
+	  		<![CDATA[ A.MOD_NAME = #{mod_name}, ]]>
+	  	</if>
+	  	<if test=" mod_parent_id  != null and  mod_parent_id  != ''  and  mod_parent_id  != 'null' ">
+	  		<![CDATA[ A.MOD_PARENT_ID = #{mod_parent_id}, ]]>
+	  	</if>
+	  	<if test=" mod_isleaf  != null and  mod_isleaf  != ''  and  mod_isleaf  != 'null' ">
+	  		<![CDATA[ A.MOD_ISLEAF = #{mod_isleaf}, ]]>
+	  	</if>
+	  	<if test=" mod_child_id  != null and  mod_child_id  != ''  and  mod_child_id  != 'null' ">
+	  		<![CDATA[ A.MOD_CHILD_ID = #{mod_child_id}, ]]>
+	  	</if>
+	  	<if test=" mod_url  != null and  mod_url  != ''  and  mod_url  != 'null' ">
+	  		<![CDATA[ A.MOD_URL = #{mod_url}, ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  		<![CDATA[ A.CREATED_BY = #{created_by}, ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  		<![CDATA[ A.MODIFIED_BY = #{modified_by}, ]]>
+	  	</if>
+		<if test=" version  != null ">
+  			<![CDATA[ A.VERSION = ${version} , ]]>
+		</if>
+	  	<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  		<![CDATA[ A.DELFLAG = #{delflag}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.MOD_ID = #{mod_id}]]>
+  	</update>
+  
+  	<delete id="deleteModule" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ZJOW_MODULE A where A.MOD_ID = #{mod_id} ]]>
+	</delete>
+  
+	<select id="findOneModule" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE A  ]]>
+		<include refid="moduleWhereCondition" />
+  	</select>
+    
+  	<select id="findAllModule" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE A ]]>
+		<include refid="moduleWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapModule" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE A ]]>
+		<include refid="moduleWhereCondition" />
+	</select>
+  
+  	<select id="findModuleTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ZJOW_MODULE A ]]>
+		<include refid="moduleWhereCondition" />
+  	</select>
+  
+  	<select id="queryModuleForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE A ]]>
+		<include refid="moduleWhereCondition" />
+  	</select>
+  	
+  	
+  	<select id="queryNavMenuForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">		
+ 		SELECT d.menu_name AS menuName,d.Parent_Id as parentId,CASE LENGTH(d.Parent_Id)-LENGTH(REPLACE(d.Parent_Id,'|','')) WHEN 1 THEN '一级栏目' WHEN 2 THEN '二级栏目' WHEN 3 THEN '三级栏目'  WHEN 4 THEN '四级栏目' ELSE '' END AS modRank
+          FROM bsc_menu_t d
+         WHERE d.Menu_Status = '1'
+           AND d.Is_Show = '1'
+          <if test=" menuId  != null and  menuId  != ''  and  menuId  != 'null' ">
+	  		AND d.Parent_Id =(SELECT CONCAT(A.Parent_id,'|',#{menuId}) FROM BSC_MENU_T A WHERE A.Menu_Id=#{menuId} AND A.Menu_Status = '1' AND A.Is_Show = '1')              
+	  	</if>
+                
+  	</select>
+</mapper>

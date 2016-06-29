@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Login">
+	<select id="checkUserByUserInfo" parameterType="java.util.Map" resultType="java.util.Map">
+	<![CDATA[ 
+		select a.* from bsc_user_t a where a.user_code=#{user_code}
+	]]>
+	</select>
+	
+	<select id="findAllMenuByUserId" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+	<![CDATA[
+		select d.parent_id as parent_id,
+		       (select menu_name from bsc_menu_t where menu_id = d.parent_id) as parent_name,
+		       d.menu_id as menu_id,
+		       d.menu_name as menu_name,
+		       d.Menu_Url as url,
+		       d.Menu_Order as menu_order,
+		       d.Permission as permission
+		  from bsc_menu_t d
+		 where d.Menu_Status = '1'
+		   and Is_Show = '1'
+		   and d.Menu_Id in
+		       (select c.Menu_Id
+		          from bsc_role_menu_t c
+		         where c.Role_Id in
+		               (select b.Role_Id from bsc_user_role_t b where b.User_Id = #{userId}))
+		 order by d.parent_id asc, d.menu_id asc
+	]]>
+	</select>
+
+    <select id="getbtnAccess" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+    <![CDATA[
+		select b.menu_id,
+		       b.menu_name,
+		       b.Parent_Id,
+		       (select distinct 1 
+		          from (select d.menu_id as menu_id
+		                  from bsc_role_menu_t d, bsc_menu_t e
+		                 where d.role_id in (select a.role_id
+		                                       from bsc_user_role_t a
+		                                      where a.user_id = #{user_Id})
+		                   and d.menu_id = e.menu_id
+		                   and e.Is_Show = '0'
+		                   and e.Parent_Id = #{parent_id}) c
+		         where c.menu_id = b.menu_id) as ishaveBtn
+		  from bsc_menu_t b
+		 where b.Parent_Id = #{parent_id}
+		   and b.Is_Show = '0';
+    ]]>
+    </select>
+    
+   <select id="findButtonPermission" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+    <![CDATA[
+        select d.parent_id as parent_id,
+               (select menu_name from bsc_menu_t where menu_id = d.parent_id) as parent_name,
+               d.menu_id as menu_id,
+               d.menu_name as menu_name,
+               d.Menu_Url as url,
+               d.Icon as icon,
+               d.Is_Show as is_show,
+               d.Menu_Order as menu_order,
+               d.Permission as permission
+          from bsc_menu_t d
+         where d.Menu_Status = '1'
+           and Is_Show = '0'
+           and d.Menu_Id in
+               (select c.Menu_Id
+                  from bsc_role_menu_t c
+                 where c.Role_Id in
+                       (select b.Role_Id from bsc_user_role_t b where b.User_Id = #{userId}))
+         order by d.parent_id asc, d.menu_id asc
+    ]]>
+    </select>
+
+</mapper>

@@ -1,0 +1,205 @@
+package com.taikang.tkcoww.module.action.impl;
+
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+
+import javax.annotation.Resource;
+
+import com.taikang.tkcoww.module.service.IModuleService;
+
+import java.util.List;
+
+import com.taikang.tkcoww.module.action.IModuleAction;
+import com.taikang.udp.framework.core.action.impl.BaseActionImpl;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+
+import java.util.Arrays;
+
+import com.taikang.tkcoww.module.model.ModuleBO;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.sys.model.MenuBO;
+import com.taikang.udp.sys.service.IMenuService;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+/**
+ * ModuleAction
+ */
+@Service(IModuleAction.ACTION_ID)
+public class ModuleActionImpl extends BaseActionImpl implements IModuleAction {
+
+	/**
+	 * 注入service
+	 */
+	@Resource(name = IModuleService.SERVICE_ID)
+	private IModuleService<ModuleBO> moduleService;
+	
+	/**
+     * 注入service
+     */
+   @Resource(name=IMenuService.SERVICE_ID)
+	private IMenuService<MenuBO> menuService;
+
+	/**
+	 * 增加数据
+	 */
+	public void insertObject(Dto param) {
+		logger.debug("<======ModuleAction--addModule======>");
+
+		ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, param);
+		moduleService.insertObject(moduleBO);
+	}
+
+	/**
+	 * 修改数据
+	 */
+	public void updateObject(Dto param) {
+		logger.debug("<======ModuleAction--updateModule======>");
+
+		ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, param);
+		moduleService.updateObject(moduleBO);
+	}
+
+	/**
+	 * 删除数据
+	 */
+	public void deleteObject(Dto param) {
+		logger.debug("<======ModuleAction--deleteModule======>");
+
+		ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, param);
+		moduleService.deleteObject(moduleBO);
+	}
+
+	/**
+	 * 查询单条数据
+	 */
+	public Dto findOne(Dto param) {
+		logger.debug("<======ModuleAction--findOneModule======>");
+
+		ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, param);
+		return moduleService.findOne(moduleBO).toDto();// 返回的BO对象自动转换成Dto返回
+	}
+	
+	/**
+	 * 查询单条数据(新)
+	 */
+	public Dto findNewOne(Dto param) {
+		logger.debug("<======ModuleAction--findNewOne======>");
+
+		ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, param);
+		return moduleService.findNewOne(moduleBO).toDto();// 返回的BO对象自动转换成Dto返回
+	}
+
+	/**
+	 * 查询所有数据
+	 */
+	public List<Dto> findAll(Dto param) {
+		logger.debug("<======ModuleAction--findAllModule======>");
+
+		return moduleService.findAllMap(param);
+	}
+
+	/**
+	 * 分页查询数据
+	 */
+	public CurrentPage queryForPage(CurrentPage currentPage) {
+		logger.debug("<======ModuleAction--queryModuleForPage======>");
+
+		return moduleService.queryForPage(currentPage);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.taikang.tkcoww.module.action.IModuleAction#queryNavMenuForPage(com
+	 * .taikang.udp.framework.core.persistence.pagination.CurrentPage)
+	 */
+	@Override
+	public CurrentPage queryNavMenuForPage(CurrentPage page) {
+		logger.debug("<======ModuleAction--queryNavMenuForPage======>");
+
+		return moduleService.queryNavMenuForPage(page);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taikang.tkcoww.module.action.IModuleAction#findSubOneModule(com.taikang.udp.framework.common.datastructre.Dto)
+	 */
+	@Override
+	public Dto findSubOneModule(Dto param) {
+		
+		//判断是否为根节点
+		MenuBO menuBO = BaseDto.toModel(MenuBO.class, param);
+		Dto menudto = menuService.findOne(menuBO).toDto();
+		if(!menudto.isEmpty()){
+			param.put("result", "ok");
+		    return param;
+		}		
+		String menuId=param.getAsString("menuId");
+		String menuType=param.getAsString("menuType");				
+		//下级栏目
+		if(StringUtils.equalsIgnoreCase("sub", menuType)){
+			//判断是否是叶子目录
+			param.put("moDisleaf", "1");
+			param.put("modId", menuId);
+			int count=1;
+			for (int i = 0; i < 4; i++) {
+				ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, param);
+				Dto moduledto = moduleService.findOne(moduleBO).toDto();		
+				if(!menudto.isEmpty()){
+					param.put("modId",moduledto.getAsString("modParentId"));
+					if(count++>4){
+						param.put("result", "fail");
+						return param;
+					}
+				}else{
+					break;
+				}
+				
+			}
+			param.put("result", "ok");
+			return param;
+		}
+		//叶子节点
+		if(StringUtils.equalsIgnoreCase("leaf", menuType)){
+			param.put("moDisleaf", "0");
+			param.put("modId", menuId);
+		}
+		param.put("result", "ok");
+		return param;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taikang.tkcoww.module.action.IModuleAction#querySubMenu(com.taikang.udp.framework.core.persistence.pagination.CurrentPage)
+	 */
+	@Override
+	public CurrentPage querySubMenu(CurrentPage page) {
+		// TODO Auto-generated method stub
+		logger.debug("<======ModuleAction--querySubMenu======>");
+
+		return moduleService.querySubMenu(page);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.taikang.tkcoww.module.action.IModuleAction#updateSubObject(com.taikang.udp.framework.common.datastructre.Dto)
+	 */
+	@Override
+	public void updateSubObject(Dto dto) {
+		// TODO Auto-generated method stub
+		logger.debug("<======ModuleAction--updateSubModule======>");
+
+		ModuleBO moduleBO = BaseDto.toModel(ModuleBO.class, dto);
+		moduleService.updateSubObject(moduleBO);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.taikang.tkcoww.module.action.IModuleAction#queryModulelist(com.taikang.udp.framework.core.persistence.pagination.CurrentPage)
+	 */
+	@Override
+	public CurrentPage queryModulelist(CurrentPage page) {
+		// TODO Auto-generated method stub
+		logger.debug("<======ModuleAction--queryModulelist======>");
+
+		return moduleService.queryModulelist(page);
+	}
+}

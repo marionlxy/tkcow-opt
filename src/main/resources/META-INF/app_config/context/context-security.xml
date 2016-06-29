@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
+	<beans:bean id="customWebInvocationPrivilegeEvaluator"
+		class="org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator">
+		<beans:constructor-arg name="securityInterceptor" ref="optSecurityFilter" />
+	</beans:bean>
+	<http pattern="/login.htm*" security="none" />
+	<http pattern="/api/*" security="none" />
+	<http pattern="/**/*.xls" security="none" />
+	<http pattern="/**/*.jpg" security="none" />
+	<http pattern="/**/*.ico" security="none" />
+	<http pattern="/**/*.png" security="none" />
+	<http pattern="/**/*.gif" security="none" />
+	<http pattern="/**/*.css" security="none" />
+	<http pattern="/**/*.swf" security="none" />
+	<http pattern="/**/*.js" security="none" />
+	<http pattern="/**/*.docx" security="none" />
+	<http pattern="/**/*.html" security="none" />
+	<http pattern="/ws/*" security="none" />
+
+	<http auto-config="true" entry-point-ref="authenticationEntryPoint">
+		<logout invalidate-session="true" logout-url="/j_logout.htm"
+			success-handler-ref="optLogoutSuccessHandler" />
+		<custom-filter before="FORM_LOGIN_FILTER" ref="optLoginFilter" />
+		<access-denied-handler ref="accessDeniedHandler" />
+		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="optSecurityFilter" />
+	</http>
+	<beans:bean id="authenticationEntryPoint"
+		class="com.taikang.udp.security.service.LoginUrlEntryPoint">
+	</beans:bean>
+	
+	<beans:bean id="accessDeniedHandler"
+		class="com.taikang.udp.security.service.AccessDeniedHandlerImpl">
+	</beans:bean>
+	
+	
+	<!-- 配置过滤器 -->
+	<beans:bean id="optSecurityFilter" class="com.taikang.udp.security.service.SecurityFilter">
+		<!-- 用户拥有的角色,主要是查出用户的角色，便于后面决策器进行决策 -->
+		<beans:property name="authenticationManager" ref="optAuthenticationManager" />
+		<!-- 资源与权限对应关系，根据请求的资源查出需要对应的角色 -->
+		<beans:property name="securityMetadataSource" ref="optSecurityMetadataSource" />
+		<!-- 用户是否拥有所请求资源的权限，决策器 -->
+		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+	</beans:bean>
+	
+	<authentication-manager alias="optAuthenticationManager">
+		<authentication-provider ref="optAuthenticationProvider"/>
+	</authentication-manager>
+	
+	<beans:bean id="optAuthenticationProvider" class="com.taikang.udp.security.service.OptUserDetailsAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="securityManager" />
+	</beans:bean>
+	<beans:bean id="securityManager"
+		class="com.taikang.udp.security.service.SecurityManagerSupport" />
+		
+	<!-- 权限验证 -->
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<beans:property name="allowIfAllAbstainDecisions"
+			value="false" />
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter" />
+				<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- 角色模块对应关系 -->
+	<beans:bean id="optSecurityMetadataSource"
+		class="com.taikang.udp.security.service.SecurityMetadataSourceImpl" />
+		
+	<beans:bean id="optLoginFilter" class="com.taikang.udp.security.service.OptLoginFilter">
+		 <beans:property name="authenticationSuccessHandler"
+			ref="loginLogAuthenticationSuccessHandler">
+		</beans:property>
+		<beans:property name="authenticationFailureHandler"
+			ref="simpleUrlAuthenticationFailureHandler">
+		</beans:property> 
+		<beans:property name="authenticationManager" ref="optAuthenticationManager">
+		</beans:property>
+	</beans:bean>
+
+	<!-- 登录成功 -->
+	<beans:bean id="loginLogAuthenticationSuccessHandler"
+		class="com.taikang.udp.security.service.OptSimpleUrlAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/main"></beans:property>
+	</beans:bean>
+	<beans:bean id="simpleUrlAuthenticationFailureHandler"
+		class="com.taikang.udp.security.service.OptSimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login.htm"></beans:property>
+	</beans:bean>
+	<!-- 自定义异常过滤器 -->
+	<beans:bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+
+	<beans:bean id="optLogoutSuccessHandler"
+		class="com.taikang.udp.security.service.OptLogoutSuccessHandler">
+	</beans:bean>
+</beans:beans>

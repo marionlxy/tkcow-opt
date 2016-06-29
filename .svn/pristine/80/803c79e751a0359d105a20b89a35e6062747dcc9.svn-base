@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Advert">
+	<resultMap id="advertResultMap" type="com.taikang.udp.manage.model.AdvertBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="adBeginTime" column="ad_begin_time"/>
+		<result property="adClickNum" column="ad_click_num"/>
+		<result property="adEndTime" column="ad_end_time"/>
+		<result property="adGold" column="ad_gold"/>
+		<result property="adSlideSequence" column="ad_slide_sequence"/>
+		<result property="adStatus" column="ad_status"/>
+		<result property="adText" column="ad_text"/>
+		<result property="adTitle" column="ad_title"/>
+		<result property="adUrl" column="ad_url"/>
+		<result property="adAccId" column="ad_acc_id"/>
+		<result property="adApId" column="ad_ap_id"/>
+		<result property="adUserId" column="ad_user_id"/>
+  	</resultMap>
+  
+  	<sql id="advertWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null ">
+	  		<![CDATA[ AND A.deleteStatus = ${deletestatus} ]]>
+	  	</if>
+	  	<if test=" ad_begin_time != null ">
+	    	<![CDATA[ AND A.ad_begin_time = DATE_FORMAT(#{ad_begin_time},'%Y-%m-%d') ]]>
+	  	</if>
+	  	<if test=" ad_click_num != null ">
+	  		<![CDATA[ AND A.ad_click_num = ${ad_click_num} ]]>
+	  	</if>
+	  	<if test=" ad_end_time != null and ad_end_time != '' and ad_end_time  != 'null' ">
+	    	<![CDATA[ AND A.ad_end_time = DATE_FORMAT(#{ad_end_time},'%Y-%m-%d') ]]>
+	  	</if>
+	  	<if test=" ad_gold != null ">
+	  		<![CDATA[ AND A.ad_gold = ${ad_gold} ]]>
+	  	</if>
+	  	<if test=" ad_slide_sequence != null ">
+	  		<![CDATA[ AND A.ad_slide_sequence = ${ad_slide_sequence} ]]>
+	  	</if>
+	  	<if test=" ad_status != null ">
+	  		<![CDATA[ AND A.ad_status = ${ad_status} ]]>
+	  	</if>
+	  	<if test=" ad_text != null and ad_text != '' and ad_text != 'null' ">
+			<![CDATA[ AND A.ad_text = #{ad_text} ]]>
+	  	</if>
+	  	<if test=" ad_title != null and ad_title != '' and ad_title != 'null' ">
+			<![CDATA[ AND A.ad_title = #{ad_title} ]]>
+	  	</if>
+	  	<if test=" ad_url != null and ad_url != '' and ad_url != 'null' ">
+			<![CDATA[ AND A.ad_url = #{ad_url} ]]>
+	  	</if>
+	  	<if test=" ad_acc_id != null ">
+	  		<![CDATA[ AND A.ad_acc_id = ${ad_acc_id} ]]>
+	  	</if>
+	  	<if test=" ad_ap_id != null ">
+	  		<![CDATA[ AND A.ad_ap_id = ${ad_ap_id} ]]>
+	  	</if>
+	  	<if test=" ad_user_id != null ">
+	  		<![CDATA[ AND A.ad_user_id = ${ad_user_id} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addAdvert"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ADVERT
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null and  addtime  != ''  and  addtime  != 'null' ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null and  modifytime  != ''  and  modifytime  != 'null' ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null ">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" ad_begin_time  != null and  ad_begin_time  != ''  and  ad_begin_time  != 'null' ">
+				<![CDATA[ ad_begin_time , ]]>
+	  		</if>
+	  		<if test=" ad_click_num  != null ">
+				<![CDATA[ ad_click_num , ]]>
+	  		</if>
+	  		<if test=" ad_end_time  != null and  ad_end_time  != ''  and  ad_end_time  != 'null' ">
+				<![CDATA[ ad_end_time , ]]>
+	  		</if>
+	  		<if test=" ad_gold  != null ">
+				<![CDATA[ ad_gold , ]]>
+	  		</if>
+	  		<if test=" ad_slide_sequence  != null ">
+				<![CDATA[ ad_slide_sequence , ]]>
+	  		</if>
+	  		<if test=" ad_status  != null ">
+				<![CDATA[ ad_status , ]]>
+	  		</if>
+	  		<if test=" ad_text  != null and  ad_text  != ''  and  ad_text  != 'null' ">
+				<![CDATA[ ad_text , ]]>
+	  		</if>
+	  		<if test=" ad_title  != null and  ad_title  != ''  and  ad_title  != 'null' ">
+				<![CDATA[ ad_title , ]]>
+	  		</if>
+	  		<if test=" ad_url  != null and  ad_url  != ''  and  ad_url  != 'null' ">
+				<![CDATA[ ad_url , ]]>
+	  		</if>
+	  		<if test=" ad_acc_id  != null ">
+				<![CDATA[ ad_acc_id , ]]>
+	  		</if>
+	  		<if test=" ad_ap_id  != null ">
+				<![CDATA[ ad_ap_id , ]]>
+	  		</if>
+	  		<if test=" ad_user_id  != null ">
+				<![CDATA[ ad_user_id , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+	    		<![CDATA[ ${deletestatus} , ]]>
+	  		</if>
+	  		<if test=" ad_begin_time != null and ad_begin_time != '' and ad_begin_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{ad_begin_time},'%Y-%m-%d'), ]]>
+	  		</if>
+	  		<if test=" ad_click_num  != null">
+	    		<![CDATA[ ${ad_click_num} , ]]>
+	  		</if>
+	  		<if test=" ad_end_time != null and ad_end_time != '' and ad_end_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{ad_end_time},'%Y-%m-%d'), ]]>
+	  		</if>
+	  		<if test=" ad_gold  != null">
+	    		<![CDATA[ ${ad_gold} , ]]>
+	  		</if>
+	  		<if test=" ad_slide_sequence  != null">
+	    		<![CDATA[ ${ad_slide_sequence} , ]]>
+	  		</if>
+	  		<if test=" ad_status  != null">
+	    		<![CDATA[ ${ad_status} , ]]>
+	  		</if>
+	  		<if test=" ad_text  != null and  ad_text  != ''  and  ad_text  != 'null' ">
+	  			<![CDATA[ #{ad_text} , ]]>
+	  		</if>
+	  		<if test=" ad_title  != null and  ad_title  != ''  and  ad_title  != 'null' ">
+	  			<![CDATA[ #{ad_title} , ]]>
+	  		</if>
+	  		<if test=" ad_url  != null and  ad_url  != ''  and  ad_url  != 'null' ">
+	  			<![CDATA[ #{ad_url} , ]]>
+	  		</if>
+	  		<if test=" ad_acc_id  != null">
+	    		<![CDATA[ ${ad_acc_id} , ]]>
+	  		</if>
+	  		<if test=" ad_ap_id  != null">
+	    		<![CDATA[ ${ad_ap_id} , ]]>
+	  		</if>
+	  		<if test=" ad_user_id  != null">
+	    		<![CDATA[ ${ad_user_id} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateAdvert" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ADVERT A ]]>
+		<set>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+		<if test=" deletestatus  != null ">
+  			<![CDATA[ A.deleteStatus = ${deletestatus} , ]]>
+		</if>
+	  	<if test=" ad_begin_time != null and ad_begin_time != '' and ad_begin_time  != 'null' ">
+	    	<![CDATA[ A.ad_begin_time = DATE_FORMAT(#{ad_begin_time},'%Y-%m-%d'), ]]>
+	  	</if>
+		<if test=" ad_click_num  != null ">
+  			<![CDATA[ A.ad_click_num = ${ad_click_num} , ]]>
+		</if>
+	  	<if test=" ad_end_time != null and ad_end_time != '' and ad_end_time  != 'null' ">
+	    	<![CDATA[ A.ad_end_time = DATE_FORMAT(#{ad_end_time},'%Y-%m-%d'), ]]>
+	  	</if>
+		<if test=" ad_gold  != null ">
+  			<![CDATA[ A.ad_gold = ${ad_gold} , ]]>
+		</if>
+		<if test=" ad_slide_sequence  != null ">
+  			<![CDATA[ A.ad_slide_sequence = ${ad_slide_sequence} , ]]>
+		</if>
+		<if test=" ad_status  != null ">
+  			<![CDATA[ A.ad_status = ${ad_status} , ]]>
+		</if>
+	  	<if test=" ad_text  != null and  ad_text  != ''  and  ad_text  != 'null' ">
+	  		<![CDATA[ A.ad_text = #{ad_text}, ]]>
+	  	</if>
+	  	<if test=" ad_title  != null and  ad_title  != ''  and  ad_title  != 'null' ">
+	  		<![CDATA[ A.ad_title = #{ad_title}, ]]>
+	  	</if>
+	  	<if test=" ad_url  != null and  ad_url  != ''  and  ad_url  != 'null' ">
+	  		<![CDATA[ A.ad_url = #{ad_url}, ]]>
+	  	</if>
+		<if test=" ad_acc_id  != null ">
+  			<![CDATA[ A.ad_acc_id = ${ad_acc_id} , ]]>
+		</if>
+		<if test=" ad_ap_id  != null ">
+  			<![CDATA[ A.ad_ap_id = ${ad_ap_id} , ]]>
+		</if>
+		<if test=" ad_user_id  != null ">
+  			<![CDATA[ A.ad_user_id = ${ad_user_id} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteAdvert" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ADVERT  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneAdvert" parameterType="java.util.Map" resultMap="advertResultMap">
+		<![CDATA[ SELECT A.* FROM ADVERT A  ]]>
+		<include refid="advertWhereCondition" />
+  	</select>
+    
+  	<select id="findAllAdvert" parameterType="java.util.Map" resultMap="advertResultMap" >
+		<![CDATA[ SELECT A.* FROM ADVERT A ]]>
+		<include refid="advertWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapAdvert" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ADVERT A ]]>
+		<include refid="advertWhereCondition" />
+	</select>
+  
+  	<select id="findAdvertTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ADVERT A ]]>
+		<include refid="advertWhereCondition" />
+  	</select>
+  
+  	<select id="queryAdvertForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ADVERT A ]]>
+		<include refid="advertWhereCondition" />
+  	</select>
+</mapper>

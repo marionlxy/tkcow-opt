@@ -1,0 +1,40 @@
+# databse setting
+#validationQuery=SELECT 1 FROM SYSIBM.SYSDUMMY1
+#jdbc_url=jdbc:db2://10.137.2.11:50000/frontend:currentSchema=FECLAIM;
+#jdbc_username=db2inst1
+#jdbc_password=db2inst1
+#jdbc_driverClass=com.ibm.db2.jcc.DB2Driver
+
+validationQuery=SELECT 1 
+#test environment
+jdbc_url=jdbc:mysql://10.137.61.101:3306/tkcoww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+jdbc_username=tkcoww
+jdbc_password=tkcoww
+jdbc_driverClass=com.mysql.jdbc.Driver
+
+#jdbc_url=jdbc:mysql://127.0.0.1:3306/home?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+#jdbc_url=jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+#jdbc_username=root
+#jdbc_password=123456
+#jdbc_driverClass=com.mysql.jdbc.Driver
+
+
+
+service_baseUrl=http://10.136.80.170:8080
+bak_upload_filepath=D:/apache-tomcat-6.0.35/webapps/mwp/
+
+# mybatis config
+mybatis.config=/META-INF/app_config/mybatis/mybatis-config.xml
+
+# ehcache setting
+ehcache.config=/META-INF/app_config/cache/ehcache.xml
+#isValidateCodeLogin[0:off;1:on]
+isValidateCodeLogin=0
+#requestMonitor[0:off;1:on]
+requestMonitor=1
+oraclevalidationQuery=SELECT sysdate from dual 
+
+logoBanner=D:/test/upload/banner
+
+
+logofolder=D:/test/upload/logo

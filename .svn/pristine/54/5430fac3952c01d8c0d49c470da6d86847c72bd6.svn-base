@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+	<resultMap id="userResultMap" type="com.taikang.udp.sys.model.UserBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="msn" column="MSN"/>
+		<result property="qq" column="QQ"/>
+		<result property="ww" column="WW"/>
+		<result property="address" column="address"/>
+		<result property="availablebalance" column="availableBalance"/>
+		<result property="birthday" column="birthday"/>
+		<result property="email" column="email"/>
+		<result property="freezeblance" column="freezeBlance"/>
+		<result property="gold" column="gold"/>
+		<result property="integral" column="integral"/>
+		<result property="mobile" column="mobile"/>
+		<result property="password" column="password"/>
+		<result property="sex" column="sex"/>
+		<result property="telephone" column="telephone"/>
+		<result property="truename" column="trueName"/>
+		<result property="username" column="userName"/>
+		<result property="userrole" column="userRole"/>
+		<result property="userCredit" column="user_credit"/>
+		<result property="qqOpenid" column="qq_openid"/>
+		<result property="sinaOpenid" column="sina_openid"/>
+		<result property="years" column="years"/>
+		<result property="areaId" column="area_id"/>
+  	</resultMap>
+  
+  	<sql id="userWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null and deletestatus != '' and deletestatus != 'null' ">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" msn != null and msn != '' and msn != 'null' ">
+			<![CDATA[ AND A.MSN = #{msn} ]]>
+	  	</if>
+	  	<if test=" qq != null and qq != '' and qq != 'null' ">
+			<![CDATA[ AND A.QQ = #{qq} ]]>
+	  	</if>
+	  	<if test=" ww != null and ww != '' and ww != 'null' ">
+			<![CDATA[ AND A.WW = #{ww} ]]>
+	  	</if>
+	  	<if test=" address != null and address != '' and address != 'null' ">
+			<![CDATA[ AND A.address = #{address} ]]>
+	  	</if>
+	  	<if test=" availablebalance != null ">
+	  		<![CDATA[ AND A.availableBalance = ${availablebalance} ]]>
+	  	</if>
+	  	<if test=" birthday != null and birthday != '' and birthday  != 'null' ">
+	    	<![CDATA[ AND A.birthday = DATE_FORMAT(#{birthday},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" email != null and email != '' and email != 'null' ">
+			<![CDATA[ AND A.email = #{email} ]]>
+	  	</if>
+	  	<if test=" freezeblance != null ">
+	  		<![CDATA[ AND A.freezeBlance = ${freezeblance} ]]>
+	  	</if>
+	  	<if test=" gold != null ">
+	  		<![CDATA[ AND A.gold = ${gold} ]]>
+	  	</if>
+	  	<if test=" integral != null ">
+	  		<![CDATA[ AND A.integral = ${integral} ]]>
+	  	</if>
+	  	<if test=" mobile != null and mobile != '' and mobile != 'null' ">
+			<![CDATA[ AND A.mobile = #{mobile} ]]>
+	  	</if>
+	  	<if test=" password != null and password != '' and password != 'null' ">
+			<![CDATA[ AND A.password = #{password} ]]>
+	  	</if>
+	  	<if test=" sex != null ">
+	  		<![CDATA[ AND A.sex = ${sex} ]]>
+	  	</if>
+	  	<if test=" telephone != null and telephone != '' and telephone != 'null' ">
+			<![CDATA[ AND A.telephone = #{telephone} ]]>
+	  	</if>
+	  	<if test=" truename != null and truename != '' and truename != 'null' ">
+			<![CDATA[ AND A.trueName = #{truename} ]]>
+	  	</if>
+	  	<if test=" username != null and username != '' and username != 'null' ">
+			<![CDATA[ AND A.userName = #{username} ]]>
+	  	</if>
+	  	<if test=" userrole != null and userrole != '' and userrole != 'null' ">
+			<![CDATA[ AND A.userRole = #{userrole} ]]>
+	  	</if>
+	  	<if test=" user_credit != null ">
+	  		<![CDATA[ AND A.user_credit = ${user_credit} ]]>
+	  	</if>
+	  	<if test=" qq_openid != null and qq_openid != '' and qq_openid != 'null' ">
+			<![CDATA[ AND A.qq_openid = #{qq_openid} ]]>
+	  	</if>
+	  	<if test=" sina_openid != null and sina_openid != '' and sina_openid != 'null' ">
+			<![CDATA[ AND A.sina_openid = #{sina_openid} ]]>
+	  	</if>
+	  	<if test=" years != null ">
+	  		<![CDATA[ AND A.years = ${years} ]]>
+	  	</if>
+	  	<if test=" area_id != null ">
+	  		<![CDATA[ AND A.area_id = ${area_id} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addUser"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO USER
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null and  addtime  != ''  and  addtime  != 'null' ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null and  modifytime  != ''  and  modifytime  != 'null' ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" msn  != null and  msn  != ''  and  msn  != 'null' ">
+				<![CDATA[ MSN , ]]>
+	  		</if>
+	  		<if test=" qq  != null and  qq  != ''  and  qq  != 'null' ">
+				<![CDATA[ QQ , ]]>
+	  		</if>
+	  		<if test=" ww  != null and  ww  != ''  and  ww  != 'null' ">
+				<![CDATA[ WW , ]]>
+	  		</if>
+	  		<if test=" address  != null and  address  != ''  and  address  != 'null' ">
+				<![CDATA[ address , ]]>
+	  		</if>
+	  		<if test=" availablebalance  != null ">
+				<![CDATA[ availableBalance , ]]>
+	  		</if>
+	  		<if test=" birthday  != null and  birthday  != ''  and  birthday  != 'null' ">
+				<![CDATA[ birthday , ]]>
+	  		</if>
+	  		<if test=" email  != null and  email  != ''  and  email  != 'null' ">
+				<![CDATA[ email , ]]>
+	  		</if>
+	  		<if test=" freezeblance  != null ">
+				<![CDATA[ freezeBlance , ]]>
+	  		</if>
+	  		<if test=" gold  != null ">
+				<![CDATA[ gold , ]]>
+	  		</if>
+	  		<if test=" integral  != null ">
+				<![CDATA[ integral , ]]>
+	  		</if>
+	  		<if test=" mobile  != null and  mobile  != ''  and  mobile  != 'null' ">
+				<![CDATA[ mobile , ]]>
+	  		</if>
+	  		<if test=" password  != null and  password  != ''  and  password  != 'null' ">
+				<![CDATA[ password , ]]>
+	  		</if>
+	  		<if test=" sex  != null ">
+				<![CDATA[ sex , ]]>
+	  		</if>
+	  		<if test=" telephone  != null and  telephone  != ''  and  telephone  != 'null' ">
+				<![CDATA[ telephone , ]]>
+	  		</if>
+	  		<if test=" truename  != null and  truename  != ''  and  truename  != 'null' ">
+				<![CDATA[ trueName , ]]>
+	  		</if>
+	  		<if test=" username  != null and  username  != ''  and  username  != 'null' ">
+				<![CDATA[ userName , ]]>
+	  		</if>
+	  		<if test=" userrole  != null and  userrole  != ''  and  userrole  != 'null' ">
+				<![CDATA[ userRole , ]]>
+	  		</if>
+	  		<if test=" user_credit  != null ">
+				<![CDATA[ user_credit , ]]>
+	  		</if>
+	  		<if test=" qq_openid  != null and  qq_openid  != ''  and  qq_openid  != 'null' ">
+				<![CDATA[ qq_openid , ]]>
+	  		</if>
+	  		<if test=" sina_openid  != null and  sina_openid  != ''  and  sina_openid  != 'null' ">
+				<![CDATA[ sina_openid , ]]>
+	  		</if>
+	  		<if test=" years  != null ">
+				<![CDATA[ years , ]]>
+	  		</if>
+	  		<if test=" area_id  != null ">
+				<![CDATA[ area_id , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+	  			<![CDATA[ #{deletestatus} , ]]>
+	  		</if>
+	  		<if test=" msn  != null and  msn  != ''  and  msn  != 'null' ">
+	  			<![CDATA[ #{msn} , ]]>
+	  		</if>
+	  		<if test=" qq  != null and  qq  != ''  and  qq  != 'null' ">
+	  			<![CDATA[ #{qq} , ]]>
+	  		</if>
+	  		<if test=" ww  != null and  ww  != ''  and  ww  != 'null' ">
+	  			<![CDATA[ #{ww} , ]]>
+	  		</if>
+	  		<if test=" address  != null and  address  != ''  and  address  != 'null' ">
+	  			<![CDATA[ #{address} , ]]>
+	  		</if>
+	  		<if test=" availablebalance  != null">
+	    		<![CDATA[ ${availablebalance} , ]]>
+	  		</if>
+	  		<if test=" birthday != null and birthday != '' and birthday  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{birthday},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" email  != null and  email  != ''  and  email  != 'null' ">
+	  			<![CDATA[ #{email} , ]]>
+	  		</if>
+	  		<if test=" freezeblance  != null">
+	    		<![CDATA[ ${freezeblance} , ]]>
+	  		</if>
+	  		<if test=" gold  != null">
+	    		<![CDATA[ ${gold} , ]]>
+	  		</if>
+	  		<if test=" integral  != null">
+	    		<![CDATA[ ${integral} , ]]>
+	  		</if>
+	  		<if test=" mobile  != null and  mobile  != ''  and  mobile  != 'null' ">
+	  			<![CDATA[ #{mobile} , ]]>
+	  		</if>
+	  		<if test=" password  != null and  password  != ''  and  password  != 'null' ">
+	  			<![CDATA[ #{password} , ]]>
+	  		</if>
+	  		<if test=" sex  != null">
+	    		<![CDATA[ ${sex} , ]]>
+	  		</if>
+	  		<if test=" telephone  != null and  telephone  != ''  and  telephone  != 'null' ">
+	  			<![CDATA[ #{telephone} , ]]>
+	  		</if>
+	  		<if test=" truename  != null and  truename  != ''  and  truename  != 'null' ">
+	  			<![CDATA[ #{truename} , ]]>
+	  		</if>
+	  		<if test=" username  != null and  username  != ''  and  username  != 'null' ">
+	  			<![CDATA[ #{username} , ]]>
+	  		</if>
+	  		<if test=" userrole  != null and  userrole  != ''  and  userrole  != 'null' ">
+	  			<![CDATA[ #{userrole} , ]]>
+	  		</if>
+	  		<if test=" user_credit  != null">
+	    		<![CDATA[ ${user_credit} , ]]>
+	  		</if>
+	  		<if test=" qq_openid  != null and  qq_openid  != ''  and  qq_openid  != 'null' ">
+	  			<![CDATA[ #{qq_openid} , ]]>
+	  		</if>
+	  		<if test=" sina_openid  != null and  sina_openid  != ''  and  sina_openid  != 'null' ">
+	  			<![CDATA[ #{sina_openid} , ]]>
+	  		</if>
+	  		<if test=" years  != null">
+	    		<![CDATA[ ${years} , ]]>
+	  		</if>
+	  		<if test=" area_id  != null">
+	    		<![CDATA[ ${area_id} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateUser" parameterType="java.util.Map">
+		<![CDATA[ UPDATE USER A ]]>
+		<set>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+	  	<if test=" deletestatus  != null and  deletestatus  != ''  and  deletestatus  != 'null' ">
+	  		<![CDATA[ A.deleteStatus = #{deletestatus}, ]]>
+	  	</if>
+	  	<if test=" msn  != null and  msn  != ''  and  msn  != 'null' ">
+	  		<![CDATA[ A.MSN = #{msn}, ]]>
+	  	</if>
+	  	<if test=" qq  != null and  qq  != ''  and  qq  != 'null' ">
+	  		<![CDATA[ A.QQ = #{qq}, ]]>
+	  	</if>
+	  	<if test=" ww  != null and  ww  != ''  and  ww  != 'null' ">
+	  		<![CDATA[ A.WW = #{ww}, ]]>
+	  	</if>
+	  	<if test=" address  != null and  address  != ''  and  address  != 'null' ">
+	  		<![CDATA[ A.address = #{address}, ]]>
+	  	</if>
+		<if test=" availablebalance  != null ">
+  			<![CDATA[ A.availableBalance = ${availablebalance} , ]]>
+		</if>
+	  	<if test=" birthday != null and birthday != '' and birthday  != 'null' ">
+	    	<![CDATA[ A.birthday = DATE_FORMAT(#{birthday},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" email  != null and  email  != ''  and  email  != 'null' ">
+	  		<![CDATA[ A.email = #{email}, ]]>
+	  	</if>
+		<if test=" freezeblance  != null ">
+  			<![CDATA[ A.freezeBlance = ${freezeblance} , ]]>
+		</if>
+		<if test=" gold  != null ">
+  			<![CDATA[ A.gold = ${gold} , ]]>
+		</if>
+		<if test=" integral  != null ">
+  			<![CDATA[ A.integral = ${integral} , ]]>
+		</if>
+	  	<if test=" mobile  != null and  mobile  != ''  and  mobile  != 'null' ">
+	  		<![CDATA[ A.mobile = #{mobile}, ]]>
+	  	</if>
+	  	<if test=" password  != null and  password  != ''  and  password  != 'null' ">
+	  		<![CDATA[ A.password = #{password}, ]]>
+	  	</if>
+		<if test=" sex  != null ">
+  			<![CDATA[ A.sex = ${sex} , ]]>
+		</if>
+	  	<if test=" telephone  != null and  telephone  != ''  and  telephone  != 'null' ">
+	  		<![CDATA[ A.telephone = #{telephone}, ]]>
+	  	</if>
+	  	<if test=" truename  != null and  truename  != ''  and  truename  != 'null' ">
+	  		<![CDATA[ A.trueName = #{truename}, ]]>
+	  	</if>
+	  	<if test=" username  != null and  username  != ''  and  username  != 'null' ">
+	  		<![CDATA[ A.userName = #{username}, ]]>
+	  	</if>
+	  	<if test=" userrole  != null and  userrole  != ''  and  userrole  != 'null' ">
+	  		<![CDATA[ A.userRole = #{userrole}, ]]>
+	  	</if>
+		<if test=" user_credit  != null ">
+  			<![CDATA[ A.user_credit = ${user_credit} , ]]>
+		</if>
+	  	<if test=" qq_openid  != null and  qq_openid  != ''  and  qq_openid  != 'null' ">
+	  		<![CDATA[ A.qq_openid = #{qq_openid}, ]]>
+	  	</if>
+	  	<if test=" sina_openid  != null and  sina_openid  != ''  and  sina_openid  != 'null' ">
+	  		<![CDATA[ A.sina_openid = #{sina_openid}, ]]>
+	  	</if>
+		<if test=" years  != null ">
+  			<![CDATA[ A.years = ${years} , ]]>
+		</if>
+		<if test=" area_id  != null ">
+  			<![CDATA[ A.area_id = ${area_id} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteUser" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM USER  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneUser" parameterType="java.util.Map" resultMap="userResultMap">
+		<![CDATA[ SELECT A.* FROM USER A  ]]>
+		<include refid="userWhereCondition" />
+  	</select>
+    
+  	<select id="findAllUser" parameterType="java.util.Map" resultMap="userResultMap" >
+		<![CDATA[ SELECT A.* FROM USER A ]]>
+		<include refid="userWhereCondition" />
+  	</select>
+  	
+  	<select id="verifyAlreadyExists" parameterType="java.util.Map" resultMap="userResultMap" >
+		<![CDATA[ SELECT A.* FROM USER A ]]>
+		select
+		U.*
+		from
+		user U
+		<trim prefix="where" prefixOverrides="and">
+			<if test="userName!=null and userName!=''">
+				and userName = #{userName}
+			</if>
+			<if test="email!=null and email!=''">
+				and email = #{email}
+			</if>
+			<if test="id!=null">
+				and id != #{id}
+			</if>
+		</trim>
+  	</select>
+  	
+  	<select id="findAllMapUser" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM USER A ]]>
+		<include refid="userWhereCondition" />
+	</select>
+  
+  	<select id="findUserTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM USER A ]]>
+		<include refid="userWhereCondition" />
+  	</select>
+  
+  	<select id="queryUserForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM USER A ]]>
+		<include refid="userWhereCondition" />
+  	</select>
+</mapper>

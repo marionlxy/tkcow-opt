@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdvertPosition">
+	<resultMap id="advertPositionResultMap" type="com.taikang.udp.manage.model.AdvertPositionBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="apAccUrl" column="ap_acc_url"/>
+		<result property="apCode" column="ap_code"/>
+		<result property="apContent" column="ap_content"/>
+		<result property="apHeight" column="ap_height"/>
+		<result property="apPrice" column="ap_price"/>
+		<result property="apSaleType" column="ap_sale_type"/>
+		<result property="apShowType" column="ap_show_type"/>
+		<result property="apStatus" column="ap_status"/>
+		<result property="apSysType" column="ap_sys_type"/>
+		<result property="apText" column="ap_text"/>
+		<result property="apTitle" column="ap_title"/>
+		<result property="apType" column="ap_type"/>
+		<result property="apUseStatus" column="ap_use_status"/>
+		<result property="apWidth" column="ap_width"/>
+		<result property="apAccId" column="ap_acc_id"/>
+  	</resultMap>
+  
+  	<sql id="advertPositionWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null ">
+	  		<![CDATA[ AND A.deleteStatus = ${deletestatus} ]]>
+	  	</if>
+	  	<if test=" ap_acc_url != null and ap_acc_url != '' and ap_acc_url != 'null' ">
+			<![CDATA[ AND A.ap_acc_url = #{ap_acc_url} ]]>
+	  	</if>
+	  	<if test=" ap_code != null and ap_code != '' and ap_code != 'null' ">
+			<![CDATA[ AND A.ap_code = #{ap_code} ]]>
+	  	</if>
+	  	<if test=" ap_content != null and ap_content != '' and ap_content != 'null' ">
+			<![CDATA[ AND A.ap_content = #{ap_content} ]]>
+	  	</if>
+	  	<if test=" ap_height != null ">
+	  		<![CDATA[ AND A.ap_height = ${ap_height} ]]>
+	  	</if>
+	  	<if test=" ap_price != null ">
+	  		<![CDATA[ AND A.ap_price = ${ap_price} ]]>
+	  	</if>
+	  	<if test=" ap_sale_type != null ">
+	  		<![CDATA[ AND A.ap_sale_type = ${ap_sale_type} ]]>
+	  	</if>
+	  	<if test=" ap_show_type != null ">
+	  		<![CDATA[ AND A.ap_show_type = ${ap_show_type} ]]>
+	  	</if>
+	  	<if test=" ap_status != null ">
+	  		<![CDATA[ AND A.ap_status = ${ap_status} ]]>
+	  	</if>
+	  	<if test=" ap_sys_type != null ">
+	  		<![CDATA[ AND A.ap_sys_type = ${ap_sys_type} ]]>
+	  	</if>
+	  	<if test=" ap_text != null and ap_text != '' and ap_text != 'null' ">
+			<![CDATA[ AND A.ap_text = #{ap_text} ]]>
+	  	</if>
+	  	<if test=" ap_title != null and ap_title != '' and ap_title != 'null' ">
+			<![CDATA[ AND A.ap_title = #{ap_title} ]]>
+	  	</if>
+	  	<if test=" ap_type != null and ap_type != '' and ap_type != 'null' ">
+			<![CDATA[ AND A.ap_type = #{ap_type} ]]>
+	  	</if>
+	  	<if test=" ap_use_status != null ">
+	  		<![CDATA[ AND A.ap_use_status = ${ap_use_status} ]]>
+	  	</if>
+	  	<if test=" ap_width != null ">
+	  		<![CDATA[ AND A.ap_width = ${ap_width} ]]>
+	  	</if>
+	  	<if test=" ap_acc_id != null ">
+	  		<![CDATA[ AND A.ap_acc_id = ${ap_acc_id} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addAdvertPosition"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ADV_POS
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null and  addtime  != ''  and  addtime  != 'null' ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null and  modifytime  != ''  and  modifytime  != 'null' ">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null ">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" ap_acc_url  != null and  ap_acc_url  != ''  and  ap_acc_url  != 'null' ">
+				<![CDATA[ ap_acc_url , ]]>
+	  		</if>
+	  		<if test=" ap_code  != null and  ap_code  != ''  and  ap_code  != 'null' ">
+				<![CDATA[ ap_code , ]]>
+	  		</if>
+	  		<if test=" ap_content  != null and  ap_content  != ''  and  ap_content  != 'null' ">
+				<![CDATA[ ap_content , ]]>
+	  		</if>
+	  		<if test=" ap_height  != null ">
+				<![CDATA[ ap_height , ]]>
+	  		</if>
+	  		<if test=" ap_price  != null ">
+				<![CDATA[ ap_price , ]]>
+	  		</if>
+	  		<if test=" ap_sale_type  != null ">
+				<![CDATA[ ap_sale_type , ]]>
+	  		</if>
+	  		<if test=" ap_show_type  != null ">
+				<![CDATA[ ap_show_type , ]]>
+	  		</if>
+	  		<if test=" ap_status  != null ">
+				<![CDATA[ ap_status , ]]>
+	  		</if>
+	  		<if test=" ap_sys_type  != null ">
+				<![CDATA[ ap_sys_type , ]]>
+	  		</if>
+	  		<if test=" ap_text  != null and  ap_text  != ''  and  ap_text  != 'null' ">
+				<![CDATA[ ap_text , ]]>
+	  		</if>
+	  		<if test=" ap_title  != null and  ap_title  != ''  and  ap_title  != 'null' ">
+				<![CDATA[ ap_title , ]]>
+	  		</if>
+	  		<if test=" ap_type  != null and  ap_type  != ''  and  ap_type  != 'null' ">
+				<![CDATA[ ap_type , ]]>
+	  		</if>
+	  		<if test=" ap_use_status  != null ">
+				<![CDATA[ ap_use_status , ]]>
+	  		</if>
+	  		<if test=" ap_width  != null ">
+				<![CDATA[ ap_width , ]]>
+	  		</if>
+	  		<if test=" ap_acc_id  != null ">
+				<![CDATA[ ap_acc_id , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+	    		<![CDATA[ ${deletestatus} , ]]>
+	  		</if>
+	  		<if test=" ap_acc_url  != null and  ap_acc_url  != ''  and  ap_acc_url  != 'null' ">
+	  			<![CDATA[ #{ap_acc_url} , ]]>
+	  		</if>
+	  		<if test=" ap_code  != null and  ap_code  != ''  and  ap_code  != 'null' ">
+	  			<![CDATA[ #{ap_code} , ]]>
+	  		</if>
+	  		<if test=" ap_content  != null and  ap_content  != ''  and  ap_content  != 'null' ">
+	  			<![CDATA[ #{ap_content} , ]]>
+	  		</if>
+	  		<if test=" ap_height  != null">
+	    		<![CDATA[ ${ap_height} , ]]>
+	  		</if>
+	  		<if test=" ap_price  != null">
+	    		<![CDATA[ ${ap_price} , ]]>
+	  		</if>
+	  		<if test=" ap_sale_type  != null">
+	    		<![CDATA[ ${ap_sale_type} , ]]>
+	  		</if>
+	  		<if test=" ap_show_type  != null">
+	    		<![CDATA[ ${ap_show_type} , ]]>
+	  		</if>
+	  		<if test=" ap_status  != null">
+	    		<![CDATA[ ${ap_status} , ]]>
+	  		</if>
+	  		<if test=" ap_sys_type  != null">
+	    		<![CDATA[ ${ap_sys_type} , ]]>
+	  		</if>
+	  		<if test=" ap_text  != null and  ap_text  != ''  and  ap_text  != 'null' ">
+	  			<![CDATA[ #{ap_text} , ]]>
+	  		</if>
+	  		<if test=" ap_title  != null and  ap_title  != ''  and  ap_title  != 'null' ">
+	  			<![CDATA[ #{ap_title} , ]]>
+	  		</if>
+	  		<if test=" ap_type  != null and  ap_type  != ''  and  ap_type  != 'null' ">
+	  			<![CDATA[ #{ap_type} , ]]>
+	  		</if>
+	  		<if test=" ap_use_status  != null">
+	    		<![CDATA[ ${ap_use_status} , ]]>
+	  		</if>
+	  		<if test=" ap_width  != null">
+	    		<![CDATA[ ${ap_width} , ]]>
+	  		</if>
+	  		<if test=" ap_acc_id  != null">
+	    		<![CDATA[ ${ap_acc_id} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateAdvertPosition" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ADV_POS A ]]>
+		<set>
+	  	<if test=" addtime != null and addtime != '' and addtime  != 'null' ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null and modifytime != '' and modifytime  != 'null' ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+		<if test=" deletestatus  != null ">
+  			<![CDATA[ A.deleteStatus = ${deletestatus} , ]]>
+		</if>
+	  	<if test=" ap_acc_url  != null and  ap_acc_url  != ''  and  ap_acc_url  != 'null' ">
+	  		<![CDATA[ A.ap_acc_url = #{ap_acc_url}, ]]>
+	  	</if>
+	  	<if test=" ap_code  != null and  ap_code  != ''  and  ap_code  != 'null' ">
+	  		<![CDATA[ A.ap_code = #{ap_code}, ]]>
+	  	</if>
+	  	<if test=" ap_content  != null and  ap_content  != ''  and  ap_content  != 'null' ">
+	  		<![CDATA[ A.ap_content = #{ap_content}, ]]>
+	  	</if>
+		<if test=" ap_height  != null ">
+  			<![CDATA[ A.ap_height = ${ap_height} , ]]>
+		</if>
+		<if test=" ap_price  != null ">
+  			<![CDATA[ A.ap_price = ${ap_price} , ]]>
+		</if>
+		<if test=" ap_sale_type  != null ">
+  			<![CDATA[ A.ap_sale_type = ${ap_sale_type} , ]]>
+		</if>
+		<if test=" ap_show_type  != null ">
+  			<![CDATA[ A.ap_show_type = ${ap_show_type} , ]]>
+		</if>
+		<if test=" ap_status  != null ">
+  			<![CDATA[ A.ap_status = ${ap_status} , ]]>
+		</if>
+		<if test=" ap_sys_type  != null ">
+  			<![CDATA[ A.ap_sys_type = ${ap_sys_type} , ]]>
+		</if>
+	  	<if test=" ap_text  != null and  ap_text  != ''  and  ap_text  != 'null' ">
+	  		<![CDATA[ A.ap_text = #{ap_text}, ]]>
+	  	</if>
+	  	<if test=" ap_title  != null and  ap_title  != ''  and  ap_title  != 'null' ">
+	  		<![CDATA[ A.ap_title = #{ap_title}, ]]>
+	  	</if>
+	  	<if test=" ap_type  != null and  ap_type  != ''  and  ap_type  != 'null' ">
+	  		<![CDATA[ A.ap_type = #{ap_type}, ]]>
+	  	</if>
+		<if test=" ap_use_status  != null ">
+  			<![CDATA[ A.ap_use_status = ${ap_use_status} , ]]>
+		</if>
+		<if test=" ap_width  != null ">
+  			<![CDATA[ A.ap_width = ${ap_width} , ]]>
+		</if>
+		<if test=" ap_acc_id  != null ">
+  			<![CDATA[ A.ap_acc_id = ${ap_acc_id} , ]]>
+		</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteAdvertPosition" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ADV_POS  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneAdvertPosition" parameterType="java.util.Map" resultMap="advertPositionResultMap">
+		<![CDATA[ SELECT A.* FROM ADV_POS A  ]]>
+		<include refid="advertPositionWhereCondition" />
+  	</select>
+    
+  	<select id="findAllAdvertPosition" parameterType="java.util.Map" resultMap="advertPositionResultMap" >
+		<![CDATA[ SELECT A.* FROM ADV_POS A ]]>
+		<include refid="advertPositionWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapAdvertPosition" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ADV_POS A ]]>
+		<include refid="advertPositionWhereCondition" />
+	</select>
+  
+  	<select id="findAdvertPositionTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ADV_POS A ]]>
+		<include refid="advertPositionWhereCondition" />
+  	</select>
+  
+  	<select id="queryAdvertPositionForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ADV_POS A ]]>
+		<include refid="advertPositionWhereCondition" />
+  	</select>
+</mapper>

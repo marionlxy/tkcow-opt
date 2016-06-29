@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Filepath">
+	<resultMap id="filepathResultMap" type="com.taikang.udp.file.model.FilepathBO">
+		<result property="id" column="Id"/>
+		<result property="relationNo" column="relation_no"/>
+		<result property="filepathName" column="filepath_name"/>
+		<result property="fileName" column="file_name"/>
+		<result property="filePath" column="file_path"/>
+		<result property="desc" column="desc"/>
+		<result property="remark" column="remark"/>
+		<result property="operName" column="oper_name"/>
+		<result property="createTime" column="create_time"/>
+  	</resultMap>
+  
+  	<sql id="filepathWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.Id = ${id} ]]>
+	  	</if>
+	  	<if test=" relation_no != null and relation_no != '' and relation_no != 'null' ">
+			<![CDATA[ AND A.relation_no = #{relation_no} ]]>
+	  	</if>
+	  	<if test=" filepath_name != null and filepath_name != '' and filepath_name != 'null' ">
+			<![CDATA[ AND A.filepath_name = #{filepath_name} ]]>
+	  	</if>
+	  	<if test=" file_name != null and file_name != '' and file_name != 'null' ">
+			<![CDATA[ AND A.file_name = #{file_name} ]]>
+	  	</if>
+	  	<if test=" file_path != null and file_path != '' and file_path != 'null' ">
+			<![CDATA[ AND A.file_path = #{file_path} ]]>
+	  	</if>
+	  	<if test=" desc != null and desc != '' and desc != 'null' ">
+			<![CDATA[ AND A.desc = #{desc} ]]>
+	  	</if>
+	  	<if test=" remark != null and remark != '' and remark != 'null' ">
+			<![CDATA[ AND A.remark = #{remark} ]]>
+	  	</if>
+	  	<if test=" oper_name != null and oper_name != '' and oper_name != 'null' ">
+			<![CDATA[ AND A.oper_name = #{oper_name} ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ AND A.create_time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addFilepath"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO BSC_FILEPATH_T
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ Id , ]]>
+	  		</if>
+	  		<if test=" relation_no  != null and  relation_no  != ''  and  relation_no  != 'null' ">
+				<![CDATA[ relation_no , ]]>
+	  		</if>
+	  		<if test=" filepath_name  != null and  filepath_name  != ''  and  filepath_name  != 'null' ">
+				<![CDATA[ filepath_name , ]]>
+	  		</if>
+	  		<if test=" file_name  != null and  file_name  != ''  and  file_name  != 'null' ">
+				<![CDATA[ file_name , ]]>
+	  		</if>
+	  		<if test=" file_path  != null and  file_path  != ''  and  file_path  != 'null' ">
+				<![CDATA[ file_path , ]]>
+	  		</if>
+	  		<if test=" desc  != null and  desc  != ''  and  desc  != 'null' ">
+				<![CDATA[ desc , ]]>
+	  		</if>
+	  		<if test=" remark  != null and  remark  != ''  and  remark  != 'null' ">
+				<![CDATA[ remark , ]]>
+	  		</if>
+	  		<if test=" oper_name  != null and  oper_name  != ''  and  oper_name  != 'null' ">
+				<![CDATA[ oper_name , ]]>
+	  		</if>
+	  		<if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+				<![CDATA[ create_time , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" relation_no  != null and  relation_no  != ''  and  relation_no  != 'null' ">
+	  			<![CDATA[ #{relation_no} , ]]>
+	  		</if>
+	  		<if test=" filepath_name  != null and  filepath_name  != ''  and  filepath_name  != 'null' ">
+	  			<![CDATA[ #{filepath_name} , ]]>
+	  		</if>
+	  		<if test=" file_name  != null and  file_name  != ''  and  file_name  != 'null' ">
+	  			<![CDATA[ #{file_name} , ]]>
+	  		</if>
+	  		<if test=" file_path  != null and  file_path  != ''  and  file_path  != 'null' ">
+	  			<![CDATA[ #{file_path} , ]]>
+	  		</if>
+	  		<if test=" desc  != null and  desc  != ''  and  desc  != 'null' ">
+	  			<![CDATA[ #{desc} , ]]>
+	  		</if>
+	  		<if test=" remark  != null and  remark  != ''  and  remark  != 'null' ">
+	  			<![CDATA[ #{remark} , ]]>
+	  		</if>
+	  		<if test=" oper_name  != null and  oper_name  != ''  and  oper_name  != 'null' ">
+	  			<![CDATA[ #{oper_name} , ]]>
+	  		</if>
+	  		<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateFilepath" parameterType="java.util.Map">
+		<![CDATA[ UPDATE BSC_FILEPATH_T A ]]>
+		<set>
+	  	<if test=" relation_no  != null and  relation_no  != ''  and  relation_no  != 'null' ">
+	  		<![CDATA[ A.relation_no = #{relation_no}, ]]>
+	  	</if>
+	  	<if test=" filepath_name  != null and  filepath_name  != ''  and  filepath_name  != 'null' ">
+	  		<![CDATA[ A.filepath_name = #{filepath_name}, ]]>
+	  	</if>
+	  	<if test=" file_name  != null and  file_name  != ''  and  file_name  != 'null' ">
+	  		<![CDATA[ A.file_name = #{file_name}, ]]>
+	  	</if>
+	  	<if test=" file_path  != null and  file_path  != ''  and  file_path  != 'null' ">
+	  		<![CDATA[ A.file_path = #{file_path}, ]]>
+	  	</if>
+	  	<if test=" desc  != null and  desc  != ''  and  desc  != 'null' ">
+	  		<![CDATA[ A.desc = #{desc}, ]]>
+	  	</if>
+	  	<if test=" remark  != null and  remark  != ''  and  remark  != 'null' ">
+	  		<![CDATA[ A.remark = #{remark}, ]]>
+	  	</if>
+	  	<if test=" oper_name  != null and  oper_name  != ''  and  oper_name  != 'null' ">
+	  		<![CDATA[ A.oper_name = #{oper_name}, ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ A.create_time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteFilepath" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM BSC_FILEPATH_T  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneFilepath" parameterType="java.util.Map" resultMap="filepathResultMap">
+		<![CDATA[ SELECT A.* FROM BSC_FILEPATH_T A  ]]>
+		<include refid="filepathWhereCondition" />
+  	</select>
+    
+  	<select id="findAllFilepath" parameterType="java.util.Map" resultMap="filepathResultMap" >
+		<![CDATA[ SELECT A.* FROM BSC_FILEPATH_T A ]]>
+		<include refid="filepathWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapFilepath" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM BSC_FILEPATH_T A ]]>
+		<include refid="filepathWhereCondition" />
+	</select>
+  
+  	<select id="findFilepathTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM BSC_FILEPATH_T A ]]>
+		<include refid="filepathWhereCondition" />
+  	</select>
+  
+  	<select id="queryFilepathForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM BSC_FILEPATH_T A ]]>
+		<include refid="filepathWhereCondition" />
+  	</select>
+</mapper>

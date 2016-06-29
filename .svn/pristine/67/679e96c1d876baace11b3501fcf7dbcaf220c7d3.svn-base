@@ -1,0 +1,307 @@
+package com.taikang.tkcoww.banner.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Map;
+import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Controller;
+
+import com.taikang.udp.common.constant.Globals;
+import com.taikang.udp.common.constant.UploadVertor;
+import com.taikang.udp.common.util.CommUtil;
+import com.taikang.udp.common.util.FileHelper;
+import com.taikang.udp.common.util.ProperHelper;
+import com.taikang.udp.common.util.WebUtil;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.tkcoww.banner.action.IBannerAction;
+
+import java.util.HashMap;
+
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+import com.taikang.udp.framework.common.util.TKDateTimeUtils;
+import com.taikang.udp.framework.common.util.TKStringUtils;
+
+import javax.annotation.Resource;
+
+import com.taikang.udp.framework.core.web.BaseController;
+import com.taikang.udp.security.service.SecurityUserHolder;
+import com.taikang.udp.sys.util.CommonUtil;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.util.Arrays;
+
+
+/**
+  * BannerController
+  */
+@Controller("bannerController")
+@RequestMapping(value="/banner")
+public class BannerController  extends BaseController  {
+		
+	@Resource(name=IBannerAction.ACTION_ID)
+	private IBannerAction bannerAction;
+		
+	/**
+	 * 打开主查询页面
+	 * @return 页面地址
+	 */
+	@RequestMapping("")
+	public String showBannerIndexPage() {
+		return "banner/bannerIndex"; 
+	}
+	
+	/**
+	 * 查询信息列表
+	 * @return 分页列表数据
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public Map<String,Object> getBannerList(HttpServletRequest request,CurrentPage page){
+		Map<String, Object> map = new HashMap<String, Object>();
+		Dto param = getParamAsDto(request);
+		
+		page.setParamObject(param);
+		CurrentPage currentPage = bannerAction.getBannerList(page);
+		
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+		
+		return map;
+	}
+
+	/**
+	 * 打开新增或修改页面
+	 * @return
+	 */
+	@RequestMapping("edit")
+	public String showBannerEditPage(String banImgId,Model model) {
+		
+		if(banImgId!=null && !banImgId.equals(""))
+		{
+			model.addAttribute("banImgId",banImgId );
+		}
+		
+		return "banner/bannerAdd"; 
+	}
+	
+	/**
+	 * 获取一条记录详细信息，用来填充修改界面
+	 * @return
+	 */
+	@RequestMapping("/getOne")
+	@ResponseBody
+	public Dto getBannerById(@RequestParam("banImgId")String banImgId)
+	{
+		Dto param = new BaseDto();
+		param.put("banImgId", banImgId);
+		return bannerAction.findOne(param);
+	}
+	
+	/**
+	 * 保存新增或修改的记录，将其持久化到数据库中
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/save")
+	@ResponseBody
+	private Map<String,String> saveBannerInfo(HttpServletRequest request)
+	{
+		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+		Map<String,String> map=new HashMap<String,String>();
+		
+		Dto user = SecurityUserHolder.getCurrentUser().toDto();
+		Dto param = getParamAsDto(request);
+		
+		String banerpath = (String) (ProperHelper.BANNER != null ? ProperHelper.BANNER
+				: FileHelper.buildFolder(request));// 获取tomcat目录
+		CommUtil.createFolder(banerpath);
+
+
+		String[] extendes = (Globals.DEFAULT_IMAGE_SUFFIX).split("[|]");
+
+		String bannerFilename = null;
+		String saveBannerName = null;
+		Map<String, Object> mapban = null;
+		String realBannerPath = null;
+		if(param.get("banImgId") ==null ||"".equals(param.get("banImgId")))
+		{   
+			
+			// 保存banner到服务器
+			try {
+				MultipartFile fmodBanner = multiRequest.getFile("modBanner");
+				multiRequest.getFileMap().get("modBanner");
+				logger.info("开始上传文件:" + bannerFilename);
+				bannerFilename = fmodBanner.getOriginalFilename();
+				// 到服务器
+				saveBannerName = CommonUtil.generateFileName(FilenameUtils
+						.getExtension(bannerFilename));
+				mapban = WebUtil.saveFileToServer(multiRequest, "modBanner",
+						banerpath, saveBannerName, extendes);
+				realBannerPath = request.getSession().getServletContext()
+						.getRealPath(UploadVertor.FILE_UPLOAD_BANNER);
+				FileUtils.copyInputStreamToFile(fmodBanner.getInputStream(), new File(realBannerPath,
+						saveBannerName));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			String bannerUrl = WebUtil.getURL(request) + ""
+					+ UploadVertor.FILE_UPLOAD_BANNER + "/" + saveBannerName;
+			param.put("banImgUrl", bannerUrl);
+			param.put("banImgRename",bannerFilename);
+			param.put("banImgId", UUID.randomUUID().toString().replace("-", ""));
+			param.put("banId", "1111");
+			param.put("belongId", "2222");
+			
+			param.put("createdTime", TKDateTimeUtils.getTodayTimeStamp());
+			param.put("createdBy", user.getAsString("id"));
+			param.put("modifiedTime", TKDateTimeUtils.getTodayTimeStamp());
+			param.put("modifiedBy", user.getAsString("id"));
+			param.put("version", "1");
+			param.put("delflag", "0");
+			
+			bannerAction.insertObject(param);
+			map.put(MESSAGE_INFO, "新增成功！");
+		}
+		else
+		{
+		    Dto bannerDto = new BaseDto();
+		    bannerDto.put("banImgId",param.get("banImgId"));
+		    Dto banner =bannerAction.findOne(bannerDto);
+			
+			// 保存banner到服务器
+			try {
+				MultipartFile fmodBanner = multiRequest.getFile("modBanner");
+				logger.info("开始上传文件:" + bannerFilename);
+				bannerFilename = fmodBanner.getOriginalFilename();
+				// 保存小图片到服务器
+				saveBannerName = CommonUtil.generateFileName(FilenameUtils
+						.getExtension(bannerFilename));
+				mapban = WebUtil.saveFileToServer(multiRequest, "modBanner",
+						banerpath, saveBannerName, extendes);
+				realBannerPath = request.getSession().getServletContext()
+						.getRealPath(UploadVertor.FILE_UPLOAD_BANNER);
+				FileUtils.copyInputStreamToFile(fmodBanner.getInputStream(), new File(realBannerPath,
+						saveBannerName));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String bannerUrl = WebUtil.getURL(request) + ""
+					+ UploadVertor.FILE_UPLOAD_BANNER + "/" + saveBannerName;
+			
+			param.put("banImgUrl", bannerUrl);
+			param.put("banImgRename",bannerFilename);
+			param.put("modifiedTime", TKDateTimeUtils.getTodayTimeStamp());
+			param.put("modifiedBy", user.getAsString("id"));
+			param.put("version",Integer.parseInt(banner.get("version").toString())+1);
+			bannerAction.updateObject(param);
+			map.put(MESSAGE_INFO, "更新成功！");
+		}
+		map.put(RTN_RESULT, "true");
+		
+		return map;
+	}
+	/**
+	 * 保存新增或修改的记录，将其持久化到数据库中
+	 * @return
+	 */
+	@RequestMapping("/saveBannerImg")
+	@ResponseBody
+	private Map<String,String> saveBannerImg(HttpServletRequest request)
+	{
+		Map<String,String> map=new HashMap<String,String>();
+		
+		Dto param = getParamAsDto(request);
+		if(param.get("rowId") ==null ||"".equals(param.get("rowId")))
+		{
+			
+			String banImgNum = request.getParameter("banImgNum");
+			
+			String banImgId = UUID.randomUUID().toString().replace("-", "");
+			String banId = UUID.randomUUID().toString().replace("-", "");
+			param.put("banImgId", banImgId);
+			param.put("banId", banId);
+			
+			//必要的默认值
+			param.put("banImgName", "默认原图片名");
+			param.put("banImgNum", banImgNum);
+			param.put("banImgRename", "默认重命名图片名");
+			param.put("belongId", "默认belongId");
+			param.put("banImgUrl", "默认modImgUrl");
+			
+			//创建时间
+			param.put("createdTime", new Timestamp(System.currentTimeMillis()));
+			
+			bannerAction.insertObject(param);
+			
+			map.put("banId", banId);
+			map.put("banImgId", banImgId);
+			map.put("sId", banImgId);
+			
+			map.put(MESSAGE_INFO, "新增成功！");
+		}
+		else
+		{
+			bannerAction.updateObject(param);
+			map.put(MESSAGE_INFO, "更新成功！");
+		}
+		map.put(RTN_RESULT, "true");
+		
+		return map;
+	}
+	
+	/**
+	 * banner图替换   图片上传
+	 * @return
+	 */
+	@RequestMapping("/uploadBySpringGrpBanner")
+	public String uploadBySpringGrpModuleDes(HttpServletRequest request){
+		
+		Map<String, String> map = new HashMap<String, String>();
+		String banImgId = request.getParameter("banImgId");
+		try {
+			String pictureUrl = bannerAction.uploadBySpringGrpBanner(request);
+		} catch (Exception e) {
+		}
+		
+		return "moduleDes/moduleDesAdd";
+	}
+	/**
+	*删除一条或多条记录
+	*/
+	@RequestMapping(value="/del")
+	@ResponseBody
+	public Map<String, String> deleteBanner(@RequestParam("banImgId") String banImgId) {
+		Map<String, String> map = new HashMap<String, String>();
+		Dto user = SecurityUserHolder.getCurrentUser().toDto();
+		Dto param = new BaseDto();
+		param.put("banImgId", banImgId);
+		param.put("modifiedTime", TKDateTimeUtils.getTodayTimeStamp());
+		param.put("modifiedBy", user.getAsString("id"));
+		param.put("delflag", "1");
+		bannerAction.updateObject(param);
+		
+		map.put(RTN_RESULT, "true");
+		map.put(MESSAGE_INFO, "操作成功！");
+		
+		return map;
+	}
+}
+

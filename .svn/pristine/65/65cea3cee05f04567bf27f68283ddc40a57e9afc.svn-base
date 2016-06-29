@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Navigation">
+	<resultMap id="navigationResultMap" type="com.taikang.udp.view.model.NavigationBO">
+		<result property="id" column="id"/>
+		<result property="addtime" column="addTime"/>
+		<result property="modifytime" column="modifytime"/>
+		<result property="modifier" column="modifier"/>
+		<result property="deletestatus" column="deleteStatus"/>
+		<result property="display" column="display"/>
+		<result property="location" column="location"/>
+		<result property="newWin" column="new_win"/>
+		<result property="sequence" column="sequence"/>
+		<result property="title" column="title"/>
+		<result property="type" column="type"/>
+		<result property="typeId" column="type_id"/>
+		<result property="url" column="url"/>
+		<result property="originalUrl" column="original_url"/>
+  	</resultMap>
+  
+  	<sql id="navigationWhereCondition">
+		<where>
+	  	<if test=" id != null ">
+	  		<![CDATA[ AND A.id = ${id} ]]>
+	  	</if>
+	  	<if test=" addtime != null">
+	    	<![CDATA[ AND A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifytime != null ">
+	    	<![CDATA[ AND A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modifier != null and modifier != '' and modifier != 'null' ">
+			<![CDATA[ AND A.modifier = #{modifier} ]]>
+	  	</if>
+	  	<if test=" deletestatus != null">
+			<![CDATA[ AND A.deleteStatus = #{deletestatus} ]]>
+	  	</if>
+	  	<if test=" display != null ">
+			<![CDATA[ AND A.display = #{display} ]]>
+	  	</if>
+	  	<if test=" newWin != null ">
+			<![CDATA[ AND A.new_win = #{newWin} ]]>
+	  	</if>
+	  	<if test=" location != null ">
+	  		<![CDATA[ AND A.location = ${location} ]]>
+	  	</if>
+	  	<if test=" new_win != null ">
+	  		<![CDATA[ AND A.new_win = ${new_win} ]]>
+	  	</if>
+	  	<if test=" sequence != null ">
+	  		<![CDATA[ AND A.sequence = ${sequence} ]]>
+	  	</if>
+	  	
+	  	<if test=" title != null and title != '' and title != 'null' ">
+			<![CDATA[ AND A.title = #{title} ]]>
+	  	</if>
+	  	<if test=" type != null and type != '' and type != 'null' ">
+			<![CDATA[ AND A.type = #{type} ]]>
+	  	</if>
+	  	<if test=" type_id != null ">
+	  		<![CDATA[ AND A.type_id = ${type_id} ]]>
+	  	</if>
+	  	<if test=" url != null and url != '' and url != 'null' ">
+			<![CDATA[ AND A.url = #{url} ]]>
+	  	</if>
+	  	<if test=" original_url != null and original_url != '' and original_url != 'null' ">
+			<![CDATA[ AND A.original_url = #{original_url} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addNavigation"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO NAVIGATION
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null ">
+				<![CDATA[ id , ]]>
+	  		</if>
+	  		<if test=" addtime  != null ">
+				<![CDATA[ addTime , ]]>
+	  		</if>
+	  		<if test=" modifytime  != null">
+				<![CDATA[ modifytime , ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+				<![CDATA[ modifier , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null">
+				<![CDATA[ deleteStatus , ]]>
+	  		</if>
+	  		<if test=" display  != null ">
+				<![CDATA[ display , ]]>
+	  		</if>
+	  		<if test=" location  != null ">
+				<![CDATA[ location , ]]>
+	  		</if>
+	  		<if test=" new_win  != null ">
+				<![CDATA[ new_win , ]]>
+	  		</if>
+	  		<if test=" sequence  != null ">
+				<![CDATA[ sequence , ]]>
+	  		</if>
+	  		
+	  		<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+				<![CDATA[ title , ]]>
+	  		</if>
+	  		<if test=" type  != null and  type  != ''  and  type  != 'null' ">
+				<![CDATA[ type , ]]>
+	  		</if>
+	  		<if test=" type_id  != null ">
+				<![CDATA[ type_id , ]]>
+	  		</if>
+	  		<if test=" url  != null and  url  != ''  and  url  != 'null' ">
+				<![CDATA[ url , ]]>
+	  		</if>
+	  		<if test=" original_url  != null and  original_url  != ''  and  original_url  != 'null' ">
+				<![CDATA[ original_url , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" id  != null">
+	    		<![CDATA[ ${id} , ]]>
+	  		</if>
+	  		<if test=" addtime != null ">
+	    		<![CDATA[ DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifytime != null ">
+	    		<![CDATA[ DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  			<![CDATA[ #{modifier} , ]]>
+	  		</if>
+	  		<if test=" deletestatus  != null ">
+	  			<![CDATA[ #{deletestatus} , ]]>
+	  		</if>
+	  		<if test=" display  != null ">
+	  			<![CDATA[ #{display} , ]]>
+	  		</if>
+	  		<if test=" location  != null">
+	    		<![CDATA[ ${location} , ]]>
+	  		</if>
+	  		<if test=" new_win  != null">
+	    		<![CDATA[ ${new_win} , ]]>
+	  		</if>
+	  		<if test=" sequence  != null">
+	    		<![CDATA[ ${sequence} , ]]>
+	  		</if>
+	  		
+	  		<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+	  			<![CDATA[ #{title} , ]]>
+	  		</if>
+	  		<if test=" type  != null and  type  != ''  and  type  != 'null' ">
+	  			<![CDATA[ #{type} , ]]>
+	  		</if>
+	  		<if test=" type_id  != null">
+	    		<![CDATA[ ${type_id} , ]]>
+	  		</if>
+	  		<if test=" url  != null and  url  != ''  and  url  != 'null' ">
+	  			<![CDATA[ #{url} , ]]>
+	  		</if>
+	  		<if test=" original_url  != null and  original_url  != ''  and  original_url  != 'null' ">
+	  			<![CDATA[ #{original_url} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateNavigation" parameterType="java.util.Map">
+		<![CDATA[ UPDATE NAVIGATION A ]]>
+		<set>
+	  	<if test=" addtime != null ">
+	    	<![CDATA[ A.addTime = DATE_FORMAT(#{addtime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifytime != null ">
+	    	<![CDATA[ A.modifytime = DATE_FORMAT(#{modifytime},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modifier  != null and  modifier  != ''  and  modifier  != 'null' ">
+	  		<![CDATA[ A.modifier = #{modifier}, ]]>
+	  	</if>
+	  	<if test=" deletestatus  != null">
+	  		<![CDATA[ A.deleteStatus = #{deletestatus}, ]]>
+	  	</if>
+	  	<if test=" display  != null ">
+	  		<![CDATA[ A.display = #{display}, ]]>
+	  	</if>
+		<if test=" location  != null ">
+  			<![CDATA[ A.location = ${location} , ]]>
+		</if>
+		<if test=" new_win  != null ">
+  			<![CDATA[ A.new_win = ${new_win} , ]]>
+		</if>
+		<if test=" sequence  != null ">
+  			<![CDATA[ A.sequence = ${sequence} , ]]>
+		</if>
+	  	
+	  	<if test=" title  != null and  title  != ''  and  title  != 'null' ">
+	  		<![CDATA[ A.title = #{title}, ]]>
+	  	</if>
+	  	<if test=" type  != null and  type  != ''  and  type  != 'null' ">
+	  		<![CDATA[ A.type = #{type}, ]]>
+	  	</if>
+		<if test=" type_id  != null ">
+  			<![CDATA[ A.type_id = ${type_id} , ]]>
+		</if>
+	  	<if test=" url  != null and  url  != ''  and  url  != 'null' ">
+	  		<![CDATA[ A.url = #{url}, ]]>
+	  	</if>
+	  	<if test=" original_url  != null and  original_url  != ''  and  original_url  != 'null' ">
+	  		<![CDATA[ A.original_url = #{original_url}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.ID = #{id}]]>
+  	</update>
+  
+  	<delete id="deleteNavigation" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM NAVIGATION  where ID = #{id} ]]>
+	</delete>
+  
+	<select id="findOneNavigation" parameterType="java.util.Map" resultMap="navigationResultMap">
+		<![CDATA[ SELECT A.* FROM NAVIGATION A  ]]>
+		<include refid="navigationWhereCondition" />
+  	</select>
+    
+  	<select id="findAllNavigation" parameterType="java.util.Map" resultMap="navigationResultMap" >
+		<![CDATA[ SELECT A.* FROM NAVIGATION A ]]>
+		<include refid="navigationWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapNavigation" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM NAVIGATION A ]]>
+		<include refid="navigationWhereCondition" />
+	</select>
+  
+  	<select id="findNavigationTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM NAVIGATION A ]]>
+		<include refid="navigationWhereCondition" />
+  	</select>
+  
+  	<select id="queryNavigationForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM NAVIGATION A ]]>
+		<include refid="navigationWhereCondition" />
+  	</select>
+</mapper>

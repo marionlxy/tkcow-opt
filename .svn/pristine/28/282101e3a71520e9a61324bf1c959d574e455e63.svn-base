@@ -1,0 +1,135 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="UTF-8"%>
+<%@page import="java.net.URLDecoder"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<%@ include file="/include.jsp"%>
+
+<title></title>
+</head>
+
+<body>
+	<div style="padding: 10px 60px 20px 60px">
+		<form id="dataFormAdd">
+			<%--<div class="fitem">
+	    	<label>投诉编号:</label>
+	        <input name="complain_num" class="easyui-textbox" disabled>
+		</div> --%>
+			<input type="hidden" name="menuId" id="menuId" value='${menuId}'>
+			<input type="hidden" name="modId" id="modId" value='${menuId}'>
+			<input type="hidden" name="menuName" id="menuName"
+				value='${menuName }'>
+			<input type="hidden" name="reqmenuid" id="reqmenuid"
+				value='${reqmenuid }'>
+			<input type="hidden" name="modIsleaf" id="modIsleaf"
+				value='${modIsleaf }'>
+			<input type="hidden" name="modLevel" id="modLevel"
+				value='${modLevel }'>
+			<input type="hidden" name="modName" id="modName"
+				value='${modName }'>
+			<%-- <input type="hidden" name="msg" id="msg"
+				value='${msg }'>	 --%>
+			<div class="fitem">
+				<input name="menuType"  type="radio" id="radio1"  style="width: 2%" value="sub">
+				<lable>下级栏目</lable>
+			</div>
+			<div class="fitem">
+				<input name="menuType"  type="radio" id="radio2"  style="width: 2%"  value="leaf">
+				<lable>叶子栏目</lable>
+			</div>
+			<div class="fitem">
+				<input name="menuType"  type="radio" id="radio3"   style="width: 2%"  value="col">
+				<lable>栏目介绍</lable>
+			</div>
+			<!-- <div class="fitem">
+				<label>栏目介绍:</label>
+					        <input name="complainMsg" class="easyui-textbox" validType="length[0,30]" required="required">
+				<textarea name="complainMsg" style="border: 1px solid #99bbe8;"
+					rows="4" cols="33" required="required"></textarea>
+			</div> -->
+			<!-- 		<div class="fitem"> -->
+			<!-- 	    	<label>投诉状态:</label> -->
+			<!-- 	    	<input class="easyui-combobox" name="complainState" style="width:100px" required="required" panelHeight="auto" -->
+			<%-- 		 	url="${rootPath}/getDictCombox?dictType=complainstage" valueField="dictId" textField="dictName"> --%>
+			<!-- 		</div> -->
+			<%-- 		<div class="fitem">
+				<label>投诉类型:</label> <input class="easyui-combobox"
+					name="complainType" style="width: 100px" required="required"
+					panelHeight="auto" url="${rootPath}/getDictCombox?dictType=type"
+					valueField="dictId" textField="dictName">
+			</div> --%>
+		</form>
+		<div id="dlg-buttons" align="center">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				iconCls="icon-ok" id="save" onclick="saveOrUpdate()"
+				style="width: 90px">确定</a> <a href="javascript:void(0)"
+				class="easyui-linkbutton" iconCls="icon-cancel"
+				onclick="returnParent(1)" style="width: 90px">取消</a>
+
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		jQuery(function() {
+
+			jQuery.ajaxSetup({
+				cache : false
+			});
+			
+			// 	$('#site').combobox({
+			//         url:'${rootPath}/getDictCombox?dictType=kemu1',    
+			//         valueField:'dictId',    
+			//         textField:'dictName',
+			//         panelWidth: 100,
+			//         panelHeight:'auto'
+			//  }); 
+		});
+		var msg=$('#msg').val();
+		if(msg!=null){
+			$.messager.alert('提示',msg);
+		}
+		//保存记录
+		function saveOrUpdate() {
+			var r = $('#dataFormAdd').form('validate');
+			var modId=null;modIsleaf=null;modLevel=null;modName=null;menuName=null;
+			
+			modId=$("#modId").val();modIsleaf='${modIsleaf}';modLevel='${modLevel}';
+			modName='${modName}';menuName='${menuName}';
+			var val = $('input:radio[name="menuType"]:checked').val();
+	        if(val == null) {
+	        	$.messager.alert('提示',"请选中一条！",'error');
+	            return false;
+	        }
+			if (!r) {
+				return false;
+			} else {
+				if(modIsleaf=='1'){
+					$.messager.alert('提示',"已是叶子栏目,无法新增！",'error');
+				}else if(modLevel=='4'){
+					$.messager.alert('提示',"已是叶子栏目,无法新增！",'error');
+				}else if((modLevel=='1'&&val=='col')){
+					$.messager.alert('提示',"请在第二，第三级增加栏目介绍！",'error');
+				}else if((modLevel=='4'&&val=='col')){
+					$.messager.alert('提示',"请在第二，第三级增加栏目介绍！",'error');
+				}else{
+					url = '/module/addSubCol?modId=' + modId
+					/* + '&menuName=' + encodeURI(menuName) */
+					+ "&menuType=" + val
+					+ "&modName=" + encodeURI(modName)
+					+ "&modIsleaf=" + encodeURI(modIsleaf)
+					+ "&modLevel=" + encodeURI(modLevel);
+					window.parent.wrapper.addTab("新增" + menuName+modName,
+					url, '');
+				}
+				
+				
+				};
+			}
+	</script>
+</body>
+</html>

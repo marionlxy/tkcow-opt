@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ModuleContent">
+	<resultMap id="moduleContentResultMap" type="com.taikang.tkcoww.moduleContent.model.ModuleContentBO">
+		<result property="contentId" column="CONTENT_ID"/>
+		<result property="modId" column="MOD_ID"/>
+		<result property="modNumber" column="MOD_NUMBER"/>
+		<result property="contentImg" column="CONTENT_IMG"/>
+		<result property="contentImgBig" column="CONTENT_IMG_BIG"/>
+		<result property="hasBanner" column="HAS_BANNER"/>
+		<result property="bannerId" column="BANNER_ID"/>
+		<result property="content" column="CONTENT"/>
+		<result property="isDisplay" column="IS_DISPLAY"/>
+		<result property="weight" column="WEIGHT"/>
+		<result property="createdTime" column="CREATED_TIME"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="modifiedTime" column="MODIFIED_TIME"/>
+		<result property="modifiedBy" column="MODIFIED_BY"/>
+		<result property="version" column="VERSION"/>
+		<result property="delflag" column="DELFLAG"/>
+  	</resultMap>
+  
+  	<sql id="moduleContentWhereCondition">
+		<where>
+	  	<if test=" content_id != null and content_id != '' and content_id != 'null' ">
+			<![CDATA[ AND A.CONTENT_ID = #{content_id} ]]>
+	  	</if>
+	  	<if test=" mod_id != null and mod_id != '' and mod_id != 'null' ">
+			<![CDATA[ AND A.MOD_ID = #{mod_id} ]]>
+	  	</if>
+	  	<if test=" mod_number != null ">
+	  		<![CDATA[ AND A.MOD_NUMBER = ${mod_number} ]]>
+	  	</if>
+	  	<if test=" content_img != null and content_img != '' and content_img != 'null' ">
+			<![CDATA[ AND A.CONTENT_IMG = #{content_img} ]]>
+	  	</if>
+	  	<if test=" content_img_big != null and content_img_big != '' and content_img_big != 'null' ">
+			<![CDATA[ AND A.CONTENT_IMG_BIG = #{content_img_big} ]]>
+	  	</if>
+	  	<if test=" has_banner != null and has_banner != '' and has_banner != 'null' ">
+			<![CDATA[ AND A.HAS_BANNER = #{has_banner} ]]>
+	  	</if>
+	  	<if test=" banner_id != null and banner_id != '' and banner_id != 'null' ">
+			<![CDATA[ AND A.BANNER_ID = #{banner_id} ]]>
+	  	</if>
+	  	<if test=" content != null and content != '' and content != 'null' ">
+			<![CDATA[ AND A.CONTENT = #{content} ]]>
+	  	</if>
+	  	<if test=" is_display != null and is_display != '' and is_display != 'null' ">
+			<![CDATA[ AND A.IS_DISPLAY = #{is_display} ]]>
+	  	</if>
+	  	<if test=" weight != null ">
+	  		<![CDATA[ AND A.WEIGHT = ${weight} ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" created_by != null and created_by != '' and created_by != 'null' ">
+			<![CDATA[ AND A.CREATED_BY = #{created_by} ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ AND A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modified_by != null and modified_by != '' and modified_by != 'null' ">
+			<![CDATA[ AND A.MODIFIED_BY = #{modified_by} ]]>
+	  	</if>
+	  	<if test=" version != null ">
+	  		<![CDATA[ AND A.VERSION = ${version} ]]>
+	  	</if>
+	  	<if test=" delflag != null and delflag != '' and delflag != 'null' ">
+			<![CDATA[ AND A.DELFLAG = #{delflag} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addModuleContent"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ZJOW_MODULE_CONTENT
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" content_id  != null and  content_id  != ''  and  content_id  != 'null' ">
+				<![CDATA[ CONTENT_ID , ]]>
+	  		</if>
+	  		<if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+				<![CDATA[ MOD_ID , ]]>
+	  		</if>
+	  		<if test=" mod_number  != null ">
+				<![CDATA[ MOD_NUMBER , ]]>
+	  		</if>
+	  		<if test=" content_img  != null and  content_img  != ''  and  content_img  != 'null' ">
+				<![CDATA[ CONTENT_IMG , ]]>
+	  		</if>
+	  		<if test=" content_img_big  != null and  content_img_big  != ''  and  content_img_big  != 'null' ">
+				<![CDATA[ CONTENT_IMG_BIG , ]]>
+	  		</if>
+	  		<if test=" has_banner  != null and  has_banner  != ''  and  has_banner  != 'null' ">
+				<![CDATA[ HAS_BANNER , ]]>
+	  		</if>
+	  		<if test=" banner_id  != null and  banner_id  != ''  and  banner_id  != 'null' ">
+				<![CDATA[ BANNER_ID , ]]>
+	  		</if>
+	  		<if test=" content  != null and  content  != ''  and  content  != 'null' ">
+				<![CDATA[ CONTENT , ]]>
+	  		</if>
+	  		<if test=" is_display  != null and  is_display  != ''  and  is_display  != 'null' ">
+				<![CDATA[ IS_DISPLAY , ]]>
+	  		</if>
+	  		<if test=" weight  != null ">
+				<![CDATA[ WEIGHT , ]]>
+	  		</if>
+	  		<if test=" created_time  != null and  created_time  != ''  and  created_time  != 'null' ">
+				<![CDATA[ CREATED_TIME , ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+				<![CDATA[ CREATED_BY , ]]>
+	  		</if>
+	  		<if test=" modified_time  != null and  modified_time  != ''  and  modified_time  != 'null' ">
+				<![CDATA[ MODIFIED_TIME , ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+				<![CDATA[ MODIFIED_BY , ]]>
+	  		</if>
+	  		<if test=" version  != null ">
+				<![CDATA[ VERSION , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+				<![CDATA[ DELFLAG , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" content_id  != null and  content_id  != ''  and  content_id  != 'null' ">
+	  			<![CDATA[ #{content_id} , ]]>
+	  		</if>
+	  		<if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+	  			<![CDATA[ #{mod_id} , ]]>
+	  		</if>
+	  		<if test=" mod_number  != null">
+	    		<![CDATA[ ${mod_number} , ]]>
+	  		</if>
+	  		<if test=" content_img  != null and  content_img  != ''  and  content_img  != 'null' ">
+	  			<![CDATA[ #{content_img} , ]]>
+	  		</if>
+	  		<if test=" content_img_big  != null and  content_img_big  != ''  and  content_img_big  != 'null' ">
+	  			<![CDATA[ #{content_img_big} , ]]>
+	  		</if>
+	  		<if test=" has_banner  != null and  has_banner  != ''  and  has_banner  != 'null' ">
+	  			<![CDATA[ #{has_banner} , ]]>
+	  		</if>
+	  		<if test=" banner_id  != null and  banner_id  != ''  and  banner_id  != 'null' ">
+	  			<![CDATA[ #{banner_id} , ]]>
+	  		</if>
+	  		<if test=" content  != null and  content  != ''  and  content  != 'null' ">
+	  			<![CDATA[ #{content} , ]]>
+	  		</if>
+	  		<if test=" is_display  != null and  is_display  != ''  and  is_display  != 'null' ">
+	  			<![CDATA[ #{is_display} , ]]>
+	  		</if>
+	  		<if test=" weight  != null">
+	    		<![CDATA[ ${weight} , ]]>
+	  		</if>
+	  		<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  			<![CDATA[ #{created_by} , ]]>
+	  		</if>
+	  		<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  			<![CDATA[ #{modified_by} , ]]>
+	  		</if>
+	  		<if test=" version  != null">
+	    		<![CDATA[ ${version} , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  			<![CDATA[ #{delflag} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateModuleContent" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ZJOW_MODULE_CONTENT A ]]>
+		<set>
+	  	<!-- <if test=" mod_id  != null and  mod_id  != ''  and  mod_id  != 'null' ">
+	  		<![CDATA[ A.MOD_ID = #{mod_id}, ]]>
+	  	</if> -->
+		<if test=" mod_number  != null ">
+  			<![CDATA[ A.MOD_NUMBER = ${mod_number} , ]]>
+		</if>
+	  	<if test=" content_img  != null and  content_img  != ''  and  content_img  != 'null' ">
+	  		<![CDATA[ A.CONTENT_IMG = #{content_img}, ]]>
+	  	</if>
+	  	<if test=" content_img_big  != null and  content_img_big  != ''  and  content_img_big  != 'null' ">
+	  		<![CDATA[ A.CONTENT_IMG_BIG = #{content_img_big}, ]]>
+	  	</if>
+	  	<if test=" has_banner  != null and  has_banner  != ''  and  has_banner  != 'null' ">
+	  		<![CDATA[ A.HAS_BANNER = #{has_banner}, ]]>
+	  	</if>
+	  	<if test=" banner_id  != null and  banner_id  != ''  and  banner_id  != 'null' ">
+	  		<![CDATA[ A.BANNER_ID = #{banner_id}, ]]>
+	  	</if>
+	  		<![CDATA[ A.CONTENT = #{content}, ]]>
+	  	<if test=" is_display  != null and  is_display  != ''  and  is_display  != 'null' ">
+	  		<![CDATA[ A.IS_DISPLAY = #{is_display}, ]]>
+	  	</if>
+		<if test=" weight  != null ">
+  			<![CDATA[ A.WEIGHT = ${weight} , ]]>
+		</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  		<![CDATA[ A.CREATED_BY = #{created_by}, ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  		<![CDATA[ A.MODIFIED_BY = #{modified_by}, ]]>
+	  	</if>
+		<if test=" version  != null ">
+  			<![CDATA[ A.VERSION = ${version} , ]]>
+		</if>
+	  	<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  		<![CDATA[ A.DELFLAG = #{delflag}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.MOD_ID = #{mod_id}]]>
+  	</update>
+  
+  	<delete id="deleteModuleContent" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ZJOW_MODULE_CONTENT A where A.CONTENT_ID = #{content_id} ]]>
+	</delete>
+  
+	<select id="findOneModuleContent" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_CONTENT A  ]]>
+		<include refid="moduleContentWhereCondition" />
+  	</select>
+  	
+  	<select id="findNewOneModuleContent" parameterType="java.util.Map" resultType="java.util.Map">
+		 SELECT A.* FROM ZJOW_MODULE_CONTENT A WHERE 1=1 
+		<if test=" mod_id != null and mod_id != '' and mod_id != 'null' ">
+			<![CDATA[ AND A.MOD_ID = #{mod_id} ]]>
+	  	</if>
+  	</select>
+    
+  	<select id="findAllModuleContent" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_CONTENT A ]]>
+		<include refid="moduleContentWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapModuleContent" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_CONTENT A ]]>
+		<include refid="moduleContentWhereCondition" />
+	</select>
+  
+  	<select id="findModuleContentTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ZJOW_MODULE_CONTENT A ]]>
+		<include refid="moduleContentWhereCondition" />
+  	</select>
+  
+  	<select id="queryModuleContentForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ZJOW_MODULE_CONTENT A ]]>
+		<include refid="moduleContentWhereCondition" />
+  	</select>
+</mapper>

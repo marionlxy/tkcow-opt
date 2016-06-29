@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Banner">
+	<resultMap id="bannerResultMap" type="com.taikang.tkcoww.banner.model.BannerBO">
+		<result property="banImgId" column="BAN_IMG_ID"/>
+		<result property="banId" column="BAN_ID"/>
+		<result property="belongId" column="BELONG_ID"/>
+		<result property="banType" column="BAN_TYPE"/>
+		<result property="banImgName" column="BAN_IMG_NAME"/>
+		<result property="banImgUrl" column="BAN_IMG_URL"/>
+		<result property="banImgDes" column="BAN_IMG_DES"/>
+		<result property="banImgOutside" column="BAN_IMG_OUTSIDE"/>
+		<result property="banImgNum" column="BAN_IMG_NUM"/>
+		<result property="banImgRename" column="BAN_IMG_RENAME"/>
+		<result property="createdTime" column="CREATED_TIME"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="modifiedTime" column="MODIFIED_TIME"/>
+		<result property="modifiedBy" column="MODIFIED_BY"/>
+		<result property="version" column="VERSION"/>
+		<result property="delflag" column="DELFLAG"/>
+  	</resultMap>
+  
+  	<sql id="bannerWhereCondition">
+		<where>
+	  	<if test=" ban_img_id != null and ban_img_id != '' and ban_img_id != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_ID = #{ban_img_id} ]]>
+	  	</if>
+	  	<if test=" ban_id != null and ban_id != '' and ban_id != 'null' ">
+			<![CDATA[ AND A.BAN_ID = #{ban_id} ]]>
+	  	</if>
+	  	<if test=" belong_id != null and belong_id != '' and belong_id != 'null' ">
+			<![CDATA[ AND A.BELONG_ID = #{belong_id} ]]>
+	  	</if>
+	  	<if test=" ban_type != null and ban_type != '' and ban_type != 'null' ">
+			<![CDATA[ AND A.BAN_TYPE = #{ban_type} ]]>
+	  	</if>
+	  	<if test=" ban_img_name != null and ban_img_name != '' and ban_img_name != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_NAME = #{ban_img_name} ]]>
+	  	</if>
+	  	<if test=" ban_img_url != null and ban_img_url != '' and ban_img_url != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_URL = #{ban_img_url} ]]>
+	  	</if>
+	  	<if test=" ban_img_des != null and ban_img_des != '' and ban_img_des != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_DES = #{ban_img_des} ]]>
+	  	</if>
+	  	<if test=" ban_img_outside != null and ban_img_outside != '' and ban_img_outside != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_OUTSIDE = #{ban_img_outside} ]]>
+	  	</if>
+	  	<if test=" ban_img_num != null ">
+	  		<![CDATA[ AND A.BAN_IMG_NUM = ${ban_img_num} ]]>
+	  	</if>
+	  	<if test=" ban_img_rename != null and ban_img_rename != '' and ban_img_rename != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_RENAME = #{ban_img_rename} ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" created_by != null and created_by != '' and created_by != 'null' ">
+			<![CDATA[ AND A.CREATED_BY = #{created_by} ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ AND A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modified_by != null and modified_by != '' and modified_by != 'null' ">
+			<![CDATA[ AND A.MODIFIED_BY = #{modified_by} ]]>
+	  	</if>
+	  	<if test=" version != null ">
+	  		<![CDATA[ AND A.VERSION = ${version} ]]>
+	  	</if>
+	  	<if test=" delflag != null and delflag != '' and delflag != 'null' ">
+			<![CDATA[ AND A.DELFLAG = #{delflag} ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addBanner"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ZJOW_BANNER
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" ban_img_id  != null and  ban_img_id  != ''  and  ban_img_id  != 'null' ">
+				<![CDATA[ BAN_IMG_ID , ]]>
+	  		</if>
+	  		<if test=" ban_id  != null and  ban_id  != ''  and  ban_id  != 'null' ">
+				<![CDATA[ BAN_ID , ]]>
+	  		</if>
+	  		<if test=" belong_id  != null and  belong_id  != ''  and  belong_id  != 'null' ">
+				<![CDATA[ BELONG_ID , ]]>
+	  		</if>
+	  		<if test=" ban_type  != null and  ban_type  != ''  and  ban_type  != 'null' ">
+				<![CDATA[ BAN_TYPE , ]]>
+	  		</if>
+	  		<if test=" ban_img_name  != null and  ban_img_name  != ''  and  ban_img_name  != 'null' ">
+				<![CDATA[ BAN_IMG_NAME , ]]>
+	  		</if>
+	  		<if test=" ban_img_url  != null and  ban_img_url  != ''  and  ban_img_url  != 'null' ">
+				<![CDATA[ BAN_IMG_URL , ]]>
+	  		</if>
+	  		<if test=" ban_img_des  != null and  ban_img_des  != ''  and  ban_img_des  != 'null' ">
+				<![CDATA[ BAN_IMG_DES , ]]>
+	  		</if>
+	  		<if test=" ban_img_outside  != null and  ban_img_outside  != ''  and  ban_img_outside  != 'null' ">
+				<![CDATA[ BAN_IMG_OUTSIDE , ]]>
+	  		</if>
+	  		<if test=" ban_img_num  != null ">
+				<![CDATA[ BAN_IMG_NUM , ]]>
+	  		</if>
+	  		<if test=" ban_img_rename  != null and  ban_img_rename  != ''  and  ban_img_rename  != 'null' ">
+				<![CDATA[ BAN_IMG_RENAME , ]]>
+	  		</if>
+	  		<if test=" created_time  != null and  created_time  != ''  and  created_time  != 'null' ">
+				<![CDATA[ CREATED_TIME , ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+				<![CDATA[ CREATED_BY , ]]>
+	  		</if>
+	  		<if test=" modified_time  != null and  modified_time  != ''  and  modified_time  != 'null' ">
+				<![CDATA[ MODIFIED_TIME , ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+				<![CDATA[ MODIFIED_BY , ]]>
+	  		</if>
+	  		<if test=" version  != null ">
+				<![CDATA[ VERSION , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+				<![CDATA[ DELFLAG , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" ban_img_id  != null and  ban_img_id  != ''  and  ban_img_id  != 'null' ">
+	  			<![CDATA[ #{ban_img_id} , ]]>
+	  		</if>
+	  		<if test=" ban_id  != null and  ban_id  != ''  and  ban_id  != 'null' ">
+	  			<![CDATA[ #{ban_id} , ]]>
+	  		</if>
+	  		<if test=" belong_id  != null and  belong_id  != ''  and  belong_id  != 'null' ">
+	  			<![CDATA[ #{belong_id} , ]]>
+	  		</if>
+	  		<if test=" ban_type  != null and  ban_type  != ''  and  ban_type  != 'null' ">
+	  			<![CDATA[ #{ban_type} , ]]>
+	  		</if>
+	  		<if test=" ban_img_name  != null and  ban_img_name  != ''  and  ban_img_name  != 'null' ">
+	  			<![CDATA[ #{ban_img_name} , ]]>
+	  		</if>
+	  		<if test=" ban_img_url  != null and  ban_img_url  != ''  and  ban_img_url  != 'null' ">
+	  			<![CDATA[ #{ban_img_url} , ]]>
+	  		</if>
+	  		<if test=" ban_img_des  != null and  ban_img_des  != ''  and  ban_img_des  != 'null' ">
+	  			<![CDATA[ #{ban_img_des} , ]]>
+	  		</if>
+	  		<if test=" ban_img_outside  != null and  ban_img_outside  != ''  and  ban_img_outside  != 'null' ">
+	  			<![CDATA[ #{ban_img_outside} , ]]>
+	  		</if>
+	  		<if test=" ban_img_num  != null">
+	    		<![CDATA[ ${ban_img_num} , ]]>
+	  		</if>
+	  		<if test=" ban_img_rename  != null and  ban_img_rename  != ''  and  ban_img_rename  != 'null' ">
+	  			<![CDATA[ #{ban_img_rename} , ]]>
+	  		</if>
+	  		<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  			<![CDATA[ #{created_by} , ]]>
+	  		</if>
+	  		<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  			<![CDATA[ #{modified_by} , ]]>
+	  		</if>
+	  		<if test=" version  != null">
+	    		<![CDATA[ ${version} , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  			<![CDATA[ #{delflag} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateBanner" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ZJOW_BANNER A ]]>
+		<set>
+	  	<if test=" ban_id  != null and  ban_id  != ''  and  ban_id  != 'null' ">
+	  		<![CDATA[ A.BAN_ID = #{ban_id}, ]]>
+	  	</if>
+	  	<if test=" belong_id  != null and  belong_id  != ''  and  belong_id  != 'null' ">
+	  		<![CDATA[ A.BELONG_ID = #{belong_id}, ]]>
+	  	</if>
+	  	<if test=" ban_type  != null and  ban_type  != ''  and  ban_type  != 'null' ">
+	  		<![CDATA[ A.BAN_TYPE = #{ban_type}, ]]>
+	  	</if>
+	  	<if test=" ban_img_name  != null and  ban_img_name  != ''  and  ban_img_name  != 'null' ">
+	  		<![CDATA[ A.BAN_IMG_NAME = #{ban_img_name}, ]]>
+	  	</if>
+	  	<if test=" ban_img_url  != null and  ban_img_url  != ''  and  ban_img_url  != 'null' ">
+	  		<![CDATA[ A.BAN_IMG_URL = #{ban_img_url}, ]]>
+	  	</if>
+	  	<if test=" ban_img_des  != null and  ban_img_des  != ''  and  ban_img_des  != 'null' ">
+	  		<![CDATA[ A.BAN_IMG_DES = #{ban_img_des}, ]]>
+	  	</if>
+	  	<if test=" ban_img_outside  != null and  ban_img_outside  != ''  and  ban_img_outside  != 'null' ">
+	  		<![CDATA[ A.BAN_IMG_OUTSIDE = #{ban_img_outside}, ]]>
+	  	</if>
+		<if test=" ban_img_num  != null ">
+  			<![CDATA[ A.BAN_IMG_NUM = ${ban_img_num} , ]]>
+		</if>
+	  	<if test=" ban_img_rename  != null and  ban_img_rename  != ''  and  ban_img_rename  != 'null' ">
+	  		<![CDATA[ A.BAN_IMG_RENAME = #{ban_img_rename}, ]]>
+	  	</if>
+	  	<if test=" created_time != null and created_time != '' and created_time  != 'null' ">
+	    	<![CDATA[ A.CREATED_TIME = DATE_FORMAT(#{created_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  		<![CDATA[ A.CREATED_BY = #{created_by}, ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  		<![CDATA[ A.MODIFIED_BY = #{modified_by}, ]]>
+	  	</if>
+		<if test=" version  != null ">
+  			<![CDATA[ A.VERSION = ${version} , ]]>
+		</if>
+	  	<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  		<![CDATA[ A.DELFLAG = #{delflag}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.BAN_IMG_ID = #{ban_img_id}]]>
+  	</update>
+  
+  	<delete id="deleteBanner" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ZJOW_BANNER A where A.BAN_IMG_ID = #{ban_img_id} ]]>
+	</delete>
+  
+	<select id="findOneBanner" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM ZJOW_BANNER A  ]]>
+		<include refid="bannerWhereCondition" />
+  	</select>
+    
+  	<select id="findAllBanner" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM ZJOW_BANNER A ]]>
+		<include refid="bannerWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapBanner" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ZJOW_BANNER A ]]>
+		<include refid="bannerWhereCondition" />
+	</select>
+  
+  	<select id="findBannerTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ZJOW_BANNER A ]]>
+		<include refid="bannerWhereCondition" />
+  	</select>
+  
+  	<select id="queryBannerForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ZJOW_BANNER A ]]>
+		<include refid="bannerWhereCondition" />
+  	</select>
+  		<select id="getBannerList" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		 SELECT A.* FROM ZJOW_BANNER A
+		  where 1=1 
+          AND A.DELFLAG = '0' 
+        <if test=" startTime != null and startTime != '' and startTime != 'null' ">
+            <![CDATA[ AND A.CREATED_TIME >= DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+		<if test=" endTime != null and endTime != '' and endTime != 'null' ">
+            <![CDATA[ AND A.CREATED_TIME <= DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+        <if test=" banImgName != null and banImgName != '' and banImgName != 'null' ">
+			<![CDATA[ AND A.BAN_IMG_NAME like concat('%', #{banImgName}, '%') ]]>
+	  	</if>
+         ORDER BY  CREATED_TIME DESC
+  	</select>
+  	
+</mapper>

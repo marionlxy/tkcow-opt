@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user_deal">
+	<resultMap id="userResultMap" type="com.taikang.udp.sys.model.UserBO">
+		<result property="userId" column="User_Id"/>
+		<result property="userCode" column="User_Code"/>
+		<result property="userPwd" column="User_Pwd"/>
+		<result property="userName" column="User_Name"/>
+		<result property="errNum" column="Err_Num"/>
+		<result property="pwdLog" column="Pwd_Log"/>
+		<result property="modifyTime" column="Modify_Time"/>
+		<result property="startValidate" column="Start_Validate"/>
+		<result property="endValidate" column="End_Validate"/>
+		<result property="userNature" column="User_Nature"/>
+		<result property="userDept" column="User_Dept"/>
+		<result property="userCom" column="User_Com"/>
+		<result property="workStatus" column="Work_Status"/>
+		<result property="userStatus" column="User_Status"/>
+		<result property="loginTime" column="Login_Time"/>
+		<result property="isLogin" column="Is_Login"/>
+		<result property="clientIp" column="Client_Ip"/>
+		<result property="comCoy" column="Com_Coy"/>
+		<result property="comBranch" column="Com_Branch"/>
+		<result property="comAgenter" column="Com_Agenter"/>
+		<result property="backup1" column="Backup1"/>
+		<result property="backup2" column="Backup2"/>
+		<result property="creator" column="Creator"/>
+		<result property="createTime" column="Create_Time"/>
+		<result property="lastModby" column="Last_Modby"/>
+		<result property="lastModtime" column="Last_Modtime"/>
+  	</resultMap>
+  	<select id="queryByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT A.* FROM BSC_USER_T A
+		<where>
+		  	<if test=" user_code != null and user_code != '' and user_code != 'null' ">
+				<![CDATA[ AND A.USER_CODE = #{user_code} ]]>
+		  	</if>
+		  	<if test=" user_name != null and user_name != '' and user_name != 'null' ">
+				<![CDATA[ AND A.USER_NAME like concat('%',#{user_name},'%')  ]]>
+		  	</if>
+	  	</where>
+	  	<if test=" sort != null and sort != '' and sort != 'null' and order != null and order != '' and order != 'null' ">
+	  		order by ${sort} ${order}  
+	  	</if>
+  	</select>
+</mapper>

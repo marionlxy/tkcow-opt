@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+	http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<!-- spring mvc -->
+	<!-- view resolver 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:viewClass="org.springframework.web.servlet.view.JstlView" 
+		p:prefix="/WEB-INF/view/"
+		p:suffix=".jsp" />
+	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+	<context:component-scan base-package="com.taikang.**.controller,com.taikang.udp.bps.web.controller" use-default-filters="false"><!-- base-package 如果多个，用“,”分隔 -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+	
+	<!-- 默认的注解映射的支持，org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -->
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<!-- 方法直接返回字符串时，中文字符乱码的情况解决：
+					因为方法定义直接返回字符串时(Html或Json内容)，
+					调用的是StringHttpMessageConverter，
+					而此Converter默认编码是ISO-85591，需要重新设为UTF-8。
+			 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 将Jackson2HttpMessageConverter的默认格式化输出为true -->
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="prettyPrint" value="true"/>
+                <property name="objectMapper">  
+                    <bean class="com.taikang.udp.framework.common.json.JsonMapper"></bean>  
+                </property> 
+                <property name="supportedMediaTypes">  
+            		<list>
+            			<!-- 防止后台传到页面的日期转换为长整形 -->
+            			<value>application/json;charset=UTF-8</value>
+                		<value>text/html;charset=UTF-8</value>  
+            		</list>  
+        		</property>  
+            </bean>
+            <!-- 使用XML格式输出数据 -->
+            <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		        <constructor-arg>
+		        	<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+				        <property name="streamDriver">
+				            <bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>
+				        </property>
+				    </bean>
+		        </constructor-arg>
+		        <property name="supportedMediaTypes" value="application/xml"></property>
+			</bean>
+			<bean id="byteArrayHttpMessageConverter" class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="com.taikang.udp.common.aop.IDSWebBindingInitializer" />
+		</property>
+	</bean>
+	
+    <!-- 自动判定Content-Type及相应的View -->
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	    <property name="mediaTypes" >
+	        <map> 
+                <entry key="xml" value="application/xml"/> 
+                <entry key="json" value="application/json"/>
+                <entry key="html" value="text/html" />  
+            </map>
+	    </property>
+	    <property name="defaultContentType" value="application/json" />
+        <property name="ignoreAcceptHeader" value="true"/>
+        <property name="favorPathExtension" value="true"/>
+	</bean>
+	<!-- 页面日期类型绑定转换到java的日期类型 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">  
+		<property name="converters">  
+	    	<list>  
+	    		<bean class="com.taikang.udp.framework.common.util.web.TimestampConverter" />  
+	        	<bean class="com.taikang.udp.framework.common.util.web.SqlDateConverter" />
+	        	<bean class="com.taikang.udp.framework.common.util.web.DateConverter" />  
+	    	</list>   
+		</property>  
+	</bean>	
+	<!-- 定义无Controller的path<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:login.htm"/>
+	
+	<!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
+	<mvc:default-servlet-handler/>
+	<!-- 系统日志跟踪功能 -->
+	<bean id="log4JDBCImpl" class="com.taikang.udp.framework.core.web.log.impl.Log4JDBCImpl" >
+		<property name="rootLogLevel" value="ERROR"/>
+		<property name="customLogLevel">
+           <map>
+              <entry key="com.taikang.udp" value="TRACE" />
+             <!--  <entry key="com.sample" value="INFO" /> -->
+           </map>
+       </property>
+	</bean>
+	<!-- <mvc:interceptors>
+		监控运行时间
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.taikang.udp.sys.util.LogInterceptor" >
+				<property name="logAPI" ref="log4JDBCImpl"/>
+			</bean>
+		</mvc:interceptor>		
+	</mvc:interceptors> -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <!-- 用AOP控制方法时，把DefaultAdvisorAutoProxyCreator的proxyTargetClass属性设为true，与事务AOP一起使用cglib -->
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd -->  
+	<mvc:resources mapping="/static/images/**" location="/static/images/" /> 
+	<mvc:resources mapping="/static/js/**" location="/static/js/"/>  
+	<mvc:resources mapping="/static/css/**" location="/static/css/"/>
+	<mvc:resources mapping="/static/ckeditor/**" location="/ckeditor/"/>
+	<mvc:resources mapping="/static/hightchart/**" location="/hightchart/"/>
+	<!--  生产使用
+	       linux下面需要建立软连接，将图片与应用目录放到项目外面
+	       ln -s /home/jbsadmin/mwp/appImages  /home/jbsadmin/EAP/jboss-eap-6.3/standalone/deployments/mwp.war/static/appImages
+	       ln -s /home/jbsadmin/mwp/upload  /home/jbsadmin/EAP/jboss-eap-6.3/standalone/deployments/mwp.war/static/upload
+	    -->
+	<mvc:resources mapping="/static/zjow/imgcenter/**" location="/static/zjow/imgcenter/"/>
+</beans>

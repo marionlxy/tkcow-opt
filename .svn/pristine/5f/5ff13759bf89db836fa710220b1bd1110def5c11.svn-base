@@ -1,0 +1,285 @@
+package com.taikang.tkcoww.askforClaim.controller;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.taikang.tkcoww.askforClaim.action.IAskforClaimAction;
+import com.taikang.udp.common.util.ExcelUtil;
+import com.taikang.udp.framework.common.datastructre.Dto;
+import com.taikang.udp.framework.common.datastructre.impl.BaseDto;
+import com.taikang.udp.framework.common.util.TKDateTimeUtils;
+import com.taikang.udp.framework.core.persistence.pagination.CurrentPage;
+import com.taikang.udp.framework.core.web.BaseController;
+import com.taikang.udp.security.service.SecurityUserHolder;
+import com.taikang.udp.sys.model.DictEntryBO;
+import com.taikang.udp.sys.util.CommonUtil;
+import com.taikang.udp.sys.util.DictUtils;
+
+
+/**
+  * AskforClaimController
+  */
+@Controller("askforClaimController")
+@RequestMapping(value="/askforClaim")
+public class AskforClaimController  extends BaseController  {
+		
+	@Resource(name=IAskforClaimAction.ACTION_ID)
+	private IAskforClaimAction askforClaimAction;
+		
+	/**
+	 * 打开主查询页面
+	 * @return 页面地址
+	 */
+	@RequestMapping("")
+	public String showAskforClaimIndexPage() {
+		return "askforclaim/askforclaimIndex"; 
+	}
+	
+	/**
+	 * 查询信息列表
+	 * @return 分页列表数据
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public Map<String,Object> getAskforClaimList(HttpServletRequest request,CurrentPage page){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		page.setParamObject(CommonUtil.getParamAsDto(request));
+		CurrentPage currentPage = askforClaimAction.getAskforClaimList(page);
+		
+		map.put("rows", currentPage.getPageItems());
+		map.put("total", currentPage.getTotalRows());
+		
+		return map;
+	}
+
+	/**
+	 * 打开新增或修改页面
+	 * @return
+	 */
+	@RequestMapping("edit")
+	public String showAskforClaimEditPage(String claimId,Model model) {
+		
+		if(claimId!=null && !claimId.equals(""))
+		{
+			model.addAttribute("claimId",claimId );
+		}
+		
+		return "askforclaim/askforclaimEdit"; 
+	}
+	
+	/**
+	 * 获取一条记录详细信息，用来填充修改界面
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/getOne")
+	@ResponseBody
+	public Dto getAskforClaimById(@RequestParam("claimId")String claimId)
+	{
+		Dto param = new BaseDto();
+		param.put("claimid", claimId);
+		return askforClaimAction.findOne(param);
+	}
+	
+	/**
+	 * 保存新增或修改的记录，将其持久化到数据库中
+	 * @return
+	 */
+	@RequestMapping("/save")
+	@ResponseBody
+	private Map<String,String> saveAskforClaimInfo(HttpServletRequest request)
+	{
+		Map<String,String> map=new HashMap<String,String>();
+		
+		Dto param = CommonUtil.getParamAsDto(request);
+		if(param.get("claimId") ==null ||"".equals(param.get("claimId")))
+		{
+			askforClaimAction.insertObject(param);
+			map.put(MESSAGE_INFO, "新增成功！");
+		}
+		else
+		{
+			askforClaimAction.updateObject(param);
+			map.put(MESSAGE_INFO, "更新成功！");
+		}
+		map.put(RTN_RESULT, "true");
+		
+		return map;
+	}
+	
+	/**
+	*删除一条或多条记录
+	*/
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/del")
+	@ResponseBody
+	public Map<String, String> deleteAskforClaim(@RequestParam("claimId") String claimId) {
+		Map<String, String> map = new HashMap<String, String>();
+		Dto user = SecurityUserHolder.getCurrentUser().toDto();
+		
+		Dto param = new BaseDto();
+		param.put("claimid", claimId);
+		param.put("modifiedTime", TKDateTimeUtils.getTodayTimeStamp());
+		param.put("modifiedBy", user.getAsString("id"));
+		param.put("delflag", "1");
+		askforClaimAction.updateObject(param);
+		
+		map.put(RTN_RESULT, "true");
+		map.put(MESSAGE_INFO, "操作成功！");
+		
+		return map;
+	}
+	
+	/**
+	 * 导出excel
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	  @RequestMapping(value="/downloadAskforClaim")
+	    public String downloadAskforClaim(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	        String fileName="excel";
+	        String meansMethod =request.getParameter("meansMethod");
+	        String startTime =request.getParameter("startTime");
+	        String endTime =request.getParameter("endTime");//endTime
+	        String meansEmail = request.getParameter("meansEmail");
+	        
+	        //填充projects数据
+	        List<Dto> projects=createData(meansMethod,startTime,endTime,meansEmail);
+
+			List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+		    Map<String, Object> map = new HashMap<String, Object>();
+		    map.put("sheetName", "sheet1");
+		    listmap.add(map);
+		    if (projects != null) {
+		    	for (int i = 0, size = projects.size(); i < size; i++) {
+		    		Dto temp = projects.get(i);
+		    		Map<String, Object> mapValue = new HashMap<String, Object>();
+		    		
+		            String meansName = temp.getAsString("means_name");
+		            List<DictEntryBO> listDe = DictUtils.getDictEntryList("means_name");
+		            for (DictEntryBO de : listDe) {
+		            	if (meansName.equals(de.getDictId())) {
+		            		mapValue.put("meansName", de.getDictName());
+		            		break;
+		            	}
+		            }
+		            String meansMeth = temp.getAsString("means_method");
+		            List<DictEntryBO> listMean = DictUtils.getDictEntryList("means_method");
+		            for (DictEntryBO del : listMean) {
+		            	if (meansMeth.equals(del.getDictId())) {
+		            		mapValue.put("meansMethod", del.getDictName());
+		            		break;
+		            	}
+		            }
+		            mapValue.put("meansEmail",temp.getAsString("means_email"));
+		            mapValue.put("meansBak",temp.getAsString("means_bak"));
+		            mapValue.put("visitFrom",temp.getAsString("VISIT_FROM"));
+		            mapValue.put("userIp",temp.getAsString("user_ip"));
+		            mapValue.put("createdTime",temp.getAsString("CREATED_TIME"));
+		            
+		            listmap.add(mapValue);
+		    	}
+		    }
+	        
+	      //  List<Map<String,Object>> list=createExcelRecord(projects);
+	        String columnNames[]={"资料名称","索取方式","邮箱","备注","预约来源","ip","提交时间"};//列名
+	        String keys[]   =    {"meansName","meansMethod","meansEmail","meansBak","visitFrom","userIp","createdTime"};//map中的key
+	        
+	        ByteArrayOutputStream os = new ByteArrayOutputStream();
+	        try {
+	            ExcelUtil.createWorkBook(listmap,keys,columnNames).write(os);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        byte[] content = os.toByteArray();
+	        InputStream is = new ByteArrayInputStream(content);
+	        // 设置response参数，可以打开下载页面
+	        response.reset();
+	        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+	        response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+	        ServletOutputStream out = response.getOutputStream();
+	        BufferedInputStream bis = null;
+	        BufferedOutputStream bos = null;
+	        try {
+	            bis = new BufferedInputStream(is);
+	            bos = new BufferedOutputStream(out);
+	            byte[] buff = new byte[2048];
+	            int bytesRead;
+	            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+	                bos.write(buff, 0, bytesRead);
+	            }
+	        } catch (final IOException e) {
+	            throw e;
+	        } finally {
+	            if (bis != null)
+	                bis.close();
+	            if (bos != null)
+	                bos.close();
+	        }
+	        return null;
+	    }
+	  
+	    @SuppressWarnings("unchecked")
+		private List<Dto> createData(String meansMethod,String startTime,String endTime,String meansEmail){
+	    	Dto param = new BaseDto();
+	    	if(meansMethod != null){
+	    		param.put("meansMethod", meansMethod);
+	    	}
+	    	if(startTime != null){
+	    		param.put("startTime", startTime);
+	    	}
+	    	if(endTime != null){
+	    		param.put("endTime", endTime);
+	    	}
+	    	if(meansEmail != null){
+	    		param.put("meansEmail", meansEmail);
+	    	}
+	    	List <Dto> list = askforClaimAction.getAskforClaimListDto(param);
+	        return list;
+	    }
+	    
+	    @SuppressWarnings("unused")
+		private List<Map<String, Object>> createExcelRecord(List<Dto> projects) {
+	        List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+	        Map<String, Object> map = new HashMap<String, Object>();
+	        map.put("sheetName", "sheet1");
+	        listmap.add(map);
+	        Dto temp=null;
+	        for (int j = 0; j < projects.size(); j++) {
+	        	temp=projects.get(j);
+	            Map<String, Object> mapValue = new HashMap<String, Object>();
+	            mapValue.put("meansName",temp.getAsString("means_name"));
+	            mapValue.put("meansMethod",temp.getAsString("means_method"));
+	            mapValue.put("meansEmail", temp.getAsString("means_email"));
+	            mapValue.put("meansBak",temp.getAsString("means_bak"));
+	            mapValue.put("visitFrom",temp.getAsString("VISIT_FROM"));
+	            mapValue.put("userIp",temp.getAsString("user_ip"));
+	            mapValue.put("createdTime",temp.getAsString("CREATED_TIME"));
+	            listmap.add(mapValue);
+	        }
+	        return listmap;
+	    }
+}
+

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration scan="true" scanPeriod="1 seconds">
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-M-d HH:mm:ss}|%t|%p|%X{userId}|%m|%F|%L|%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="stdout2" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-M-d HH:mm:ss}|%t|%p|%m|%F|%L|%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/logs/errorlog/logtest-%d{yyyy-M-d}.log</FileNamePattern>
+			<MaxHistory> 30 </MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern> %d{yyyy-M-d HH:mm:ss}|%t|%p|%m|%F|%L|%n</pattern>
+		</encoder>
+		<tiggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</tiggeringPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+	<appender name="WARN"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/logs/warnlog/logtest-%d{yyyy-M-d}.log</FileNamePattern>
+			<MaxHistory> 30 </MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern> %d{yyyy-M-d HH:mm:ss}|%t|%p|%m|%F|%L|%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+	<appender name="INFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/logs/infolog/logtest-%d{yyyy-M-d}.log</FileNamePattern>
+			<MaxHistory> 30 </MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern> %d{yyyy-M-d HH:mm:ss}|%t|%p|%m|%F|%L|%n</pattern>
+		</encoder>
+		<tiggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</tiggeringPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+	<appender name="DEBUG"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/logs/debuglog/logtest-%d{yyyy-M-d}.log</FileNamePattern>
+			<MaxHistory> 30 </MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern> %d{yyyy-M-d HH:mm:ss}|%t|%p|%m|%F|%L|%n</pattern>
+		</encoder>
+		<tiggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</tiggeringPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+	<appender name="file"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/logs/logtest-%d{yyyy-M-d}.log</FileNamePattern>
+			<MaxHistory> 30 </MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-M-d HH:mm:ss}|%t|%p|%X{userId}|%m|%F|%L|%n
+			</pattern>
+		</encoder>
+		<tiggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</tiggeringPolicy>
+	</appender>
+	
+	<!-- <logger name="com.atomikos" level="warn" /> -->
+	<!-- <logger name="bitronix.tm.BitronixTransaction" level="debug"/> -->
+	<!-- <logger name="org.springframework.transaction" level="trace"/> -->
+	<!-- <logger name="com.ebao.gs.front.data.bxb.model.TbBxbMasterPolicyHolderMapper" 
+		level="trace"/> <logger name="com.ebao.zhongan.tuiyun.batch.TuiyunPolicyItemWriter" 
+		level="trace"/> -->
+	
+	<!-- log4mybatis -->
+	<logger name="jdbc.sqltiming" level="DEBUG"/>
+	<logger name="com.ibatis" level="DEBUG"/>
+	<logger name="com.ibatis.common.jdbc.SimpleDataSource" level="INFO"/>
+	<logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG"/>
+	<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG"/>
+	<logger name="java.sql.Connection" level="DEBUG"/>
+	<logger name="java.sql.Statement" level="DEBUG"/>
+	<logger name="java.sql.PrepareStatement" level="DEBUG"/>
+	<logger name="java.sql.ResultSet" level="DEBUG"/>	
+	
+	<logger name="com.taikang.udp" level="DEBUG" />
+	
+	<root level="debug">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="ERROR" />
+		<appender-ref ref="DEBUG" />
+		<appender-ref ref="file" />
+	</root>
+</configuration>

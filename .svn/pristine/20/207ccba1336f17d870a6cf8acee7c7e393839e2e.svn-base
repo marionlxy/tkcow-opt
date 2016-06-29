@@ -1,0 +1,343 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<%@ include file="/include.jsp"%>
+<script src="<%=basePath%>/static/ckeditor/ckeditor.js"></script>
+<script src="<%=basePath%>/static/ckeditor/samples/js/sample.js"></script>
+<script src="<%=basePath%>/static/js/imageValidate.js"></script>
+<title></title>
+</head>
+<body>
+	<input name="modId" id="hidSId" type="hidden">
+	<input type="hidden" id="fromMain" value='${fromMain}'>
+	<div class="" title="内容模板·修改页面" style="width: 1000px">
+		<form id="dataForm" name="dataForm"
+			action="${rootPath}/moduleDes/uploadBySpringGrpModuleDes"
+			method="post" enctype="multipart/form-data">
+
+			<input type="hidden" name="modParentId" value='${modParentId}'>
+			<input type="hidden" name="modIsleaf" value='${modIsleaf}'> <input
+				type="hidden" name="modParentName" value='${modParentName}'>
+			<input type="hidden" name="modType" value='${leafType}'> <input
+				type="hidden" name="modLevel" value='${modLevel }'> <input
+				type="hidden" name="menuId" id="menuId" value='${menuId}'> <input
+				type="hidden" name="parentId" id="parentId" value='${parentId}'>
+
+			<input type="hidden" name="modId" id="modId" value='${modId}'>
+
+			<div class="fitem">
+				<label>模块名称:</label> <input id="title" name="title" value="${modName}"
+					class="easyui-textbox" data-options="required:true">
+			</div>
+			<div class="fitem">
+				<label>模块别名:</label> <input id="modByname" name="modByname"
+					value="${modByname}" class="easyui-textbox" data-options="">
+			</div>
+			<div class="fitem">
+				<label>模块排序号:</label> <input id="modSquence" name="modSquence"
+					value="${modSquence}" min="1" max="99"
+					missingMessage='必须填1-99之间的数字' class="easyui-numberbox"
+					validType="length[0,2]" data-options="required:true">
+			</div>
+			<div class="fitem">
+				<label>链接名称（站内）:</label> <input name="modUrl" value="${modUrl}"
+					class="easyui-textbox">
+			</div>
+
+
+			<div class="fitem">
+				<label>SEO标题:</label> <input name="modSeo" value="${modSeo}"
+					class="easyui-textbox">
+			</div>
+			<div class="fitem">
+				<label>SEO描述:</label> <input name="seoDes" value="${seoDes}"
+					class="easyui-textbox">
+			</div>
+			<div class="fitem">
+				<label>关键词:</label> <input id="keyWord" name="keyWord"
+					value="${keyWord}" class="easyui-textbox">
+			</div>
+
+			<div class="fitem">
+				<label>描述:</label>
+				<textarea id="modDes" name="modDes" class="easyui-textbox"
+					style="width: 316px; border: 1px solid #99bbe8; height: 200px"
+					rows="4" cols="33">${modDes}</textarea>
+			</div>
+
+			<div class="fitem">
+				<label>banner替换:</label> <input name="modBanner"
+					class="easyui-filebox validatebox" validType="img_upload"
+					data-options="prompt:'Choose a image...'" style="width: 25%">
+				<%-- <img src="<%=basePath%>/${modBannerUrl }" style="width: 50px; height: 50px;" />留空默认使用父栏目banner --%>
+				<img src="<%=basePath%>/${modBannerUrl }" style="width:50px;height:50px;" />
+			</div>
+			<span
+				style="display: block; float: left; margin-right: 40px; margin-left: 0px;">内容：</span>
+			<div class="adjoined-bottom" style="display: block; float: left;">
+				<div class="grid-container">
+					<div class="grid-width-100">
+						<textarea id="editor" name="editor"
+							style="height: 40px; width: 200px" data-options="required:true">
+		            	</textarea>
+					</div>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+			<span
+				style="display: block; float: left; margin-right: 24px; margin-left: 54px;">图片组：</span>
+			<table cellpadding="0"
+				style="width: 600px; border: 1px solid #ccc; text-align: center; float: left;">
+				<tr style="height: 30px; line-height: 30px;">
+					<td style="border: 1px solid #ccc;">排序号</td>
+					<td style="border: 1px solid #ccc;">图片</td>
+					<td style="border: 1px solid #ccc;">操作</td>
+				</tr>
+				<tbody id="dataTable"></tbody>
+			</table>
+			<input name="bannerList" type="hidden" value='' id="bannerList_id">
+			<input id="upload_id" type="button" value="上传"
+				style="float: left; height: 30px; line-height: 30px; margin-left: 20px; width: 80px;">
+			<div style="clear: both"></div>
+
+			<input type="hidden" id="editor_id" name="editor_name">
+
+		</form>
+
+
+
+		<div id="dlg-buttons" align="center">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				iconCls="icon-ok" id="save" onclick="saveOrUpdate1()"
+				style="width: 90px">提交</a> <a href="javascript:void(0)"
+				class="easyui-linkbutton" iconCls="icon-cancel" onclick="window.parent.wrapper.rightMenuClick({ id: 'close' })"
+				style="width: 90px">取消</a>
+		</div>
+
+		<div id="divDialog"></div>
+
+	</div>
+
+	<script type="text/javascript">
+		initSample();
+		var modId = '${modId}';
+		jQuery(function() {
+			// 注意：不要读取缓存
+			jQuery.ajaxSetup({
+				cache : false
+			});
+			/* 	if (modId != null && modId != "" && modId != 0) {
+					var url = '${rootPath}/moduleDes/getOne?modId=' + modId;
+					$('#dataForm').form('load', url);
+				} */
+			$.post("${rootPath}/moduleDes/getOne", {
+				"modId" : modId
+			}, function(data) {
+	//			console.log(data.content);
+				var content = Base64.decode(data.content);
+	//			console.log(content);
+				CKEDITOR.instances.editor.setData(content);
+			});
+			
+			
+			$("#upload_id").click(function() {
+				addImgs();
+			});
+
+			//初始化列表
+			$.ajax({
+						url : '${rootPath}/banner/listModuleContent',
+						type : 'post',
+						data : "modId=" + modId,
+						success : function(data) {
+							for (var i = 0; i < data.total; i++) {
+								$("#dataTable")
+										.append(
+												'<tr style="height:30px;line-height:30px;">'
+														+ '<td style="border:1px solid #ccc;">'
+														+ data.rows[i].BAN_IMG_NUM
+														+ '</td>'
+														//    		   		+'<td  style="border:1px solid #ccc;"><img src='+data.rows[i].BAN_IMG_URL+' style="width:30px;height:30px;"></td>'
+														+ '<td  style="border:1px solid #ccc;">'
+														+ showImg(data.rows[i].BAN_IMG_URL)
+														+ '</td>'
+														+ '<td style="border:1px solid #ccc;"><input type="button" value="删除" onclick="delerow(this)">'
+														+ '<input type="hidden" value='+data.rows[i].BAN_ID+'>'
+														+ '<input type="hidden" value='+data.rows[i].BAN_IMG_ID+'>'
+														+ '<input type="hidden" value='+data.rows[i].BAN_IMG_NAME+'>'
+														+ '<input type="hidden" value='+data.rows[i].BAN_IMG_RENAME+'></td>'
+														+ '</tr>');
+							}
+						}
+					})
+					setTimeout(function(){
+						//alert(content);
+						CKEDITOR.instances.editor.setData(content);
+					},500);
+		});
+
+		//提交记录
+		function saveOrUpdate1() {
+			var editorText=CKEDITOR.instances.editor.getData();
+			//var BaseText=encode64(editorText);
+			var BaseText=Base64.encode(editorText);
+			$("#editor_id").val(BaseText);
+			var r = $('#dataForm').form('validate');
+			var lists = new Array();
+			var trLeng = $("#dataTable").find("tr").length;
+			var basePath='<%=basePath%>';
+			for (var i = 0; i < trLeng; i++) {
+				var trList = {};
+				var BAN_IMG_NUM = $("#dataTable").find("tr").eq(i).find("td")
+						.html();
+				var BAN_IMG_URL = $("#dataTable").find("tr").eq(i).find("td")
+						.next("td").find("img").attr("src");
+				var BAN_ID = $("#dataTable").find("tr").eq(i).find("td").next(
+						"td").next("td").find("input").next("input").val();
+				var BAN_IMG_ID = $("#dataTable").find("tr").eq(i).find("td")
+						.next("td").next("td").find("input").next("input")
+						.next("input").val();
+				var BAN_IMG_NAME = $("#dataTable").find("tr").eq(i).find("td")
+						.next("td").next("td").find("input").next("input")
+						.next("input").next("input").val();
+				var BAN_IMG_RENAME = $("#dataTable").find("tr").eq(i)
+						.find("td").next("td").next("td").find("input").next(
+								"input").next("input").next("input").next(
+								"input").val();
+				trList.BAN_IMG_NUM = BAN_IMG_NUM;
+				trList.BAN_IMG_URL = BAN_IMG_URL.replace(basePath,'');
+				trList.BAN_ID = BAN_ID;
+				trList.BAN_IMG_ID = BAN_IMG_ID;
+				trList.BAN_IMG_NAME = BAN_IMG_NAME;
+				trList.BAN_IMG_RENAME = BAN_IMG_RENAME;
+				lists.push(trList);
+			}
+//			console.log(JSON.stringify(lists));
+			$("#bannerList_id").val(JSON.stringify(lists));
+
+			if (!r) {
+				return false;
+			} else {
+				$('#dataForm')
+						.form(
+								'submit',
+								{
+									url : '${rootPath}/moduleDes/updateModuleDesInfo',
+									onSubmit : function() {
+										$("#dataForm").serializeArray();
+									},
+									success : function(data) {
+										ajaxobj = eval("(" + data + ")");
+										if (ajaxobj.result == 'true'
+												|| ajaxobj.result == true) {
+											$.messager.alert('提示',ajaxobj.msg,
+															function() {
+																var from = $("#fromMain").val();
+																if (from == null || from == '' ||  from==undefined) {
+																	url = '/module/subList?reqMenuId='
+																		+ ajaxobj.reqMenuId
+																		+ '&backUp2='
+																		+ ajaxobj.backUp2;
+																	var tabName = window.parent.wrapper.getCurrentTabTitle();
+																	window.parent.wrapper.addTabCloseOld(ajaxobj.menuName, url, '', tabName);
+																}
+															});
+											$('#save').linkbutton('disable');
+										} else {
+											$.messager.alert("提示", ajaxobj.msg,
+													'error');
+										}
+									}
+								});
+			}
+		}
+
+		function delerow(obj) {
+			var banImgId = $(obj).next("input").next("input").val();
+	//		console.log("banImgId" + banImgId)
+			if (banImgId != "" && banImgId != undefined && banImgId != null) {
+				$.messager.confirm('提示', '确定要删除行记录吗？', function(r) {
+					if (r) {
+						$.post('${rootPath}/banner/del', {
+							banImgId : banImgId
+						}, function(data) {
+
+							if (data.result == 'true' || data.result == true) {
+								$(obj).parents("tr").remove();
+								$('#dataTable').datagrid('reload'); // reload the user data
+							} else {
+								$.messager.alert('提示', data.msg, 'error');
+							}
+						});
+					}
+				});
+			} else {
+				$(obj).parents("tr").remove();
+			}
+		}
+		/**
+		 * 增加图片组<br/>
+		 */
+		function addImgs() {
+			url = '${rootPath}/moduleDes/showImgsAddPage';
+			$("#divDialog").dialog({
+				title : "新增图片组",
+				width : 450,
+				height : 250,
+				href : url,
+				cache : false,
+				closed : false,
+				modal : true
+			});
+		}
+
+		//显示图片
+		function showImg(image) {
+			// 		alert("lastPath:  == "+'${lastPath}');
+			// 		alert("image:  == "+image);
+
+			//		var basePath = '${lastPath}';
+			if (image != null) {
+				// 		alert(image.indexOf('/tkcow-opt/'));
+				//			var newPath = image.substring(image.indexOf('/tkcow-opt/'));
+				//			var str = basePath;
+				//			var lastPath = str + newPath ;
+				return '<img src=<%=basePath%>'+'/'+image+' width="25px" height="20px"/>';
+			} else {
+				return '<img src=<%=basePath%>'+'/'+image+' width="25px" height="20px"/>';
+			}
+
+		}
+
+		//返回父页面  
+		function returnParent(dataStr) {
+			var data = eval('(' + dataStr + ')');
+			$("#divDialog").window('close');
+			$("#dataTable")
+					.append(
+							'<tr style="height:30px;line-height:30px;">'
+									+ '<td style="border:1px solid #ccc;">'
+									+ data.BAN_IMG_NUM
+									+ '</td>'
+									+ '<td style="border:1px solid #ccc;">'
+									+ showImg(data.BAN_IMG_URL)
+									+ '</td>'
+									//    		   		+'<td  style="border:1px solid #ccc;"><img src='+data.BAN_IMG_URL+' style="width:30px;height:30px;"></td>'
+									+ '<td style="border:1px solid #ccc;"><input type="button" value="删除" onclick="delerow(this)">'
+									+ '<input type="hidden" value='+data.BAN_ID+'>'
+									+ '<input type="hidden" >'
+									+ '<input type="hidden" value='+data.BAN_IMG_NAME+'>'
+									+ '<input type="hidden" value='+data.BAN_IMG_RENAME+'></td>'
+									+ '</tr>');
+
+		}
+	</script>
+
+</body>
+</html>

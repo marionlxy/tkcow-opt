@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Menu">
+    <resultMap id="menuResultMap" type="com.taikang.udp.sys.model.MenuBO">
+        <result property="menuId" column="Menu_Id"/>
+        <result property="parentId" column="Parent_Id"/>
+        <result property="menuName" column="Menu_Name"/>
+        <result property="isLeaf" column="Is_Leaf"/>
+        <result property="menuUrl" column="Menu_Url"/>
+        <result property="menuOrder" column="Menu_Order"/>
+        <result property="menuStatus" column="Menu_Status"/>
+        <result property="backup1" column="Backup1"/>
+        <result property="backup2" column="Backup2"/>
+        <result property="creator" column="CREATOR"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="lastModby" column="LAST_MODBY"/>
+        <result property="lastModtime" column="LAST_MODTIME"/>
+        <result property="icon" column="Icon"/>
+        <result property="isShow" column="Is_Show"/>
+        <result property="permission" column="Permission"/>
+    </resultMap>
+  
+    <sql id="menuWhereCondition">
+        <where>
+        <if test=" menu_id != null ">
+            <![CDATA[ AND A.Menu_Id = ${menu_id} ]]>
+        </if>
+        <if test=" parent_id != null and parent_id != '' and parent_id != 'null' ">
+            <![CDATA[ AND A.Parent_Id = #{parent_id} ]]>
+        </if>
+        <if test=" menu_name != null and menu_name != '' and menu_name != 'null' ">
+            <![CDATA[ AND A.Menu_Name = #{menu_name} ]]>
+        </if>
+        <if test=" is_leaf != null and is_leaf != '' and is_leaf != 'null' ">
+            <![CDATA[ AND A.Is_Leaf = #{is_leaf} ]]>
+        </if>
+        <if test=" menu_url != null and menu_url != '' and menu_url != 'null' ">
+            <![CDATA[ AND A.Menu_Url = #{menu_url} ]]>
+        </if>
+        <if test=" menu_order != null ">
+            <![CDATA[ AND A.Menu_Order = ${menu_order} ]]>
+        </if>
+        <if test=" menu_status != null and menu_status != '' and menu_status != 'null' ">
+            <![CDATA[ AND A.Menu_Status = #{menu_status} ]]>
+        </if>
+        <if test=" backup1 != null and backup1 != '' and backup1 != 'null' ">
+            <![CDATA[ AND A.Backup1 = #{backup1} ]]>
+        </if>
+        <if test=" backup2 != null and backup2 != '' and backup2 != 'null' ">
+            <![CDATA[ AND A.Backup2 = #{backup2} ]]>
+        </if>
+        <if test=" creator != null ">
+            <![CDATA[ AND A.CREATOR = ${creator} ]]>
+        </if>
+        <if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+            <![CDATA[ AND A.CREATE_TIME = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+        <if test=" last_modby != null ">
+            <![CDATA[ AND A.LAST_MODBY = ${last_modby} ]]>
+        </if>
+        <if test=" last_modtime != null and last_modtime != '' and last_modtime  != 'null' ">
+            <![CDATA[ AND A.LAST_MODTIME = DATE_FORMAT(#{last_modtime},'%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+        <if test=" icon != null and icon != '' and icon != 'null' ">
+            <![CDATA[ AND A.Icon = #{icon} ]]>
+        </if>
+        <if test=" is_show != null and is_show != '' and is_show != 'null' ">
+            <![CDATA[ AND A.Is_Show = #{is_show} ]]>
+        </if>
+        <if test=" permission != null and permission != '' and permission != 'null' ">
+            <![CDATA[ AND A.Permission = #{permission} ]]>
+        </if>
+        </where>
+    </sql>
+
+    <insert id="addMenu"  parameterType="java.util.Map">
+        <![CDATA[
+        INSERT INTO BSC_MENU_T
+        ]]>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test=" menu_id  != null ">
+                <![CDATA[ Menu_Id , ]]>
+            </if>
+            <if test=" parent_id  != null and  parent_id  != ''  and  parent_id  != 'null' ">
+                <![CDATA[ Parent_Id , ]]>
+            </if>
+            <if test=" menu_name  != null and  menu_name  != ''  and  menu_name  != 'null' ">
+                <![CDATA[ Menu_Name , ]]>
+            </if>
+            <if test=" is_leaf  != null and  is_leaf  != ''  and  is_leaf  != 'null' ">
+                <![CDATA[ Is_Leaf , ]]>
+            </if>
+            <if test=" menu_url  != null and  menu_url  != ''  and  menu_url  != 'null' ">
+                <![CDATA[ Menu_Url , ]]>
+            </if>
+            <if test=" menu_order  != null ">
+                <![CDATA[ Menu_Order , ]]>
+            </if>
+            <if test=" menu_status  != null and  menu_status  != ''  and  menu_status  != 'null' ">
+                <![CDATA[ Menu_Status , ]]>
+            </if>
+            <if test=" backup1  != null and  backup1  != ''  and  backup1  != 'null' ">
+                <![CDATA[ Backup1 , ]]>
+            </if>
+            <if test=" backup2  != null and  backup2  != ''  and  backup2  != 'null' ">
+                <![CDATA[ Backup2 , ]]>
+            </if>
+            <if test=" creator  != null ">
+                <![CDATA[ CREATOR , ]]>
+            </if>
+            <if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+                <![CDATA[ CREATE_TIME , ]]>
+            </if>
+            <if test=" last_modby  != null ">
+                <![CDATA[ LAST_MODBY , ]]>
+            </if>
+            <if test=" last_modtime  != null and  last_modtime  != ''  and  last_modtime  != 'null' ">
+                <![CDATA[ LAST_MODTIME , ]]>
+            </if>
+            <if test=" icon  != null and  icon  != ''  and  icon  != 'null' ">
+                <![CDATA[ Icon , ]]>
+            </if>
+            <if test=" is_show  != null and  is_show  != ''  and  is_show  != 'null' ">
+                <![CDATA[ Is_Show , ]]>
+            </if>
+            <if test=" permission  != null and  permission  != ''  and  permission  != 'null' ">
+                <![CDATA[ Permission , ]]>
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test=" menu_id  != null">
+                <![CDATA[ ${menu_id} , ]]>
+            </if>
+            <if test=" parent_id  != null and  parent_id  != ''  and  parent_id  != 'null' ">
+                <![CDATA[ #{parent_id} , ]]>
+            </if>
+            <if test=" menu_name  != null and  menu_name  != ''  and  menu_name  != 'null' ">
+                <![CDATA[ #{menu_name} , ]]>
+            </if>
+            <if test=" is_leaf  != null and  is_leaf  != ''  and  is_leaf  != 'null' ">
+                <![CDATA[ #{is_leaf} , ]]>
+            </if>
+            <if test=" menu_url  != null and  menu_url  != ''  and  menu_url  != 'null' ">
+                <![CDATA[ #{menu_url} , ]]>
+            </if>
+            <if test=" menu_order  != null">
+                <![CDATA[ ${menu_order} , ]]>
+            </if>
+            <if test=" menu_status  != null and  menu_status  != ''  and  menu_status  != 'null' ">
+                <![CDATA[ #{menu_status} , ]]>
+            </if>
+            <if test=" backup1  != null and  backup1  != ''  and  backup1  != 'null' ">
+                <![CDATA[ #{backup1} , ]]>
+            </if>
+            <if test=" backup2  != null and  backup2  != ''  and  backup2  != 'null' ">
+                <![CDATA[ #{backup2} , ]]>
+            </if>
+            <if test=" creator  != null">
+                <![CDATA[ ${creator} , ]]>
+            </if>
+            <if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+                <![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+            </if>
+            <if test=" last_modby  != null">
+                <![CDATA[ ${last_modby} , ]]>
+            </if>
+            <if test=" last_modtime != null and last_modtime != '' and last_modtime  != 'null' ">
+                <![CDATA[ DATE_FORMAT(#{last_modtime},'%Y-%m-%d %H:%i:%s'), ]]>
+            </if>
+            <if test=" icon  != null and  icon  != ''  and  icon  != 'null' ">
+                <![CDATA[ #{icon} , ]]>
+            </if>
+            <if test=" is_show  != null and  is_show  != ''  and  is_show  != 'null' ">
+                <![CDATA[ #{is_show} , ]]>
+            </if>
+            <if test=" permission  != null and  permission  != ''  and  permission  != 'null' ">
+                <![CDATA[ #{permission} , ]]>
+            </if>
+        </trim>
+    </insert>
+ 
+    <update id="updateMenu" parameterType="java.util.Map">
+        <![CDATA[ UPDATE BSC_MENU_T A ]]>
+        <set>
+        <if test=" parent_id  != null and  parent_id  != ''  and  parent_id  != 'null' ">
+            <![CDATA[ A.Parent_Id = #{parent_id}, ]]>
+        </if>
+        <if test=" menu_name  != null and  menu_name  != ''  and  menu_name  != 'null' ">
+            <![CDATA[ A.Menu_Name = #{menu_name}, ]]>
+        </if>
+        <if test=" is_leaf  != null and  is_leaf  != ''  and  is_leaf  != 'null' ">
+            <![CDATA[ A.Is_Leaf = #{is_leaf}, ]]>
+        </if>
+        <if test=" menu_url  != null and  menu_url  != ''  and  menu_url  != 'null' ">
+            <![CDATA[ A.Menu_Url = #{menu_url}, ]]>
+        </if>
+        <if test=" menu_order  != null ">
+            <![CDATA[ A.Menu_Order = ${menu_order} , ]]>
+        </if>
+        <if test=" menu_status  != null and  menu_status  != ''  and  menu_status  != 'null' ">
+            <![CDATA[ A.Menu_Status = #{menu_status}, ]]>
+        </if>
+        <if test=" backup1  != null and  backup1  != ''  and  backup1  != 'null' ">
+            <![CDATA[ A.Backup1 = #{backup1}, ]]>
+        </if>
+        <if test=" backup2  != null and  backup2  != ''  and  backup2  != 'null' ">
+            <![CDATA[ A.Backup2 = #{backup2}, ]]>
+        </if>
+        <if test=" creator  != null ">
+            <![CDATA[ A.CREATOR = ${creator} , ]]>
+        </if>
+        <if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+            <![CDATA[ A.CREATE_TIME = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+        </if>
+        <if test=" last_modby  != null ">
+            <![CDATA[ A.LAST_MODBY = ${last_modby} , ]]>
+        </if>
+        <if test=" last_modtime != null and last_modtime != '' and last_modtime  != 'null' ">
+            <![CDATA[ A.LAST_MODTIME = DATE_FORMAT(#{last_modtime},'%Y-%m-%d %H:%i:%s'), ]]>
+        </if>
+        <if test=" icon  != null and  icon  != ''  and  icon  != 'null' ">
+            <![CDATA[ A.Icon = #{icon}, ]]>
+        </if>
+        <if test=" is_show  != null and  is_show  != ''  and  is_show  != 'null' ">
+            <![CDATA[ A.Is_Show = #{is_show}, ]]>
+        </if>
+        <if test=" permission  != null and  permission  != ''  and  permission  != 'null' ">
+            <![CDATA[ A.Permission = #{permission}, ]]>
+        </if>
+        </set>
+        <![CDATA[ where A.MENU_ID = #{menu_id}]]>
+    </update>
+  
+    <delete id="deleteMenu" parameterType="java.util.Map">
+        <![CDATA[ DELETE FROM BSC_MENU_T where MENU_ID = #{menu_id} ]]>
+    </delete>
+  
+    <select id="findOneMenu" parameterType="java.util.Map" resultType="java.util.Map">
+        <![CDATA[ SELECT A.* FROM BSC_MENU_T A  ]]>
+        <include refid="menuWhereCondition" />
+    </select>
+    
+    <select id="findAllMenu" parameterType="java.util.Map" resultType="java.util.Map" >
+        <![CDATA[ SELECT A.* FROM BSC_MENU_T A ]]>
+        <include refid="menuWhereCondition" />
+    </select>
+    
+    <select id="findAllMapMenu" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+        <![CDATA[ SELECT A.* FROM BSC_MENU_T A ]]>
+        <include refid="menuWhereCondition" />
+    </select>
+  
+    <select id="findMenuTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        <![CDATA[ SELECT  COUNT(1) FROM BSC_MENU_T A ]]>
+        <include refid="menuWhereCondition" />
+    </select>
+  
+    <select id="queryMenuForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+        <![CDATA[ SELECT A.* FROM BSC_MENU_T A ]]>
+        <include refid="menuWhereCondition" />
+    </select>
+    
+    <select id="findUserMenu" parameterType="java.util.Map" resultType="java.util.Map" >
+       select d.*
+          from bsc_menu_t d
+         where d.Menu_Status = '1'
+           and d.Is_Show = '1'
+        <if test=" parent_id != null and parent_id != '' and parent_id != 'null' ">
+            <![CDATA[ AND d.Parent_Id = '${parent_id}' ]]>
+        </if>
+           and d.Menu_Id in
+               (select c.Menu_Id
+                  from bsc_role_menu_t c
+                 where c.Role_Id in
+                       (select b.Role_Id from bsc_user_role_t b where b.User_Id = #{userId}))
+         order by d.parent_id asc, d.menu_id asc
+    </select>
+</mapper>
+

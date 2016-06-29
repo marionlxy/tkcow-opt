@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Com">
+	<resultMap id="comResultMap" type="com.taikang.udp.sys.model.ComBO">
+		<result property="comId" column="Com_Id"/>
+		<result property="comCode" column="Com_Code"/>
+		<result property="comSname" column="Com_SName"/>
+		<result property="comName" column="Com_Name"/>
+		<result property="comType" column="Com_Type"/>
+		<result property="comLevel" column="Com_Level"/>
+		<result property="comStatus" column="Com_Status"/>
+		<result property="proviceNo" column="Provice_No"/>
+		<result property="cityNo" column="City_No"/>
+		<result property="districtNo" column="District_No"/>
+		<result property="comAddress" column="Com_Address"/>
+		<result property="comPost" column="Com_Post"/>
+		<result property="comLinkman" column="Com_Linkman"/>
+		<result property="comPhone" column="Com_Phone"/>
+		<result property="remark" column="Remark"/>
+		<result property="createUser" column="Create_User"/>
+		<result property="createTime" column="Create_Time"/>
+		<result property="lastModifyUser" column="Last_Modify_User"/>
+		<result property="lastModifyTime" column="Last_Modify_Time"/>
+  	</resultMap>
+  
+  	<sql id="comWhereCondition">
+		<where>
+	  	<if test=" com_id != null ">
+	  		<![CDATA[ AND A.Com_Id = ${com_id} ]]>
+	  	</if>
+	  	<if test=" com_code != null and com_code != '' and com_code != 'null' ">
+			<![CDATA[ AND A.Com_Code = #{com_code} ]]>
+	  	</if>
+	  	<if test=" com_sname != null and com_sname != '' and com_sname != 'null' ">
+			<![CDATA[ AND A.Com_SName = #{com_sname} ]]>
+	  	</if>
+	  	<if test=" com_name != null and com_name != '' and com_name != 'null' ">
+			<![CDATA[ AND A.Com_Name = #{com_name} ]]>
+	  	</if>
+	  	<if test=" com_type != null and com_type != '' and com_type != 'null' ">
+			<![CDATA[ AND A.Com_Type = #{com_type} ]]>
+	  	</if>
+	  	<if test=" com_level != null ">
+	  		<![CDATA[ AND A.Com_Level = ${com_level} ]]>
+	  	</if>
+	  	<if test=" com_status != null and com_status != '' and com_status != 'null' ">
+			<![CDATA[ AND A.Com_Status = #{com_status} ]]>
+	  	</if>
+	  	<if test=" provice_no != null and provice_no != '' and provice_no != 'null' ">
+			<![CDATA[ AND A.Provice_No = #{provice_no} ]]>
+	  	</if>
+	  	<if test=" city_no != null and city_no != '' and city_no != 'null' ">
+			<![CDATA[ AND A.City_No = #{city_no} ]]>
+	  	</if>
+	  	<if test=" district_no != null and district_no != '' and district_no != 'null' ">
+			<![CDATA[ AND A.District_No = #{district_no} ]]>
+	  	</if>
+	  	<if test=" com_address != null and com_address != '' and com_address != 'null' ">
+			<![CDATA[ AND A.Com_Address = #{com_address} ]]>
+	  	</if>
+	  	<if test=" com_post != null and com_post != '' and com_post != 'null' ">
+			<![CDATA[ AND A.Com_Post = #{com_post} ]]>
+	  	</if>
+	  	<if test=" com_linkman != null and com_linkman != '' and com_linkman != 'null' ">
+			<![CDATA[ AND A.Com_Linkman = #{com_linkman} ]]>
+	  	</if>
+	  	<if test=" com_phone != null and com_phone != '' and com_phone != 'null' ">
+			<![CDATA[ AND A.Com_Phone = #{com_phone} ]]>
+	  	</if>
+	  	<if test=" remark != null and remark != '' and remark != 'null' ">
+			<![CDATA[ AND A.Remark = #{remark} ]]>
+	  	</if>
+	  	<if test=" create_user != null ">
+	  		<![CDATA[ AND A.Create_User = ${create_user} ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ AND A.Create_Time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" last_modify_user != null ">
+	  		<![CDATA[ AND A.Last_Modify_User = ${last_modify_user} ]]>
+	  	</if>
+	  	<if test=" last_modify_time != null and last_modify_time != '' and last_modify_time  != 'null' ">
+	    	<![CDATA[ AND A.Last_Modify_Time = DATE_FORMAT(#{last_modify_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+		</where>
+  	</sql>
+
+  	<insert id="addCom"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO BSC_COM_T
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" com_id  != null ">
+				<![CDATA[ Com_Id , ]]>
+	  		</if>
+	  		<if test=" com_code  != null and  com_code  != ''  and  com_code  != 'null' ">
+				<![CDATA[ Com_Code , ]]>
+	  		</if>
+	  		<if test=" com_sname  != null and  com_sname  != ''  and  com_sname  != 'null' ">
+				<![CDATA[ Com_SName , ]]>
+	  		</if>
+	  		<if test=" com_name  != null and  com_name  != ''  and  com_name  != 'null' ">
+				<![CDATA[ Com_Name , ]]>
+	  		</if>
+	  		<if test=" com_type  != null and  com_type  != ''  and  com_type  != 'null' ">
+				<![CDATA[ Com_Type , ]]>
+	  		</if>
+	  		<if test=" com_level  != null ">
+				<![CDATA[ Com_Level , ]]>
+	  		</if>
+	  		<if test=" com_status  != null and  com_status  != ''  and  com_status  != 'null' ">
+				<![CDATA[ Com_Status , ]]>
+	  		</if>
+	  		<if test=" provice_no  != null and  provice_no  != ''  and  provice_no  != 'null' ">
+				<![CDATA[ Provice_No , ]]>
+	  		</if>
+	  		<if test=" city_no  != null and  city_no  != ''  and  city_no  != 'null' ">
+				<![CDATA[ City_No , ]]>
+	  		</if>
+	  		<if test=" district_no  != null and  district_no  != ''  and  district_no  != 'null' ">
+				<![CDATA[ District_No , ]]>
+	  		</if>
+	  		<if test=" com_address  != null and  com_address  != ''  and  com_address  != 'null' ">
+				<![CDATA[ Com_Address , ]]>
+	  		</if>
+	  		<if test=" com_post  != null and  com_post  != ''  and  com_post  != 'null' ">
+				<![CDATA[ Com_Post , ]]>
+	  		</if>
+	  		<if test=" com_linkman  != null and  com_linkman  != ''  and  com_linkman  != 'null' ">
+				<![CDATA[ Com_Linkman , ]]>
+	  		</if>
+	  		<if test=" com_phone  != null and  com_phone  != ''  and  com_phone  != 'null' ">
+				<![CDATA[ Com_Phone , ]]>
+	  		</if>
+	  		<if test=" remark  != null and  remark  != ''  and  remark  != 'null' ">
+				<![CDATA[ Remark , ]]>
+	  		</if>
+	  		<if test=" create_user  != null ">
+				<![CDATA[ Create_User , ]]>
+	  		</if>
+	  		<if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+				<![CDATA[ Create_Time , ]]>
+	  		</if>
+	  		<if test=" last_modify_user  != null ">
+				<![CDATA[ Last_Modify_User , ]]>
+	  		</if>
+	  		<if test=" last_modify_time  != null and  last_modify_time  != ''  and  last_modify_time  != 'null' ">
+				<![CDATA[ Last_Modify_Time , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" com_id  != null">
+	    		<![CDATA[ ${com_id} , ]]>
+	  		</if>
+	  		<if test=" com_code  != null and  com_code  != ''  and  com_code  != 'null' ">
+	  			<![CDATA[ #{com_code} , ]]>
+	  		</if>
+	  		<if test=" com_sname  != null and  com_sname  != ''  and  com_sname  != 'null' ">
+	  			<![CDATA[ #{com_sname} , ]]>
+	  		</if>
+	  		<if test=" com_name  != null and  com_name  != ''  and  com_name  != 'null' ">
+	  			<![CDATA[ #{com_name} , ]]>
+	  		</if>
+	  		<if test=" com_type  != null and  com_type  != ''  and  com_type  != 'null' ">
+	  			<![CDATA[ #{com_type} , ]]>
+	  		</if>
+	  		<if test=" com_level  != null">
+	    		<![CDATA[ ${com_level} , ]]>
+	  		</if>
+	  		<if test=" com_status  != null and  com_status  != ''  and  com_status  != 'null' ">
+	  			<![CDATA[ #{com_status} , ]]>
+	  		</if>
+	  		<if test=" provice_no  != null and  provice_no  != ''  and  provice_no  != 'null' ">
+	  			<![CDATA[ #{provice_no} , ]]>
+	  		</if>
+	  		<if test=" city_no  != null and  city_no  != ''  and  city_no  != 'null' ">
+	  			<![CDATA[ #{city_no} , ]]>
+	  		</if>
+	  		<if test=" district_no  != null and  district_no  != ''  and  district_no  != 'null' ">
+	  			<![CDATA[ #{district_no} , ]]>
+	  		</if>
+	  		<if test=" com_address  != null and  com_address  != ''  and  com_address  != 'null' ">
+	  			<![CDATA[ #{com_address} , ]]>
+	  		</if>
+	  		<if test=" com_post  != null and  com_post  != ''  and  com_post  != 'null' ">
+	  			<![CDATA[ #{com_post} , ]]>
+	  		</if>
+	  		<if test=" com_linkman  != null and  com_linkman  != ''  and  com_linkman  != 'null' ">
+	  			<![CDATA[ #{com_linkman} , ]]>
+	  		</if>
+	  		<if test=" com_phone  != null and  com_phone  != ''  and  com_phone  != 'null' ">
+	  			<![CDATA[ #{com_phone} , ]]>
+	  		</if>
+	  		<if test=" remark  != null and  remark  != ''  and  remark  != 'null' ">
+	  			<![CDATA[ #{remark} , ]]>
+	  		</if>
+	  		<if test=" create_user  != null">
+	    		<![CDATA[ ${create_user} , ]]>
+	  		</if>
+	  		<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" last_modify_user  != null">
+	    		<![CDATA[ ${last_modify_user} , ]]>
+	  		</if>
+	  		<if test=" last_modify_time != null and last_modify_time != '' and last_modify_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{last_modify_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateCom" parameterType="java.util.Map">
+		<![CDATA[ UPDATE BSC_COM_T A ]]>
+		<set>
+	  	<if test=" com_code  != null and  com_code  != ''  and  com_code  != 'null' ">
+	  		<![CDATA[ A.Com_Code = #{com_code}, ]]>
+	  	</if>
+	  	<if test=" com_sname  != null and  com_sname  != ''  and  com_sname  != 'null' ">
+	  		<![CDATA[ A.Com_SName = #{com_sname}, ]]>
+	  	</if>
+	  	<if test=" com_name  != null and  com_name  != ''  and  com_name  != 'null' ">
+	  		<![CDATA[ A.Com_Name = #{com_name}, ]]>
+	  	</if>
+	  	<if test=" com_type  != null and  com_type  != ''  and  com_type  != 'null' ">
+	  		<![CDATA[ A.Com_Type = #{com_type}, ]]>
+	  	</if>
+		<if test=" com_level  != null ">
+  			<![CDATA[ A.Com_Level = ${com_level} , ]]>
+		</if>
+	  	<if test=" com_status  != null and  com_status  != ''  and  com_status  != 'null' ">
+	  		<![CDATA[ A.Com_Status = #{com_status}, ]]>
+	  	</if>
+	  	<if test=" provice_no  != null and  provice_no  != ''  and  provice_no  != 'null' ">
+	  		<![CDATA[ A.Provice_No = #{provice_no}, ]]>
+	  	</if>
+	  	<if test=" city_no  != null and  city_no  != ''  and  city_no  != 'null' ">
+	  		<![CDATA[ A.City_No = #{city_no}, ]]>
+	  	</if>
+	  	<if test=" district_no  != null and  district_no  != ''  and  district_no  != 'null' ">
+	  		<![CDATA[ A.District_No = #{district_no}, ]]>
+	  	</if>
+	  	<if test=" com_address  != null and  com_address  != ''  and  com_address  != 'null' ">
+	  		<![CDATA[ A.Com_Address = #{com_address}, ]]>
+	  	</if>
+	  	<if test=" com_post  != null and  com_post  != ''  and  com_post  != 'null' ">
+	  		<![CDATA[ A.Com_Post = #{com_post}, ]]>
+	  	</if>
+	  	<if test=" com_linkman  != null and  com_linkman  != ''  and  com_linkman  != 'null' ">
+	  		<![CDATA[ A.Com_Linkman = #{com_linkman}, ]]>
+	  	</if>
+	  	<if test=" com_phone  != null and  com_phone  != ''  and  com_phone  != 'null' ">
+	  		<![CDATA[ A.Com_Phone = #{com_phone}, ]]>
+	  	</if>
+	  	<if test=" remark  != null and  remark  != ''  and  remark  != 'null' ">
+	  		<![CDATA[ A.Remark = #{remark}, ]]>
+	  	</if>
+		<if test=" create_user  != null ">
+  			<![CDATA[ A.Create_User = ${create_user} , ]]>
+		</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ A.Create_Time = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		<if test=" last_modify_user  != null ">
+  			<![CDATA[ A.Last_Modify_User = ${last_modify_user} , ]]>
+		</if>
+	  	<if test=" last_modify_time != null and last_modify_time != '' and last_modify_time  != 'null' ">
+	    	<![CDATA[ A.Last_Modify_Time = DATE_FORMAT(#{last_modify_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.COM_ID = #{com_id}]]>
+  	</update>
+  
+  	<delete id="deleteCom" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM BSC_COM_T where COM_ID = #{com_id} ]]>
+	</delete>
+  
+	<select id="findOneCom" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM BSC_COM_T A  ]]>
+		<include refid="comWhereCondition" />
+  	</select>
+    
+  	<select id="findAllCom" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM BSC_COM_T A ]]>
+		<include refid="comWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapCom" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM BSC_COM_T A ]]>
+		<include refid="comWhereCondition" />
+	</select>
+  
+  	<select id="findComTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM BSC_COM_T A ]]>
+		<include refid="comWhereCondition" />
+  	</select>
+  
+  	<select id="queryComForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM BSC_COM_T A ]]>
+		<include refid="comWhereCondition" />
+  	</select>
+  	
+    <select id="getComsByComId" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+    <![CDATA[
+        select *
+         from bsc_com_t b
+        where b.com_id in
+              (select c.child_id from bsc_com_rela_t c where c.parent_id = #{com_id})
+        ORDER by b.com_id
+    ]]>
+    </select>
+
+    <select id="getChildComs" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+    <![CDATA[
+        select *
+         from bsc_com_t b
+        where b.com_id in
+              (select c.child_id from bsc_com_rela_t c where c.parent_id = #{com_id})
+              or b.com_id = #{com_id}
+        ORDER by b.com_id
+    ]]>
+    </select>
+
+    <select id="getByconlist" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+       select *
+         from bsc_com_t b
+        <where>
+	        <if test=" comCode != null and comCode != '' and comCode != 'null' ">
+	            <![CDATA[ and b.Com_Code = #{comCode} ]]>
+	        </if> 
+	        <if test=" comName != null and comName != '' and comName != 'null' ">
+	            <![CDATA[ AND b.Com_Name like concat('%', #{comName}, '%') ]]>
+	        </if>
+	        ORDER by b.com_id
+        </where>
+    </select>
+</mapper>

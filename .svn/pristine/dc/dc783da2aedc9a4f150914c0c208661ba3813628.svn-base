@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CooperLogo">
+	<resultMap id="cooperLogoResultMap" type="com.taikang.tkcoww.logo.model.CooperLogoBO">
+		<result property="cooperLogoId" column="COOPER_LOGO_ID"/>
+		<result property="logoSquence" column="LOGO_SQUENCE"/>
+		<result property="cooperLogoName" column="COOPER_LOGO_NAME"/>
+		<result property="belongId" column="BELONG_ID"/>
+		<result property="cooperLogoImgname" column="COOPER_LOGO_IMGNAME"/>
+		<result property="cooperLogoDes" column="COOPER_LOGO_DES"/>
+		<result property="cooperLogoUrl" column="COOPER_LOGO_URL"/>
+		<result property="cooperLogoStorname" column="COOPER_LOGO_STORNAME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="createdBy" column="CREATED_BY"/>
+		<result property="modifiedTime" column="MODIFIED_TIME"/>
+		<result property="modifiedBy" column="MODIFIED_BY"/>
+		<result property="version" column="VERSION"/>
+		<result property="delflag" column="DELFLAG"/>
+  	</resultMap>
+  
+  	<sql id="cooperLogoWhereCondition">
+		<where>
+	  	<if test=" cooper_logo_id != null and cooper_logo_id != '' and cooper_logo_id != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_ID = #{cooper_logo_id} ]]>
+		</if>
+	  	<if test=" logo_squence != null ">
+	  		<![CDATA[ AND A.LOGO_SQUENCE = ${logo_squence} ]]>
+	  	</if>
+	  	<if test=" cooper_logo_name != null and cooper_logo_name != '' and cooper_logo_name != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_NAME = #{cooper_logo_name} ]]>
+	  	</if>
+	  	<if test=" belong_id != null and belong_id != '' and belong_id != 'null' ">
+			<![CDATA[ AND A.BELONG_ID = #{belong_id} ]]>
+	  	</if>
+	  	<if test=" cooper_logo_imgname != null and cooper_logo_imgname != '' and cooper_logo_imgname != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_IMGNAME = #{cooper_logo_imgname} ]]>
+	  	</if>
+	  	<if test=" cooper_logo_des != null and cooper_logo_des != '' and cooper_logo_des != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_DES = #{cooper_logo_des} ]]>
+	  	</if>
+	  	<if test=" cooper_logo_url != null and cooper_logo_url != '' and cooper_logo_url != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_URL = #{cooper_logo_url} ]]>
+	  	</if>
+	  	<if test=" cooper_logo_storname != null and cooper_logo_storname != '' and cooper_logo_storname != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_STORNAME = #{cooper_logo_storname} ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ AND A.CREATE_TIME = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" created_by != null and created_by != '' and created_by != 'null' ">
+			<![CDATA[ AND A.CREATED_BY = #{created_by} ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ AND A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s') ]]>
+	  	</if>
+	  	<if test=" modified_by != null and modified_by != '' and modified_by != 'null' ">
+			<![CDATA[ AND A.MODIFIED_BY = #{modified_by} ]]>
+	  	</if>
+	  	<if test=" version != null ">
+	  		<![CDATA[ AND A.VERSION = ${version} ]]>
+	  	</if>
+			<![CDATA[ AND A.DELFLAG = '0' ]]>
+		</where>
+  	</sql>
+
+  	<insert id="addCooperLogo"  parameterType="java.util.Map">
+		<![CDATA[
+	  	INSERT INTO ZJOW_COOPER_LOGO
+		]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" cooper_logo_id  != null and  cooper_logo_id  != ''  and  cooper_logo_id  != 'null' ">
+				<![CDATA[ COOPER_LOGO_ID , ]]>
+			</if>
+	  		<if test=" logo_squence  != null ">
+				<![CDATA[ LOGO_SQUENCE , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_name  != null and  cooper_logo_name  != ''  and  cooper_logo_name  != 'null' ">
+				<![CDATA[ COOPER_LOGO_NAME , ]]>
+	  		</if>
+	  		<if test=" belong_id  != null and  belong_id  != ''  and  belong_id  != 'null' ">
+				<![CDATA[ BELONG_ID , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_imgname  != null and  cooper_logo_imgname  != ''  and  cooper_logo_imgname  != 'null' ">
+				<![CDATA[ COOPER_LOGO_IMGNAME , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_des  != null and  cooper_logo_des  != ''  and  cooper_logo_des  != 'null' ">
+				<![CDATA[ COOPER_LOGO_DES , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_url  != null and  cooper_logo_url  != ''  and  cooper_logo_url  != 'null' ">
+				<![CDATA[ COOPER_LOGO_URL , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_storname  != null and  cooper_logo_storname  != ''  and  cooper_logo_storname  != 'null' ">
+				<![CDATA[ COOPER_LOGO_STORNAME , ]]>
+	  		</if>
+	  		<if test=" create_time  != null and  create_time  != ''  and  create_time  != 'null' ">
+				<![CDATA[ CREATE_TIME , ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+				<![CDATA[ CREATED_BY , ]]>
+	  		</if>
+	  		<if test=" modified_time  != null and  modified_time  != ''  and  modified_time  != 'null' ">
+				<![CDATA[ MODIFIED_TIME , ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+				<![CDATA[ MODIFIED_BY , ]]>
+	  		</if>
+	  		<if test=" version  != null ">
+				<![CDATA[ VERSION , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+				<![CDATA[ DELFLAG , ]]>
+	  		</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	  		<if test=" cooper_logo_id  != null and  cooper_logo_id  != ''  and  cooper_logo_id  != 'null' ">
+	  			<![CDATA[ #{cooper_logo_id} , ]]>
+	  		</if>
+			<if test=" logo_squence  != null">
+	    		<![CDATA[ ${logo_squence} , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_name  != null and  cooper_logo_name  != ''  and  cooper_logo_name  != 'null' ">
+	  			<![CDATA[ #{cooper_logo_name} , ]]>
+	  		</if>
+	  		<if test=" belong_id  != null and  belong_id  != ''  and  belong_id  != 'null' ">
+	  			<![CDATA[ #{belong_id} , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_imgname  != null and  cooper_logo_imgname  != ''  and  cooper_logo_imgname  != 'null' ">
+	  			<![CDATA[ #{cooper_logo_imgname} , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_des  != null and  cooper_logo_des  != ''  and  cooper_logo_des  != 'null' ">
+	  			<![CDATA[ #{cooper_logo_des} , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_url  != null and  cooper_logo_url  != ''  and  cooper_logo_url  != 'null' ">
+	  			<![CDATA[ #{cooper_logo_url} , ]]>
+	  		</if>
+	  		<if test=" cooper_logo_storname  != null and  cooper_logo_storname  != ''  and  cooper_logo_storname  != 'null' ">
+	  			<![CDATA[ #{cooper_logo_storname} , ]]>
+	  		</if>
+	  		<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  			<![CDATA[ #{created_by} , ]]>
+	  		</if>
+	  		<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    		<![CDATA[ DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  		</if>
+	  		<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  			<![CDATA[ #{modified_by} , ]]>
+	  		</if>
+	  		<if test=" version  != null">
+	    		<![CDATA[ ${version} , ]]>
+	  		</if>
+	  		<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  			<![CDATA[ #{delflag} , ]]>
+	  		</if>
+		</trim>
+  	</insert>
+ 
+  	<update id="updateCooperLogo" parameterType="java.util.Map">
+		<![CDATA[ UPDATE ZJOW_COOPER_LOGO A ]]>
+		<set>
+		<if test=" logo_squence  != null ">
+  			<![CDATA[ A.LOGO_SQUENCE = ${logo_squence} , ]]>
+		</if>
+	  	<if test=" cooper_logo_name  != null and  cooper_logo_name  != ''  and  cooper_logo_name  != 'null' ">
+	  		<![CDATA[ A.COOPER_LOGO_NAME = #{cooper_logo_name}, ]]>
+	  	</if>
+	  	<if test=" belong_id  != null and  belong_id  != ''  and  belong_id  != 'null' ">
+	  		<![CDATA[ A.BELONG_ID = #{belong_id}, ]]>
+	  	</if>
+	  	<if test=" cooper_logo_imgname  != null and  cooper_logo_imgname  != ''  and  cooper_logo_imgname  != 'null' ">
+	  		<![CDATA[ A.COOPER_LOGO_IMGNAME = #{cooper_logo_imgname}, ]]>
+	  	</if>
+	  	<if test=" cooper_logo_des  != null and  cooper_logo_des  != ''  and  cooper_logo_des  != 'null' ">
+	  		<![CDATA[ A.COOPER_LOGO_DES = #{cooper_logo_des}, ]]>
+	  	</if>
+	  	<if test=" cooper_logo_url  != null and  cooper_logo_url  != ''  and  cooper_logo_url  != 'null' ">
+	  		<![CDATA[ A.COOPER_LOGO_URL = #{cooper_logo_url}, ]]>
+	  	</if>
+	  	<if test=" cooper_logo_storname  != null and  cooper_logo_storname  != ''  and  cooper_logo_storname  != 'null' ">
+	  		<![CDATA[ A.COOPER_LOGO_STORNAME = #{cooper_logo_storname}, ]]>
+	  	</if>
+	  	<if test=" create_time != null and create_time != '' and create_time  != 'null' ">
+	    	<![CDATA[ A.CREATE_TIME = DATE_FORMAT(#{create_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" created_by  != null and  created_by  != ''  and  created_by  != 'null' ">
+	  		<![CDATA[ A.CREATED_BY = #{created_by}, ]]>
+	  	</if>
+	  	<if test=" modified_time != null and modified_time != '' and modified_time  != 'null' ">
+	    	<![CDATA[ A.MODIFIED_TIME = DATE_FORMAT(#{modified_time},'%Y-%m-%d %H:%i:%s'), ]]>
+	  	</if>
+	  	<if test=" modified_by  != null and  modified_by  != ''  and  modified_by  != 'null' ">
+	  		<![CDATA[ A.MODIFIED_BY = #{modified_by}, ]]>
+	  	</if>
+		<if test=" version  != null ">
+  			<![CDATA[ A.VERSION = ${version} , ]]>
+		</if>
+	  	<if test=" delflag  != null and  delflag  != ''  and  delflag  != 'null' ">
+	  		<![CDATA[ A.DELFLAG = #{delflag}, ]]>
+	  	</if>
+		</set>
+		<![CDATA[ where A.COOPER_LOGO_ID = #{cooper_logo_id}]]>
+  	</update>
+  
+  	<delete id="deleteCooperLogo" parameterType="java.util.Map">
+		<![CDATA[ DELETE FROM ZJOW_COOPER_LOGO A where A.COOPER_LOGO_ID = #{cooper_logo_id} ]]>
+	</delete>
+  
+	<select id="findOneCooperLogo" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[ SELECT A.* FROM ZJOW_COOPER_LOGO A  ]]>
+		<include refid="cooperLogoWhereCondition" />
+  	</select>
+    
+  	<select id="findAllCooperLogo" parameterType="java.util.Map" resultType="java.util.Map" >
+		<![CDATA[ SELECT A.* FROM ZJOW_COOPER_LOGO A ]]>
+		<include refid="cooperLogoWhereCondition" />
+  	</select>
+  	
+  	<select id="findAllMapCooperLogo" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto" >
+		<![CDATA[ SELECT A.* FROM ZJOW_COOPER_LOGO A ]]>
+		<include refid="cooperLogoWhereCondition" />
+	</select>
+  
+  	<select id="findCooperLogoTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		<![CDATA[ SELECT  COUNT(1) FROM ZJOW_COOPER_LOGO A ]]>
+		<include refid="cooperLogoWhereCondition" />
+  	</select>
+  
+  	<select id="queryCooperLogoForPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+		<![CDATA[ SELECT A.* FROM ZJOW_COOPER_LOGO A ]]>
+		<include refid="cooperLogoWhereCondition" />
+  	</select>
+ 	<select id="getLogoModelPage" parameterType="java.util.Map" resultType="com.taikang.udp.framework.common.datastructre.impl.BaseDto">
+      SELECT A.* FROM ZJOW_COOPER_LOGO A
+		 where 1=1 
+          AND A.DELFLAG = '0' 
+        AND A.BELONG_ID = #{belongId}
+        <if test=" startTime != null and startTime != '' and startTime != 'null' ">
+            <![CDATA[ AND A.CREATE_TIME >= DATE_FORMAT(#{startTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+		<if test=" endTime != null and endTime != '' and endTime != 'null' ">
+            <![CDATA[ AND A.CREATE_TIME <= DATE_FORMAT(#{endTime}, '%Y-%m-%d %H:%i:%s') ]]>
+        </if>
+        <if test=" cooperLogoName != null and cooperLogoName != '' and cooperLogoName != 'null' ">
+			<![CDATA[ AND A.COOPER_LOGO_NAME like concat('%', #{cooperLogoName}, '%') ]]>
+	  	</if>
+		ORDER BY A.CREATE_TIME DESC
+  	</select>
+</mapper>

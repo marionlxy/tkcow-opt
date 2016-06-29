@@ -1,0 +1,128 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<%@ include file="/include.jsp"%>
+    <title></title>
+</head>
+<body>
+<div fit="true" style="margin-top: 10px; margin-left: 10px;">
+	<form id="dataFormLogo" enctype="multipart/form-data" method="post">
+			<div class="fitem">
+		    	<label>Logo名称:</label>
+		        <input name="cooperLogoName" id="cooperLogoName" class="easyui-textbox" data-options="required:true" style="width: 400px;" value="${data.cooperLogoName}">
+			</div>
+			<div class="fitem">
+		    	<label>描述:</label>
+		        <textarea id="cooperLogoDes" rows=5 name="cooperLogoDes" class="textarea easyui-validatebox" style="width: 400px;">${data.cooperLogoDes}</textarea>
+			</div>
+			<div class="fitem">
+		    	<label>Logo图:</label>
+		        <input name="logoFile" id="logoFile" type="file" onchange="javascript:setImagePreview();">
+			</div>
+			<div class="fitem" id="localImag">
+		        <img id="logoImg" style="display: block; width: 80px; height: 80px; padding-left: 100px;" src="<%=basePath%>+'/'+${data.cooperLogoUrl}"/>
+			</div>
+	</form>
+    <div id="dlg-buttons" align="center">
+       <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" id="save" onclick="saveOrUpdate()" style="width:90px">提交</a>
+       <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="goBack(0)" style="width:90px">取消</a>
+   </div>
+</div>
+    
+<script type="text/javascript">
+
+var rowId;
+jQuery(function(){
+	rowId ='${data.cooperLogoId}';
+});
+
+//保存记录
+function saveOrUpdate()
+{
+	var r = $('#dataFormLogo').form('validate');
+	if(!r) {
+		return false;
+	} else {
+		$('#save').linkbutton('disable');
+		var name = $("#cooperLogoName").val();
+		var des = $("#cooperLogoDes").val();
+		$.ajaxFileUpload({
+            url: "${rootPath}/cooperLogo/save", 
+            type: 'post',
+            secureuri: false, //一般设置为false
+            complete:null,
+            fileElementId: 'logoFile',
+            data: { cooperLogoName: name, cooperLogoDes: des, cooperLogoId: rowId},
+            dataType: 'text', //返回值类型，必须text
+            success: function(data, status,msg){
+            	if (data == null || data == '') {
+            		$.messager.alert('提示',data.msg,'error');
+            		//com.message("error", "Logo图片修改失败！");
+            	} else {
+            		var daObj = eval('(' + data + ')');
+            		if (daObj.code == '0') {
+            			$.messager.alert('提示','Logo图片上传成功！');
+            			goBack(1);
+            		} else {
+            			$.messager.alert('提示',"Logo图片上传失败！",'error');
+            			//com.message("error", "Logo图片修改失败！");
+            		}
+            	}
+            }
+        });
+	}
+}
+ 
+//返回父页面  
+function goBack(flag){
+	$('#divDialog').dialog('close')
+	var url = '${rootPath}/cooperLogo/list';
+	$('#dataTable').datagrid('reload', url);
+}
+
+//下面用于图片上传预览功能
+function setImagePreview(avalue) {
+	var docObj = document.getElementById("logoFile");
+
+	var imgObjPreview = document.getElementById("logoImg");
+	if (docObj.files && docObj.files[0]) {
+		//火狐下，直接设img属性
+		imgObjPreview.style.display = 'block';
+		imgObjPreview.style.width = '80px';
+		imgObjPreview.style.height = '80px';
+		//imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+		//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+		imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+	} else {
+		//IE下，使用滤镜
+		docObj.select();
+		var imgSrc = document.selection.createRange().text;
+		var localImagId = document.getElementById("localImag");
+		//必须设置初始大小
+		localImagId.style.width = "80px";
+		localImagId.style.height = "80px";
+		//图片异常的捕捉，防止用户修改后缀来伪造图片
+		try {
+			localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+			localImagId.filters
+					.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+		} catch (e) {
+			alert("您上传的图片格式不正确，请重新选择!");
+			return false;
+		}
+		imgObjPreview.style.display = 'none';
+		document.selection.empty();
+	}
+	return true;
+}
+
+</script>
+
+</body>
+</html>
